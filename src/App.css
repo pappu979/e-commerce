@@ -1,0 +1,25 @@
+.whyusRow-1{
+    width: 50%;
+}
+
+.product-image{
+    max-height: 380px;
+    height: 100%;
+}
+
+
+
+@media (max-width: 768px){
+    .whyusRow-1{
+        width: 100%;
+    }
+
+    .product-image{
+        max-height: 220px;
+        height: 100%;
+    }
+    .productPage-col-2{
+        margin-top: 20px;
+    }
+    
+}

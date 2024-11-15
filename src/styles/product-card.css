@@ -1,0 +1,70 @@
+.container {
+  padding-top: 40px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.my-5 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.rating {
+  margin-bottom: 20px;
+}
+
+.quantity {
+  margin-bottom: 20px;
+}
+
+.review-title {
+  margin-bottom: 30px;
+}
+
+.review-form {
+  margin-top: 30px;
+}
+
+.rating-section {
+  margin-top: 20px;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.submit-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.shimmer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.shimmer {
+  width: 250px;
+  height: 300px;
+  background: linear-gradient(to right, #f6f7f8 0%, #ededed 50%, #f6f7f8 100%);
+  background-size: 200% 200%;
+  animation: shimmer-animation 2s infinite;
+}
+
+@keyframes shimmer-animation {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
