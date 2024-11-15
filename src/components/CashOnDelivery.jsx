@@ -20,10 +20,6 @@ const CashOnDelivery = ({ selectedOption }) => {
     }
   }, [selectedOption]);
 
-  const handleInputChange = (e) => {
-    setInputCode(e.target.value);
-  };
-
 
   const confirmOrder = () => {
     if (inputCode === randomCode) {
@@ -60,7 +56,7 @@ const CashOnDelivery = ({ selectedOption }) => {
             <input
               type="text"
               value={inputCode}
-              onChange={handleInputChange}
+              onChange={() => setInputCode(e.target.value)}
               placeholder="Enter confirmation code"
               style={{ padding: "8px 20px", width: "100%" }}
             />

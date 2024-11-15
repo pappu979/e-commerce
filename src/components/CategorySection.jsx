@@ -1,18 +1,25 @@
-import axios from "axios";
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
+import { fetchCategories } from "../utils/api";
 import "../styles/cardStyle.css";
+import { useQuery } from "@tanstack/react-query";
 
 
 export default function CategoriesSection() {
-  const [categories, setCategories] = React.useState([]);
+  
+  const {data: categories, isLoading, isError, error} = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories
+  });
 
-  React.useEffect(() => {
-    axios
-      .get("https://dummyjson.com/products/categories")
-      .then((json) => setCategories(json.data));
-  }, []);
+  if (isLoading) {
+    return <div>Loading categories...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading categories: {error.message}</div>;
+  }
 
   return (
     <div className="container">

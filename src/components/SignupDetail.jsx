@@ -43,11 +43,8 @@ function SignupDetail() {
       setFormData({
         email: "",
         password: "",
-        address1: "",
-        address2: "",
-        city: "",
-        state: "",
-        zip: "",
+       name: "",
+       mobileNumber: "",
       });
     });
     const redirectTo = location.state?.from || "/";

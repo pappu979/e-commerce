@@ -6,10 +6,6 @@ import '../styles/passwordInput.css'
 const PasswordInput = ({ name, value, onChange }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible);
-    };
-
     return (
         <>
             <div className="password-input-wrapper">
@@ -21,7 +17,7 @@ const PasswordInput = ({ name, value, onChange }) => {
                     onChange={onChange}
                     style={{ width: "100%" }}
                 />
-                <span onClick={togglePasswordVisibility} className="toggle-password-icon">
+                <span onClick={() => setIsPasswordVisible(!isPasswordVisible)} className="toggle-password-icon">
                     <FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} />
                 </span>
             </div>
