@@ -4,7 +4,6 @@ import { useLocation, Link } from "react-router-dom";
 export default function ConfirmationPage() {
     const location = useLocation();
     const { product, productQuantity } = location?.state;
-   console.log(product, productQuantity);
     return (
         <div className="container mt-5 text-center mb-4">
             <h1>Payment Successful!</h1>

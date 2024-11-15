@@ -54,9 +54,9 @@ const CashOnDelivery = ({ selectedOption }) => {
           </div>
           <div className='col-md-4'>
             <input
-              type="text"
+              type="number"
               value={inputCode}
-              onChange={() => setInputCode(e.target.value)}
+              onChange={(e) => setInputCode(e.target.value)}
               placeholder="Enter confirmation code"
               style={{ padding: "8px 20px", width: "100%" }}
             />

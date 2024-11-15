@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -7,44 +6,39 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useWishlist } from "../provider/WishlistProvider";
 import useWishlistHandler from "../provider/useWishlistHandler";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
+import { fetchProducts } from "../utils/api";
 import "../styles/AllProducts.css";
+
+const categorizeProducts = (products) => {
+  return products.reduce((acc, product) => {
+    acc[product.category] = acc[product.category] || [];
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+};
 
 
 export default function Products() {
 
-  const [categorizedProducts, setCategorizedProducts] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState(true);
   const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
   const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
 
-  React.useEffect(() => {
-    axios
-      .get("https://dummyjson.com/products")
-      .then((response) => {
-        categorizeProducts(response.data.products);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  }, []);
+  const { data: products, isLoading, isError } = useQuery({
+    queryKey: ["products"], 
+    queryFn: fetchProducts,
+  });
+
+  console.log(fetchProducts());
+  const categorizedProducts = React.useMemo(() => {
+    return products ? categorizeProducts(products) : {};
+  }, [products]);
 
 
-  const categorizeProducts = (products) => {
-    const categorized = {};
-
-    products.forEach((product) => {
-      if (categorized.hasOwnProperty(product.category)) {
-        categorized[product.category].push(product);
-      } else {
-        categorized[product.category] = [product];
-      }
-    });
-
-    setCategorizedProducts(categorized);
-  };
-
+  if (isError) {
+    return <div>Error fetching products. Please try again later.</div>;
+  }
 
   return (
     <div className="products-container" style={{ color: "#e1997e" }}>
