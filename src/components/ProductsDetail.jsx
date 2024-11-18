@@ -12,7 +12,7 @@ import { fetchProducts } from "../utils/api";
 import "../styles/AllProducts.css";
 
 const categorizeProducts = (products) => {
-  return products.reduce((acc, product) => {
+  return products?.reduce((acc, product) => {
     acc[product.category] = acc[product.category] || [];
     acc[product.category].push(product);
     return acc;
@@ -30,11 +30,9 @@ export default function Products() {
     queryFn: fetchProducts,
   });
 
-  console.log(fetchProducts());
   const categorizedProducts = React.useMemo(() => {
     return products ? categorizeProducts(products) : {};
-  }, [products]);
-
+  }, [products])
 
   if (isError) {
     return <div>Error fetching products. Please try again later.</div>;
@@ -44,7 +42,7 @@ export default function Products() {
     <div className="products-container" style={{ color: "#e1997e" }}>
       <div className="container">
         <h1 className="text-center mb-5">All Products</h1>
-        {Object.keys(categorizedProducts).map((category) => (
+        {Object.keys(categorizedProducts)?.map((category) => (
           <div className="category-row" key={category}>
             <h2 className="category-title mb-4">{category}</h2>
             <div className="row justify-content-center">
@@ -55,7 +53,7 @@ export default function Products() {
                   <div className="col-md-4 mb-4 shimmer-card" />
                 </>
               ) : (
-                categorizedProducts[category].map((product) => (
+                categorizedProducts[category]?.map((product) => (
                   <div className="col-md-4 mb-4" key={product.id}>
 
                     <Card
@@ -68,7 +66,7 @@ export default function Products() {
                       <div className="image-container">
                         <button onClick={() => handleWishlistClick(product)} className="btn" data-tooltip-id="wishlistItem-tooltip">
                           {
-                            wishlistItem.some((item) => item.id === product.id) ?
+                            wishlistItem.some((item) => item?.id === product?.id) ?
                               <FavoriteIcon color="error" />
                               : <FavoriteBorderIcon />
                           }
@@ -76,8 +74,8 @@ export default function Products() {
                         <ReactTooltip
                           id="wishlistItem-tooltip"
                           place="top"
-                          key={wishlistItem.some((item) => item.id === product.id) ? 'in-wishlist' : 'not-in-wishlist'}
-                          content={wishlistItem.some((item) => item.id === product.id)
+                          key={wishlistItem.some((item) => item?.id === product?.id) ? 'in-wishlist' : 'not-in-wishlist'}
+                          content={wishlistItem.some((item) => item?.id === product?.id)
                             ? "Remove From Wishlist"
                             : "Add Item to Wishlist"}
 

@@ -39,7 +39,7 @@ const SaveForLaterPage = () => {
             ) : (
                 <div >
                     {saveForLaterItems.map((product) => (
-                            <div className="row d-flex align-items-center mb-2" style={{borderBottom: "1px solid grey"}}>
+                            <div key={product?.id} className="row d-flex align-items-center mb-2" style={{borderBottom: "1px solid grey"}}>
                                 <div className="col-md-3">
                                     <button onClick={() => handleWishlistClick(product)} className="btn text-start">
                                         {

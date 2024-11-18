@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PaymentDefaultAddress({addresses, selectedAddress, setSelectedAddress, handleDelivery, handleEdit}) {
+export default function PaymentDefaultAddress({addresses, selectedAddress, updateState, handleDelivery, handleEdit}) {
     return (
         <>
                 {addresses.map((addr, index) => (
@@ -9,7 +9,7 @@ export default function PaymentDefaultAddress({addresses, selectedAddress, setSe
                       type="radio"
                       name="address"
                       checked={selectedAddress === index}
-                      onChange={() => setSelectedAddress(index)}
+                      onChange={() => updateState("selectedAddress",index)}
                     />
                     <div className="address-content">
                       <span>{addr.name}</span> <span>{addr.phone}</span>
@@ -28,7 +28,7 @@ export default function PaymentDefaultAddress({addresses, selectedAddress, setSe
                       <button className="edit-btn" onClick={handleEdit}>EDIT</button>}
                   </div>
                 ))}
-                <button className="add-new-btn" onClick={() => setEditDelivery(true)}>+ Add a new address</button>
+                <button className="add-new-btn" onClick={() => updateState("editDelivery", true)}>+ Add a new address</button>
               </>
     )
 }

@@ -9,56 +9,37 @@ import emptyCartImg from '../images/emptyCart.webp';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useWishlistHandler from "../provider/useWishlistHandler";
-import flipLogo from '../images/flipLogo.png'
-
+import flipLogo from '../images/flipLogo.png';
+import useDateInfo from "../utils/dateUtilis";
+import { calculateTotal, totalDiscountAmount } from "../utils/cartCalculations";
 
 export default function CartPage() {
 
     const { cartItems, clearCart, removeFromCart, updateQuantity } = useCart();
     const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
+    const {currentDate, currentMonth, deliveryDay} = useDateInfo();
     const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
     const { addToSave } = useSaveForLater();
     const isLoggedIn = localStorage.getItem("authToken");
     const navigate = useNavigate();
     let platformFee = 10;
-
-    const daysOfMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const date = new Date();
-    const dayPlus4 = (date.getDay() + 4) % 7;
-    const dayNamePlus4 = daysOfWeek[dayPlus4];
-    const month = daysOfMonth[date.getMonth()];
-
-    // CalculateTotal...
-    const calculateTotal = () => {
-        return cartItems.reduce(
-            (total, item) => total + item.price * item.productQuantity,
-            0
-        );
-    };
-
-    // TotalDiscountAmount....
-    const totalDiscountAmount = () => {
-        return cartItems.reduce(
-            (total, item) => total + (item.price * item.discountPercentage * item.productQuantity) / 100,
-            0
-        );
-    }
+    let updateCalc = calculateTotal(cartItems);
+    let updateDiscount = totalDiscountAmount(cartItems);
 
     // Check platformFee..
-    if (calculateTotal() < 100) {
+    if (updateCalc < 100) {
         platformFee = 0;
-    } else if (calculateTotal() > 100 && calculateTotal() < 500) {
+    } else if (updateCalc > 100 && updateCalc < 500) {
         platformFee = 5;
     } else {
         platformFee = 10;
     }
 
     // ActualPrice...
-    let actualPrice = (calculateTotal() + totalDiscountAmount()).toFixed(2);
+    let actualPrice = (updateCalc + updateDiscount).toFixed(2);
 
     // TotalAmount...
-    let totalAmount = (calculateTotal() + platformFee).toFixed(2);
+    let totalAmount = (updateCalc + platformFee).toFixed(2);
 
     // handleBuyNow Option....
     const handleBuyNow = () => {
@@ -102,11 +83,11 @@ export default function CartPage() {
 
     return (
         <div className="container mt-5 ">
-            {cartItems.length > 0 ? (
+            {cartItems?.length > 0 ? (
                 <div className="row ">
 
                     <div className="col-md-8 border">
-                        {cartItems.map((product) => (
+                        {cartItems?.map((product) => (
                             <div
                                 className="row mb-4 d-flex align-items-center justify-content-center"
                                 key={product.id}
@@ -217,7 +198,7 @@ export default function CartPage() {
                                     </div>
                                     <div className="col-md-6">
                                         <p>
-                                            <span style={{ paddingRight: "4px" }}>Delivery by {dayNamePlus4} {month} {date.getDate() + 3} |</span>
+                                            <span style={{ paddingRight: "4px" }}>Delivery by {deliveryDay} {currentMonth} {currentDate + 3} |</span>
 
                                             <span style={{ textDecoration: "line-through", paddingLeft: "4px" }}>₹40</span>
 
@@ -247,7 +228,7 @@ export default function CartPage() {
                                     fontWeight: "500"
                                 }}
                                 >
-                                    -₹{totalDiscountAmount().toFixed(2)}
+                                    -₹{updateDiscount.toFixed(2)}
                                 </span>
                             </div>
 
@@ -280,7 +261,7 @@ export default function CartPage() {
                                     fontWeight: "500"
                                 }}
                             >
-                                You will save ₹{(totalDiscountAmount() - platformFee).toFixed(2)} on this order
+                                You will save ₹{(updateDiscount - platformFee).toFixed(2)} on this order
                             </p>
                             <button
                                 className="btn btn-warning btn-block mt-3"
@@ -310,7 +291,7 @@ export default function CartPage() {
                 </div>
             )}
 
-            {cartItems.length > 0 && (
+            {cartItems?.length > 0 && (
                 <div className="text-center my-5">
                     <button
                         onClick={clearCart}

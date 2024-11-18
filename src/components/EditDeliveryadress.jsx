@@ -19,7 +19,6 @@ export default function EditDeliveryAdress({ handleCancel }) {
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
-        console.log("formData", formData);
         setFormData({
             name: "",
             password: "",

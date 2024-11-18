@@ -17,6 +17,7 @@ import ForgotPassword from "../pages/ForgotPasswordPage";
 import ResetPassword from "../pages/ResetPasswordPage";
 import WishListPage from "../pages/WishListPage";
 import SaveForLaterPage from "../pages/SaveForLater";
+import ReviewPage from "../pages/ReviePage";
 
 const Layout = () => (
   <>
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
           { path: "saveforlater", element: <SaveForLaterPage /> },
           { path: "forgot-password", element: <ForgotPassword />},
           { path: "reset-password", element: <ResetPassword />},
+          { path: "review", element: <ReviewPage />},
           { path: "*", element: <Page404 /> },
         ],
     }

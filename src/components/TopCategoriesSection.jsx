@@ -1,8 +1,6 @@
-
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -76,11 +74,11 @@ const BestSellerSection = () => {
           {isProductsLoading ? (
             <p>Loading products...</p>
           ) : productsError ? (
-            <p>Error loading products: {productsError.message}</p>
+            <p>Error loading products: {productsError?.message}</p>
           ) : (
             <div className="row">
               {relatedProducts?.map((product) => (
-                <div className="col-md-4 mb-4" key={product.id}>
+                <div className="col-md-4 mb-4" key={product?.id}>
                   <Card className="product-card" style={{ height: "100%" }}>
                     <button onClick={() => handleWishlistClick(product)} className="btn text-end">
                       {wishlistItem.some((item) => item.id === product?.id) ? (

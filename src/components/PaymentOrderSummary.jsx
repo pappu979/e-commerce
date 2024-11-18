@@ -1,6 +1,17 @@
 import React from "react";
 
-export default function PaymentOrderSummary({selectOrderSummary, product, productQuantity, dayNamePlus4, month, date, userData, handleContinue}) {
+export default function PaymentOrderSummary({
+  selectOrderSummary, 
+  product, 
+  productQuantity, 
+  deliveryDay, 
+  month, 
+  date, 
+  userData, 
+  handleContinue
+}) 
+{
+
     return (
         <div className="address-section">
             <h3 className="section-title">3 ORDER SUMMARY</h3>
@@ -11,14 +22,14 @@ export default function PaymentOrderSummary({selectOrderSummary, product, produc
 
                   <div className="col-md-3">
                     <img
-                      src={product.thumbnail}
-                      alt={product.title}
+                      src={product?.thumbnail}
+                      alt={product?.title}
                       style={{ width: '100%' }}
                     />
                     <div className="d-flex align-items-center justify-content-center mt-2 mb-2">
                       <button
                         className="btn  mx-2"
-                        disabled={product.productQuantity <= 1}
+                        disabled={product?.productQuantity <= 1}
                         style={{
                           padding: "4px 8px",
                           border: "1px solid grey",
@@ -80,7 +91,6 @@ export default function PaymentOrderSummary({selectOrderSummary, product, produc
 
                     <button
                       className="btn p-0 mt-2 fw-bold"
-                      onClick={() => removeFromCart(product.id)}
                       style={{ fontSize: "18px", marginLeft: "16px" }}
                     >
                       Remove
@@ -88,7 +98,7 @@ export default function PaymentOrderSummary({selectOrderSummary, product, produc
 
                   </div>
                   <div className="col-md-4">
-                    <span>Delivery by {dayNamePlus4} {date.getDate() + 4} {month}</span> |
+                    <span>Delivery by {deliveryDay} {date + 4} {month}</span> |
                     <span style={{
                       textDecoration: 'line-through',
                       color: '#888',

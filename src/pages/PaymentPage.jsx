@@ -1,161 +1,119 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../helper/LogOut";
-import "../styles/payment.css";
 import PriceDetails from "../components/PriceDetails";
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
 import EditDeliveryAdress from "../components/EditDeliveryadress";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
+import useDateInfo from "../utils/dateUtilis";
+import bank from "../data/indianBanks.json";
+import { addresses } from "../data/address";
+import "../styles/payment.css";
 
 export default function PaymentPage() {
 
-  const [selectedAddress, setSelectedAddress] = React.useState(0);
-  const [chnageLogin, setChangeLogin] = React.useState(false);
-  const [deliveryAdress, setDeliveryAdress] = React.useState(true);
-  const [editDelivery, setEditDelivery] = React.useState(false);
-  const [orderSummary, setOrderSummary] = React.useState(false);
-  const [selectOrderSummary, setSelectOrderSummary] = React.useState(false);
-  const [selectPaymetOption, setSelectPaymetOption] = React.useState(false)
-  const [selectedAddressDelivery, setSelectedAddressDelivery] = React.useState(null);
-  const [selectedOption, setSelectedOption] = React.useState('UPI');
-  const [timeLeft, setTimeLeft] = React.useState(14 * 60);
+  const intialState = {
+    selectedAddress: 0,
+    chnageLogin: false,
+    deliveryAdress: true,
+    editDelivery: false,
+    orderSummary: false,
+    selectOrderSummary: false,
+    selectPaymetOption: false,
+    selectedAddressDelivery: null,
+    selectedOption: "UPI",
+    timeLeft: 14 * 60
+  }
+  const [stateData, setStateData] = React.useState(intialState);
 
-
-  const indianBanks = [
-    "HDFC Bank",
-    "ICICI Bank",
-    "State Bank of India",
-    "Axis Bank",
-    "Kotak Mahindra Bank",
-    "Punjab National Bank",
-    "Bank of Baroda",
-    "Canara Bank",
-    "Union Bank of India",
-    "Indian Bank",
-    "IDBI Bank",
-    "IndusInd Bank",
-    "Yes Bank",
-    "Bank of India",
-    "UCO Bank",
-    "Central Bank of India",
-    "IDFC First Bank",
-    "Bank of Maharashtra",
-    "Federal Bank",
-    "RBL Bank",
-    "South Indian Bank",
-    "Karur Vysya Bank",
-    "Dhanlaxmi Bank",
-    "Tamilnad Mercantile Bank",
-    "Punjab & Sind Bank",
-    "Jammu & Kashmir Bank",
-    "Suryoday Small Finance Bank",
-    "AU Small Finance Bank",
-    "Ujjivan Small Finance Bank",
-    "Equitas Small Finance Bank"
-  ];
-
-
-  const daysOfMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const date = new Date();
-  const dayPlus4 = (date.getDay() + 4) % 7;
-  const dayNamePlus4 = daysOfWeek[dayPlus4];
-  const month = daysOfMonth[date.getMonth()];
-
-  const location = useLocation();
+  const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const navigate = useNavigate();
-  const { product, productQuantity } = location.state || {};
-  const addresses = [
-    {
-      name: "Pappu",
-      phone: "+916352075082",
-      address: "Rajput Mohla, Charanwasi, Sardarshahar Subdistrict, Churu District, Rajasthan - 331403",
-    },
-    {
-      name: "Pappu",
-      phone: "+916352075082",
-      address: "Rajput Mohla, Charanwasi, Churu, Rajasthan - 331403",
-    },
-    {
-      name: "Pappu",
-      phone: "+916352075082",
-      address: "Rajput Mohla, Churu, Rajasthan - 331403",
-    },
-  ];
-
-  const userData = JSON.parse(localStorage.getItem("userData")) || {};
-
+  const location = useLocation();
+  const { product, productQuantity } = location?.state || {};
   let platformFee = 0;
+  let savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
+
+  const userData = JSON.parse(localStorage?.getItem("userData")) || {};
+
+  React.useEffect(() => {
+   
+    const interval = setInterval(() => {
+      setStateData((prevState) => ({
+        ...prevState,
+        timeLeft: prevState?.timeLeft - 1,
+      }));
+    }, 1000);
+
+    if (stateData?.timeLeft <= 0) {
+      clearInterval(interval);
+      alert('Time up! Redirecting you to the cart page.');
+      navigate('/products');
+    }
+
+    return () => clearInterval(interval);
+  }, [stateData?.timeLeft, navigate]);
+
 
   if (!product || !productQuantity) {
     navigate("/products");
   }
 
-
-  if (product.price < 100) {
+  if (product?.price < 100) {
     platformFee = 0;
-  } else if (product.price > 100 && product.price < 500) {
+  } else if (product?.price > 100 && product?.price < 500) {
     platformFee = 5;
   } else {
     platformFee = 10;
   }
 
-  let savePrice = ((product.price * product.discountPercentage) / 100).toFixed(2);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-    }, 1000);
-
-    if (timeLeft === 0) {
-      clearInterval(interval);
-      alert('Time up! Redirecting you to the cart page.');
-      navigate('/cart');
-    }
-
-    return () => clearInterval(interval);
-  }, [timeLeft, navigate]);
+  const updateState = (key, value) => {
+    setStateData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }))
+  }
 
   const handleOpenDelivaryAddress = () => {
-    setDeliveryAdress(true);
-    setSelectOrderSummary(false)
+    updateState("deliveryAdress", true);
+    updateState("selectOrderSummary", false);
+    updateState("selectPaymetOption", false);
   }
 
   const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
+    updateState("selectedOption", event.target.value);
   };
 
   const handleDelivery = (addr) => {
-    setSelectedAddressDelivery(addr);
-    setSelectOrderSummary(true)
-    setOrderSummary(true)
-    setDeliveryAdress(false)
+    updateState("selectedAddressDelivery", addr);
+    updateState("selectOrderSummary", true);
+    updateState("orderSummary", true);
+    updateState("deliveryAdress", false)
   };
 
   const handleChange = () => {
-    setSelectOrderSummary(false)
-    setChangeLogin(true);
-    setDeliveryAdress(false);
+    updateState("selectedAddressDelivery", false);
+    updateState("chnageLogin", true);
+    updateState("selectPaymetOption", false);
+    updateState("deliveryAdress", false)
   }
   const handleCheck = () => {
-    setSelectOrderSummary(false)
-    setChangeLogin(false);
-    setDeliveryAdress(true);
+    updateState("chnageLogin", false);
+    updateState("selectOrderSummary", false);
+    updateState("deliveryAdress", true)
   }
 
   const handleEdit = () => {
-    setEditDelivery(true);
+    updateState("editDelivery", true)
   }
 
   const handleCancel = () => {
-    console.log("cancel")
-    setEditDelivery(false);
+    updateState("editDelivery", false)
   }
 
   const handleContinue = () => {
-    setSelectOrderSummary(false)
-    setSelectPaymetOption(true)
+    updateState("selectOrderSummary", false);
+    updateState("selectPaymetOption", true);
   }
 
   const handleLogout = () => {
@@ -169,7 +127,7 @@ export default function PaymentPage() {
           <div className="login-section">
             <div className="d-flex align-items-center justify-content-between flex-wrap">
               <div className="login-title">1 LOGIN ✔️
-                <p style={{ fontSize: "14px" }}>{userData.mobileNumber}</p>
+                <p style={{ fontSize: "14px" }}>{userData?.mobileNumber || +916352075082}</p>
               </div>
               <div className="login-details">
                 <button style={{
@@ -184,7 +142,7 @@ export default function PaymentPage() {
               </div>
             </div>
             <div>
-              {chnageLogin &&
+              {stateData?.chnageLogin &&
                 <div>
                   <button className="mb-2"
                     style={{ color: "blue", border: "none", display: "block" }}
@@ -208,18 +166,18 @@ export default function PaymentPage() {
           <div className="address-section">
             <h3 className="section-title">2 DELIVERY ADDRESS</h3>
 
-            {deliveryAdress && !editDelivery &&
-              <PaymentDefaultAddress 
-              addresses={addresses} 
-              selectedAddress={selectedAddress} 
-              setSelectedAddress={setSelectedAddress} 
-              handleDelivery={handleDelivery} 
-              handleEdit={handleEdit}>
+            {stateData?.deliveryAdress && !stateData?.editDelivery &&
+              <PaymentDefaultAddress
+                addresses={addresses}
+                selectedAddress={stateData?.selectedAddress}
+                updateState={updateState}
+                handleDelivery={handleDelivery}
+                handleEdit={handleEdit}>
               </PaymentDefaultAddress>
             }
-            {orderSummary && !deliveryAdress &&
+            {stateData?.orderSummary && !stateData?.deliveryAdress &&
               <>
-                <p>{selectedAddressDelivery.name}, {selectedAddressDelivery.address}</p>
+                <p>{stateData?.selectedAddressDelivery?.name}, {stateData?.selectedAddressDelivery?.address}</p>
                 <button style={{
                   background: "#fff",
                   padding: "11px 16px",
@@ -231,39 +189,41 @@ export default function PaymentPage() {
               </>
             }
 
-            {editDelivery &&
-               <EditDeliveryAdress handleCancel={handleCancel}></EditDeliveryAdress>
+           {/* Edit Address Section */}
+            {stateData?.editDelivery &&
+              <EditDeliveryAdress handleCancel={handleCancel}></EditDeliveryAdress>
             }
           </div>
 
-
+         {/* Order Summary Section */}
           <PaymentOrderSummary
-            selectOrderSummary={selectOrderSummary}
+            selectOrderSummary={stateData?.selectOrderSummary}
             product={product}
             productQuantity={productQuantity}
-            dayNamePlus4={dayNamePlus4}
-            month={month}
-            date={date}
+            deliveryDay={deliveryDay}
+            month={currentMonth}
+            date={currentDate}
             userData={userData}
             handleContinue={handleContinue}
           ></PaymentOrderSummary>
 
+         {/* Payment Options Section */}
           <PaymentAdressDetails
-            selectPaymetOption={selectPaymetOption}
-            selectedOption={selectedOption}
-            timeLeft={timeLeft}
+            selectPaymetOption={stateData?.selectPaymetOption}
+            selectedOption={stateData?.selectedOption}
+            timeLeft={stateData?.timeLeft}
             handleOptionChange={handleOptionChange}
             product={product}
             productQuantity={productQuantity}
             platformFee={platformFee}
-            indianBanks={indianBanks}
+            indianBanks={bank}
           >
           </PaymentAdressDetails>
         </div>
 
         {/* Price Details Section */}
         <PriceDetails
-          selectedOption={selectedOption}
+          selectedOption={stateData?.selectedOption}
           productQuantity={productQuantity}
           product={product}
           platformFee={platformFee}

@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCart } from "../provider/CartProvider";
 import { useWishlist } from "../provider/WishlistProvider";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
@@ -19,8 +19,6 @@ function ProductPage() {
 
   const { productID } = useParams();
   const [product, setProduct] = React.useState({});
-  // const [review, setReview] = React.useState("");
-  // const [ratingStar, setRatingStar] = React.useState(0);
   const [productQuantity, setProductQuantity] = React.useState(1);
   const navigate = useNavigate();
   const { addToCart, updateQuantity, cartItems } = useCart();
@@ -33,33 +31,6 @@ function ProductPage() {
       .get(`https://dummyjson.com/products/${productID}`)
       .then((json) => setProduct(json.data));
   }, []);
-
-
-  // const ratingChanged = (newRating) => {
-  //   setRatingStar(newRating);
-  // };
-
-  // const submitReview = () => {
-  //   const payload = {
-  //     productID: productID,
-  //     review: review,
-  //     rating: ratingStar,
-  //   };
-
-  //   console.log(payload);
-
-  //   Swal.fire({
-  //     title: "Successfully Submitted!",
-  //     text: "Thanks for reviewing our product",
-  //     icon: "success",
-  //     confirmButtonText: "Continue Shopping",
-  //   }).then(() => {
-  //     navigate("/products")
-  //   })
-
-  //   setReview("");
-  //   setRatingStar(0);
-  // };
 
   const handleToCart = () => {
     const payload = {
@@ -105,28 +76,23 @@ function ProductPage() {
             <div className="col-md-6">
               {product?.images?.length > 0 && (
                 <div className="image-section-container">
-
                   <ImageSection
                     images={product?.images}
                     wishlistItem={wishlistItem}
                     handleWishlistClick={handleWishlistClick}
                     product={product}
                   />
-
                 </div>
-
               )}
             </div>
-            <div className="col-md-6 productPage-col-2 mt-3">
 
+            <div className="col-md-6 productPage-col-2 mt-4">
               <h2 style={{ color: "#e1997e" }}>
                 {product.title}
                 <br />
               </h2>
               <p>{product.description}</p>
-             
-               <Rating product={product}></Rating>
-
+              <Rating product={product}></Rating>
               <p style={{
                 fontSize: "18px",
                 color: "#26a541",
@@ -192,52 +158,12 @@ function ProductPage() {
                   +
                 </button>
               </div>
-
-
-
-              {/* <div className="mt-4" style={{ color: "#e1997e" }}>
-              <h3 className="mb-4">Customer Reviews</h3>
-
-              <div className="form-floating mb-3">
-                <textarea
-                  className="form-control"
-                  placeholder="Leave a comment here"
-                  id="floatingTextarea2"
-                  style={{ height: 100 }}
-                  defaultValue={review}
-                  onChange={(e) => setReview(e.target.value)}
-                />
-                <label htmlFor="floatingTextarea2">Comments</label>
+              <div>
+                <Link to="/review" style={{ textDecoration: "none" }}>
+                  Leave Review
+                </Link>
               </div>
 
-              <div className="mb-3">
-                Rate Us:
-                <div className="d-flex">
-                  <ReactStars
-                    count={5}
-                    size={24}
-                    value={ratingStar}
-                    onChange={ratingChanged}
-                    color2={"#ffd700"}
-                  />
-                </div>
-              </div>
-
-              <div className="d-flex">
-                <button className="btn btn-dark"
-                  onClick={submitReview}
-                  style={{
-                    position: "relative",
-                    right: "12px",
-                    backgroundColor: "#ff9f00",
-                    border: "none",
-                    padding: "11px 16px",
-                    borderRadius: "0px"
-                  }}>
-                  Submit Review
-                </button>
-              </div>
-            </div> */}
             </div>
           </div>
           <div className="row mt-5">

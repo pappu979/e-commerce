@@ -6,8 +6,8 @@ const WishlistContext = React.createContext();
 export const useWishlist = () => React.useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
+    
     const [wishlistItem, setWishlistItem] = React.useState(() => {
-
         const savedWishListItem = localStorage.getItem("wishlistItem");
         return savedWishListItem ? JSON.parse(savedWishListItem) : [];
     });
