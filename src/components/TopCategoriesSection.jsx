@@ -47,7 +47,7 @@ const BestSellerSection = () => {
       </div>
 
       <div className="d-flex products-items-home">
-        <div className="col-md-3 mt-2 products-items-list">
+        <div className="col-md-3 mt-5 products-items-list">
           {isCategoriesLoading ? (
             <p>Loading categories...</p>
           ) : (

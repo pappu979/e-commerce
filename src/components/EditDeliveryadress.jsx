@@ -1,37 +1,7 @@
 import React from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 
-export default function EditDeliveryAdress({ handleCancel }) {
-    const [formData, setFormData] = React.useState({
-        name: "",
-        password: "",
-        pincode: "",
-        locality: "",
-        city: "",
-        state: "",
-        landmark: "",
-        alternate: "",
-        address: "",
-        deliveryOption: ""
-    });
-
-    const { name, password, pincode, locality, city, state, landmark, alternate, address, deliveryOption } = formData;
-
-    const handleEditSubmit = (e) => {
-        e.preventDefault();
-        setFormData({
-            name: "",
-            password: "",
-            pincode: "",
-            locality: "",
-            city: "",
-            state: "",
-            landmark: "",
-            alternate: "",
-            address: "",
-            deliveryOption: ""
-        })
-    }
+ function EditDeliveryAdress({ handleDeliveryAddressCancel, formData, handleEditSaveChange,  handleEditSaveSubmit}) {
 
     return (
         <div className="signup-form">
@@ -41,22 +11,19 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>Name</Form.Label>
                         <Form.Control
                             type="text"
-                            value={name}
-                            onChange={(e) =>
-                                setFormData({ ...formData, name: e.target.value })
-                            }
+                            name="username"
+                            value={formData.username}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>MobileNumber</Form.Label>
                         <Form.Control
-                            type="password"
-
-                            value={password}
-                            onChange={(e) =>
-                                setFormData({ ...formData, password: e.target.value })
-                            }
+                            type="number"
+                            name="mobileNumber"
+                            value={formData.mobileNumber}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
                 </Row>
@@ -65,10 +32,9 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>PinCode</Form.Label>
                         <Form.Control
                             type="number"
-                            value={pincode}
-                            onChange={(e) =>
-                                setFormData({ ...formData, pincode: e.target.value })
-                            }
+                            name="pincode"
+                            value={formData.pincode}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
 
@@ -76,10 +42,9 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>Locality</Form.Label>
                         <Form.Control
                             type="text"
-                            value={locality}
-                            onChange={(e) =>
-                                setFormData({ ...formData, locality: e.target.value })
-                            }
+                            name="locality"
+                            value={formData.locality}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
                 </Row>
@@ -87,12 +52,11 @@ export default function EditDeliveryAdress({ handleCancel }) {
                     <Form.Label>Address (Area and Street)</Form.Label>
                     <Form.Control
                         type="text"
+                        name="address"
                         as="textarea"
                         rows={3}
-                        value={address}
-                        onChange={(e) =>
-                            setFormData({ ...formData, address: e.target.value })
-                        }
+                        value={formData.address}
+                        onChange={handleEditSaveChange}
                     />
                 </Form.Group>
                 <Row className="mb-2">
@@ -100,10 +64,9 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>City/District/Town</Form.Label>
                         <Form.Control
                             type="text"
-                            value={city}
-                            onChange={(e) =>
-                                setFormData({ ...formData, city: e.target.value })
-                            }
+                            name="city"
+                            value={formData.city}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
 
@@ -111,10 +74,9 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>State</Form.Label>
                         <Form.Control
                             type="text"
-                            value={state}
-                            onChange={(e) =>
-                                setFormData({ ...formData, state: e.target.value })
-                            }
+                            name="state"
+                            value={formData.state}
+                            onChange={handleEditSaveChange}
                         >
                         </Form.Control>
                     </Form.Group>
@@ -125,20 +87,18 @@ export default function EditDeliveryAdress({ handleCancel }) {
                         <Form.Label>Landmark(Optinal)</Form.Label>
                         <Form.Control
                             type="text"
-                            value={landmark}
-                            onChange={(e) =>
-                                setFormData({ ...formData, landmark: e.target.value })
-                            }
+                            name="landmark"
+                            value={formData.landmark}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
                     <Form.Group as={Col} controlId="formGridAlternate">
                         <Form.Label>Alternate Phone(Optinal)</Form.Label>
                         <Form.Control
                             type="number"
-                            value={alternate}
-                            onChange={(e) =>
-                                setFormData({ ...formData, alternate: e.target.value })
-                            }
+                            name="alternate"
+                            value={formData.alternate}
+                            onChange={handleEditSaveChange}
                         />
                     </Form.Group>
                 </Row>
@@ -150,8 +110,8 @@ export default function EditDeliveryAdress({ handleCancel }) {
                             label="Home (All day delivery)"
                             name="deliveryOption"
                             value="home"
-                            onChange={(e) => setFormData({ ...formData, deliveryOption: e.target.value })}
-                            checked={deliveryOption === "home"}
+                            onChange={handleEditSaveChange}
+                            checked={formData.deliveryOption === "home"}
                         />
                     </Form.Group>
 
@@ -161,21 +121,23 @@ export default function EditDeliveryAdress({ handleCancel }) {
                             label="Work (delivery between 10 AM - 5 PM)"
                             name="deliveryOption"
                             value="work"
-                            onChange={(e) => setFormData({ ...formData, deliveryOption: e.target.value })}
-                            checked={deliveryOption === "work"}
+                            onChange={handleEditSaveChange}
+                            checked={formData.deliveryOption === "work"}
                         />
                     </Form.Group>
                 </div>
 
                 <div className="row">
-                    <Button as={Col} variant="primary" onClick={handleEditSubmit} className="mx-2" >
+                    <Button as={Col} variant="primary" onClick={handleEditSaveSubmit} className="mx-2" >
                         SAVE AND DELIVERY HERE
                     </Button>
-                    <Button as={Col} variant="primary" onClick={handleCancel} >
+                    <Button as={Col} variant="primary" onClick={handleDeliveryAddressCancel} >
                         CANCEL
                     </Button>
                 </div>
             </Form>
         </div>
     )
-}
+};
+
+export default EditDeliveryAdress;

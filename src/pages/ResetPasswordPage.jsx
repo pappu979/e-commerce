@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import Typography from "@mui/material/Typography";
@@ -17,6 +16,7 @@ import PasswordInput from "../components/PasswordInput";
 const ResetPassword = () => {
     const [newPassword, setNewPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [error, setError] = React.useState("");
     const location = useLocation();
     const navigate = useNavigate();
     const email = location.state?.email || "";
@@ -46,6 +46,12 @@ const ResetPassword = () => {
 
         const userData = JSON.parse(localStorage.getItem("userData")) || {};
         userData.email = email;
+
+        if(newPassword.length < 6){
+            setError("Password must be at least 6 characters ");
+            return;
+        }
+
         userData.password = newPassword;
         localStorage.setItem("userData", JSON.stringify(userData));
 
@@ -93,15 +99,17 @@ const ResetPassword = () => {
                                 name="password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="New PassWord"
                             >
                             </PasswordInput>
-
+                             {error && <span style={{color: "rebeccapurple"}}>{error}</span>}
                             <Box sx={{
                                 marginTop: 2,
                             }}>
                                 <PasswordInput
                                     name="password"
                                     value={confirmPassword}
+                                    placeholder="Confirm PassWord"
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 >
                                 </PasswordInput>

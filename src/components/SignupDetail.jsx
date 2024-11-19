@@ -6,27 +6,37 @@ import signupImage from "../images/sign.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/SignupDetail.css";
 import PasswordInput from "./PasswordInput";
+import { signupReducer, intialState } from "../reducer/signupReducer";
 
 function SignupDetail() {
+  const [state, dispatch] = React.useReducer(signupReducer, intialState);
 
-  const [formData, setFormData] = React.useState({
-    email: "",
-    password: "",
-    name: "",
-    mobileNumber: "",
-  });
-
-  const { email, password, name, mobileNumber } = formData;
   const location = useLocation();
   const navigate = useNavigate();
+
+  const handleChangeSignupField = (e) => {
+    const {name, value} = e.target;
+    dispatch({type: "UPDATE_FIELD", field: name, value})
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const errors = {};
+    if(!state.username) errors.username = "Username is required";
+    if(!state.email.includes('@')) errors.email = "Email is invalid";
+    if(state.password.length < 6) errors.password = "Password must be at least 6 characters";
+    if(state.mobileNumber.length < 10) errors.mobileNumber = "MobileNumber must be at least 10 characters";
+
+    if(Object.keys(errors).length > 0){
+     dispatch({type: "SET_ERRORS", errors});
+     return;
+    }
+
     const authToken = Math.random().toString(36).substring(2);
 
     const userData = {
-      ...formData,
+      ...state,
       token: authToken
     };
 
@@ -40,16 +50,12 @@ function SignupDetail() {
       text: "Data has been stored successfully!",
       confirmButtonText: "Ok",
     }).then(() => {
-      setFormData({
-        email: "",
-        password: "",
-       name: "",
-       mobileNumber: "",
-      });
+     dispatch({type: "RESET_FORM"});
     });
     const redirectTo = location.state?.from || "/";
     navigate(redirectTo);
   };
+
 
   return (
     <>
@@ -64,43 +70,44 @@ function SignupDetail() {
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
-                  value={name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  name="username"
+                  value={state.username}
+                  onChange={handleChangeSignupField}
                 />
+                {state.errors.username && <span className="error-message">{state.errors.username}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
-                  value={email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  name="email"
+                  value={state.email}
+                  onChange={handleChangeSignupField}
                 />
+                 {state.errors.email && <span className="error-message">{state.errors.email}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridPassword">               
                 <Form.Label>Password</Form.Label>
                 <PasswordInput
+                type="number"
                 name="password"
-                value={password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                value={state.password}
+                onChange={handleChangeSignupField}
                 ></PasswordInput>
+                {state.errors.password && <span className="error-message">{state.errors.password}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridAddress2">
                 <Form.Label>Mobile No.</Form.Label>
                 <Form.Control
-                  value={mobileNumber}
-                  onChange={(e) =>
-                    setFormData({ ...formData, mobileNumber: e.target.value })
-                  }
+                  type="number"
+                  name="mobileNumber"
+                  value={state.mobileNumber}
+                  onChange={handleChangeSignupField}
                 />
+                {state.errors.mobileNumber && <span className="error-message">{state.errors.mobileNumber}</span>}
               </Form.Group>
 
               <div style={{ marginTop: "20px" }}>
@@ -115,7 +122,7 @@ function SignupDetail() {
             </Form>
 
             <p className="sign-up">
-              Already have an account? <Link to="/login" style={{textDecoration: "none"}}>Login</Link>
+              Already have an account? <Link to="/login" style={{textDecoration: "none", marginLeft: "6px"}}>Login</Link>
             </p>
           </div>
         </div>

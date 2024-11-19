@@ -2,13 +2,12 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../helper/LogOut";
 import PriceDetails from "../components/PriceDetails";
+import EditDeliveryAdress from '../components/EditDeliveryadress';
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
-import EditDeliveryAdress from "../components/EditDeliveryadress";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
 import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
-import { addresses } from "../data/address";
 import "../styles/payment.css";
 
 export default function PaymentPage() {
@@ -23,9 +22,26 @@ export default function PaymentPage() {
     selectPaymetOption: false,
     selectedAddressDelivery: null,
     selectedOption: "UPI",
-    timeLeft: 14 * 60
+    timeLeft: 14 * 60,
+    isEditing: true,
+  }
+
+  const intialEditState = {
+    username: "",
+    mobileNumber: "",
+    pincode: "",
+    locality: "",
+    city: "",
+    state: "",
+    landmark: "",
+    alternate: "",
+    address: "",
+    deliveryOption: ""
   }
   const [stateData, setStateData] = React.useState(intialState);
+  const [formData, setFormData] = React.useState(intialEditState);
+  const [addresses, setAddresses] = React.useState([]);
+  const [userData, setUserData] = React.useState('');
 
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const navigate = useNavigate();
@@ -34,10 +50,10 @@ export default function PaymentPage() {
   let platformFee = 0;
   let savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
 
-  const userData = JSON.parse(localStorage?.getItem("userData")) || {};
+  // const userData = JSON.parse(localStorage?.getItem("userData")) || {};
 
   React.useEffect(() => {
-   
+
     const interval = setInterval(() => {
       setStateData((prevState) => ({
         ...prevState,
@@ -47,13 +63,27 @@ export default function PaymentPage() {
 
     if (stateData?.timeLeft <= 0) {
       clearInterval(interval);
-      alert('Time up! Redirecting you to the cart page.');
+      alert('Time up! Redirecting you to the products page.');
       navigate('/products');
     }
 
     return () => clearInterval(interval);
   }, [stateData?.timeLeft, navigate]);
 
+  React.useEffect(() => {
+    const storedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
+    setAddresses(storedAddresses);
+  }, []);
+
+  React.useEffect(() => {
+    const storeUserData = JSON.parse(localStorage.getItem("userData")) || {};
+    setUserData(storeUserData);
+  }, []);
+
+  const updateLocalStorage = (updatedAddresses) => {
+    localStorage.setItem("addresses", JSON.stringify(updatedAddresses));
+    setAddresses(updatedAddresses)
+  }
 
   if (!product || !productQuantity) {
     navigate("/products");
@@ -76,42 +106,44 @@ export default function PaymentPage() {
 
   const handleOpenDelivaryAddress = () => {
     updateState("deliveryAdress", true);
+    updateState("chnageLogin", false);
     updateState("selectOrderSummary", false);
     updateState("selectPaymetOption", false);
   }
 
-  const handleOptionChange = (event) => {
+  const handlePaymentOptionChange = (event) => {
     updateState("selectedOption", event.target.value);
   };
 
-  const handleDelivery = (addr) => {
+  const handleDeliveryHere = (addr) => {
     updateState("selectedAddressDelivery", addr);
     updateState("selectOrderSummary", true);
     updateState("orderSummary", true);
     updateState("deliveryAdress", false)
   };
 
-  const handleChange = () => {
+  const handleLoginChange = () => {
     updateState("selectedAddressDelivery", false);
     updateState("chnageLogin", true);
     updateState("selectPaymetOption", false);
     updateState("deliveryAdress", false)
   }
-  const handleCheck = () => {
+  const handleCheckOutContinue = () => {
     updateState("chnageLogin", false);
     updateState("selectOrderSummary", false);
     updateState("deliveryAdress", true)
   }
 
-  const handleEdit = () => {
-    updateState("editDelivery", true)
+  const handleDeliveryAddressEdit = () => {
+    updateState("editDelivery", true);
+    updateState("isEditing", false);
   }
 
-  const handleCancel = () => {
+  const handleDeliveryAddressCancel = () => {
     updateState("editDelivery", false)
   }
 
-  const handleContinue = () => {
+  const handleOrderContinue = () => {
     updateState("selectOrderSummary", false);
     updateState("selectPaymetOption", true);
   }
@@ -119,6 +151,30 @@ export default function PaymentPage() {
   const handleLogout = () => {
     logout(navigate)
   };
+
+  const handleEditSaveChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
+  }
+  
+
+  const handleEditSaveSubmit = (e) => {
+    e.preventDefault();
+    const updatedAddresses = [...addresses];
+
+    if (stateData.isEditing) {
+      updatedAddresses.push(formData);
+    } else {
+      updatedAddresses[stateData?.selectedAddress] = formData;
+    }
+    updateLocalStorage(updatedAddresses);
+    setAddresses(updatedAddresses);
+    updateState("editDelivery", false);
+    setFormData(intialEditState)
+  }
 
   return (
     <div className="container my-3">
@@ -135,7 +191,7 @@ export default function PaymentPage() {
                   padding: "11px 16px",
                   border: "1px solid grey", color: "#000"
                 }}
-                  onClick={handleChange}
+                  onClick={handleLoginChange}
                 >
                   Change
                 </button>
@@ -155,7 +211,7 @@ export default function PaymentPage() {
                     fontSize: "17px", fontWeight: "700",
                     border: "none"
                   }}
-                    onClick={handleCheck}
+                    onClick={handleCheckOutContinue}
                   >Checkout continue</button>
                 </div>
               }
@@ -171,13 +227,20 @@ export default function PaymentPage() {
                 addresses={addresses}
                 selectedAddress={stateData?.selectedAddress}
                 updateState={updateState}
-                handleDelivery={handleDelivery}
-                handleEdit={handleEdit}>
+                handleDeliveryHere={handleDeliveryHere}
+                handleDeliveryAddressEdit={handleDeliveryAddressEdit}
+                setFormData={setFormData}
+                intialEditState={intialEditState}
+                >
               </PaymentDefaultAddress>
             }
             {stateData?.orderSummary && !stateData?.deliveryAdress &&
               <>
-                <p>{stateData?.selectedAddressDelivery?.name}, {stateData?.selectedAddressDelivery?.address}</p>
+                <p>
+                  {stateData?.selectedAddressDelivery?.username},
+                  {stateData?.selectedAddressDelivery?.address}
+                  -{stateData?.selectedAddressDelivery?.pincode}
+                </p>
                 <button style={{
                   background: "#fff",
                   padding: "11px 16px",
@@ -185,17 +248,23 @@ export default function PaymentPage() {
                 }}
                   onClick={handleOpenDelivaryAddress}
                 >
-                  Change</button>
+                  Change
+                </button>
               </>
             }
 
-           {/* Edit Address Section */}
+            {/* Edit Address Section */}
             {stateData?.editDelivery &&
-              <EditDeliveryAdress handleCancel={handleCancel}></EditDeliveryAdress>
+              <EditDeliveryAdress
+                handleDeliveryAddressCancel={handleDeliveryAddressCancel}
+                handleEditSaveChange={handleEditSaveChange}
+                handleEditSaveSubmit={handleEditSaveSubmit}
+                formData={formData}
+              ></EditDeliveryAdress>
             }
           </div>
 
-         {/* Order Summary Section */}
+          {/* Order Summary Section */}
           <PaymentOrderSummary
             selectOrderSummary={stateData?.selectOrderSummary}
             product={product}
@@ -204,15 +273,15 @@ export default function PaymentPage() {
             month={currentMonth}
             date={currentDate}
             userData={userData}
-            handleContinue={handleContinue}
+            handleOrderContinue={handleOrderContinue}
           ></PaymentOrderSummary>
 
-         {/* Payment Options Section */}
+          {/* Payment Options Section */}
           <PaymentAdressDetails
             selectPaymetOption={stateData?.selectPaymetOption}
             selectedOption={stateData?.selectedOption}
             timeLeft={stateData?.timeLeft}
-            handleOptionChange={handleOptionChange}
+            handleOptionChange={handlePaymentOptionChange}
             product={product}
             productQuantity={productQuantity}
             platformFee={platformFee}

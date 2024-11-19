@@ -67,11 +67,11 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {    
     Swal.fire({
-      title: "Cart is Empty Now!",
-      text: "Your cart has been cleared. Don't forget to log in before making purchases!",
-      icon: "success",
-      confirmButtonText: "Review Cart or Log In",
-    })
+      title: "Cart Emptied",
+      text: "Your cart is now empty. Log in to save your favorite items or start shopping to add more!",
+      icon: "info",
+      confirmButtonText: "Start Shopping",
+    });
     setCartItems([]);
   };
   

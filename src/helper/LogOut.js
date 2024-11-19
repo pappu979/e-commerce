@@ -23,6 +23,8 @@ export const logout = (navigate) => {
     // Remove the token and user data
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
+    localStorage.removeItem("cartItems"); 
+    localStorage.removeItem("addresses");
 
     // Show success toast for logged out
     toast.success('You have been successfully logged out.', {

@@ -68,7 +68,6 @@
 
 .card-main {
     position: relative;
-    /* overflow: hidden; */
 }
 
 .discount {
@@ -250,7 +249,7 @@
 }
 
 .products-items-list {
-    height: 855px;
+    height: 920px;
     overflow-y: auto;
 }
 
@@ -262,7 +261,7 @@
 
     .products-items-list {
         margin-bottom: 20px;
-        height: 112px;
+        height: 200px;
         width: 100%;
         overflow-y: auto;
     }

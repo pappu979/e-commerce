@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { useLocation } from "react-router-dom";
 
 const ReviewPage = () => {
 
@@ -11,6 +12,8 @@ const ReviewPage = () => {
     const [ratingStar, setRatingStar] = React.useState(0);
     const [reviews, setReviews] = React.useState([]);
     const [userName, setUserName] = React.useState([]);
+    const location = useLocation();
+    const { product, productID } = location?.state || {};
 
     const ratingChanged = (newRating) => {
         setRatingStar(newRating);
@@ -19,15 +22,17 @@ const ReviewPage = () => {
     React.useEffect(() => {
         const userData = localStorage.getItem("userData");
         const storedReviews = localStorage.getItem("reviews");
+
         if (userData) {
             const parsedData = JSON.parse(userData);
-            setUserName(parsedData?.name || "Unknown User");
+            setUserName(parsedData?.username || "Unknown User");
         }
 
         if (storedReviews) {
-            setReviews(JSON.parse(storedReviews));
+            const allReviews = JSON.parse(storedReviews);
+            setReviews(allReviews[productID] || []);
         }
-    }, []);
+    }, [productID]);
 
     const submitReview = () => {
         if (ratingStar <= 0 || !review.trim()) {
@@ -41,11 +46,17 @@ const ReviewPage = () => {
                 userName: userName,
             };
 
-            // Add the new review to the reviews array
-            const newReviews = [...reviews, payload]
-            setReviews(newReviews);
+            // Fetch all reviews from localStorage
+            const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
+            const productReviews = storedReviews[productID] || [];  // check the any review inside the storedReviews object 
 
-            localStorage.setItem("reviews", JSON.stringify(newReviews))
+            const updatedReviews = [...productReviews, payload];
+            storedReviews[productID] = updatedReviews; // update the storedReviews object for this particular productId...
+
+            // Add the new review to the reviews array
+            setReviews(updatedReviews);
+
+            localStorage.setItem("reviews", JSON.stringify(storedReviews))
             Swal.fire({
                 title: "Successfully Submitted!",
                 text: "Thanks for reviewing our product",
@@ -58,11 +69,15 @@ const ReviewPage = () => {
         setRatingStar(0);
     }
 
+
     const deleteReview = (index) => {
         const updateReviews = reviews.filter((_, i) => i !== index);
 
+        const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
+        storedReviews[productID] = updateReviews;
+
         setReviews(updateReviews);
-        localStorage.setItem("reviews", JSON.stringify(updateReviews));
+        localStorage.setItem("reviews", JSON.stringify(storedReviews));
 
         Swal.fire({
             title: "Deleted!",
@@ -74,7 +89,7 @@ const ReviewPage = () => {
 
     return (
         <div className="mt-4 container" style={{ color: "#e1997e" }}>
-            <h3 className="mb-2">Create Reviews</h3>
+            <h3 className="mb-2">Create Reviews for {product.title}</h3>
             <p>Overall Rating</p>
             Rate Us:
             <ReactStars

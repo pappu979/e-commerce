@@ -8,7 +8,7 @@ export default function PaymentOrderSummary({
   month, 
   date, 
   userData, 
-  handleContinue
+  handleOrderContinue
 }) 
 {
 
@@ -18,8 +18,6 @@ export default function PaymentOrderSummary({
             {selectOrderSummary &&
               <>
                 <div className="row d-flex align-items-center justify-content-center">
-
-
                   <div className="col-md-3">
                     <img
                       src={product?.thumbnail}
@@ -112,14 +110,14 @@ export default function PaymentOrderSummary({
 
                 </div>
                 <div className="mt-4">
-                  <span >Order confirmation email will be sent to <strong style={{ fontSize: "14px" }}>{userData.mobileNumber}</strong></span>
+                  <span >Order confirmation email will be sent to <strong style={{ fontSize: "14px" }}>{userData.email}</strong></span>
                   <button style={{
                     background: "#fb641b",
                     padding: "11px 22px",
                     border: "none", color: "#fff",
                     marginLeft: "20PX"
                   }}
-                    onClick={handleContinue}
+                    onClick={handleOrderContinue}
                   >
                     CONTINUE
                   </button>

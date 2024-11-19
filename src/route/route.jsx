@@ -17,7 +17,7 @@ import ForgotPassword from "../pages/ForgotPasswordPage";
 import ResetPassword from "../pages/ResetPasswordPage";
 import WishListPage from "../pages/WishListPage";
 import SaveForLaterPage from "../pages/SaveForLater";
-import ReviewPage from "../pages/ReviePage";
+import ReviewPage from "../pages/ReviewPage";
 
 const Layout = () => (
   <>

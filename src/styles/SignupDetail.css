@@ -46,6 +46,11 @@
   .label{
     font-size: 16px;
   }
+
+  .error-message {
+    margin-top: 5px;
+    color: rgb(197, 12, 12);
+  }
   
 
 @media (max-width: 992px){

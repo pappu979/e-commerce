@@ -159,7 +159,7 @@ function ProductPage() {
                 </button>
               </div>
               <div>
-                <Link to="/review" style={{ textDecoration: "none" }}>
+                <Link to="/review" state={{product, productID}} style={{ textDecoration: "none" }}>
                   Leave Review
                 </Link>
               </div>

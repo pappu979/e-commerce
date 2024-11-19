@@ -35,16 +35,16 @@ function ImageSection({ images, handleWishlistClick, product, wishlistItem }) {
             ))}
           </div>
           <div className="col-md-9 border ">
-          <button onClick={() => handleWishlistClick(product)} className="btn" data-tooltip-id="wishlist-tooltip">
-                {
-                  wishlistItem.some((item) => item.id === product.id) ?
-                    <FavoriteIcon color="error" />
-                    : <FavoriteBorderIcon />
-                }
-              </button>
-              <ReactTooltip id="wishlist-tooltip" place="top" content="Add Item In WishList" />
+            <button onClick={() => handleWishlistClick(product)} className="btn" data-tooltip-id="wishlist-tooltip">
+              {
+                wishlistItem.some((item) => item.id === product.id) ?
+                  <FavoriteIcon color="error" />
+                  : <FavoriteBorderIcon />
+              }
+            </button>
+            <ReactTooltip id="wishlist-tooltip" place="top" content="Add Item In WishList" />
             <div>
-              
+
               <img src={img} alt="" className="product-image" />
             </div>
           </div>

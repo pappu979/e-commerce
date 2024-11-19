@@ -3,6 +3,7 @@ import "../styles/Login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoginImg from "../images/login[1].svg";
 import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
 import PasswordInput from "./PasswordInput";
 
 export default function Login() {
@@ -20,15 +21,13 @@ export default function Login() {
       const parsedUserData = JSON.parse(savedUserData);
 
       if (email === parsedUserData.email && password === parsedUserData.password) {
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
-          text: "You are now logged in.",
-          confirmButtonText: "Ok",
-        }).then(() => {
-          const redirectTo = location.state?.from || "/";
-          navigate(redirectTo);
-        });
+        toast.info("Login Successful!", {
+          position: "top-right",
+          autoClose: 3000,
+        })
+        const redirectTo = location.state?.from || "/";
+        navigate(redirectTo);
+
       } else {
         Swal.fire({
           icon: "error",
@@ -72,11 +71,11 @@ export default function Login() {
               />
             </div>
             <div className="form-group mt-3">
-            <label>Password</label>
-              <PasswordInput 
-              name="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}
+              <label>Password</label>
+              <PasswordInput
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               >
               </PasswordInput>
               <p className="forgot-password text-right mt-2">
