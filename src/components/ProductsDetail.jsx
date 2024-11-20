@@ -128,7 +128,6 @@ export default function Products() {
                           <Link to={`/products/${product.id}`}
                             className="btn"
                             style={{ backgroundColor: "rgb(225, 153, 126)" }}
-                            target="_blank"
                             data-tooltip-id="viewProduct-tooltip"
                           >
                             View Product Details
