@@ -1,9 +1,10 @@
 import React from "react";
-import Login from "../components/Login";
+import LoginDetails from "../components/LoginDetails";
+
 function LoginPage() {
   return (
     <>
-      <Login />
+      <LoginDetails />
     </>
   );
 }

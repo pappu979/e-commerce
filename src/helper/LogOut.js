@@ -20,11 +20,8 @@ export const logout = (navigate) => {
       navigate('/login');
     }, 3000);
   } else {
-    // Remove the token and user data
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("cartItems"); 
-    localStorage.removeItem("addresses");
+    // Remove the token 
+    localStorage.removeItem(isLoggedIn);
 
     // Show success toast for logged out
     toast.success('You have been successfully logged out.', {

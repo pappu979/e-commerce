@@ -50,10 +50,7 @@ export default function PaymentPage() {
   let platformFee = 0;
   let savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
 
-  // const userData = JSON.parse(localStorage?.getItem("userData")) || {};
-
   React.useEffect(() => {
-
     const interval = setInterval(() => {
       setStateData((prevState) => ({
         ...prevState,

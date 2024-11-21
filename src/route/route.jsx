@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
-import Products from "../pages/Products";
 import ProductPage from "../pages/ProductPage";
+import ShowProductDetailsPage from "../pages/ShowProductDetailsPage";
 import CategoryPage from "../pages/CategoryPage";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
+import Login from "../pages/LoginPage";
+import SignupPage from "../pages/SignupPage";
 import CartPage from "../pages/CartPage";
 import PaymentPage from "../pages/PaymentPage";
 import ConfirmationPage from "../pages/ConfirmationPage";
@@ -34,9 +34,9 @@ export const router = createBrowserRouter([
         children: [
           { path: "/", element: <Home /> },
           { path: "login", element: <Login /> },
-          { path: "signup", element: <Signup /> },
-          { path: "products", element: <Products /> },
-          { path: "products/:productID", element: <ProductPage /> },
+          { path: "signup", element: <SignupPage /> },
+          { path: "products", element: <ProductPage /> },
+          { path: "products/:productID", element: <ShowProductDetailsPage /> },
           { path: "products/category/:categoryName", element: <CategoryPage /> },
           { path: "cart", element: <CartPage /> },
           { path: "payment", element: <PaymentPage /> },

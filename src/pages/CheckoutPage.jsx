@@ -4,9 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const CheckoutPage = () => {
-    const { cartItems, clearCart, totalAmount } = useCart();
-    // const navigate = useNavigate();
-    const [formData, setFormData] = React.useState({
+
+    const intialFormData = {
         name: "",
         email: "",
         address: "",
@@ -16,12 +15,14 @@ const CheckoutPage = () => {
         cardNumber: "",
         cardExpiry: "",
         cardCvc: ""
-    });
+    };
+
+    const { cartItems, clearCart, totalAmount } = useCart();
+    const navigate = useNavigate();
+    const [formData, setFormData] = React.useState(intialFormData);
 
     const location = useLocation();
-    let { state } = location;
-
-    const itemsToCheckout = state?.cartItems || cartItems;
+    let { platformFee } = location?.state || {};
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,21 +35,13 @@ const CheckoutPage = () => {
             position: "top-right",
             autoClose: 3000,
         });
-        // navigate("/confirmation")
+        navigate("/confirmation")
         clearCart();
 
-        setFormData({
-            name: "",
-            email: "",
-            address: "",
-            city: "",
-            state: "",
-            zip: "",
-            cardNumber: "",
-            cardExpiry: "",
-            cardCvc: ""
-        });
+        setFormData(intialFormData);
     };
+
+    const checkoutTotalAmount = totalAmount > 0 ? (Number(totalAmount.toFixed(2)) + platformFee) : Number(totalAmount.toFixed(2))
 
     return (
         <div className="container">
@@ -184,17 +177,23 @@ const CheckoutPage = () => {
                 <div className="col-md-4 ">
                     <h3>Order Summary</h3>
                     <div className="card p-3">
-                        {itemsToCheckout.map((item) => (
+                        {cartItems.map((item) => (
                             <div key={item.id} className="d-flex justify-content-between">
                                 <span>{item.title}</span>
                                 <span>₹{(item.price * item.productQuantity).toFixed(2)}</span>
                             </div>
                         ))}
+                        {platformFee > 0 ? <p className="w-100 d-flex justify-content-between">
+                            Platform Fee:
+                            <span className="text-end">{platformFee}</span>
+                        </p>
+                            : null
+                        }
                         <hr />
                         <div className="d-flex justify-content-between">
                             <strong>Total</strong>
                             <strong>
-                                ₹{totalAmount > 0 ? (Number(totalAmount.toFixed(2)) + state?.platformFee) : Number(totalAmount.toFixed(2))}
+                                ₹{checkoutTotalAmount}
                             </strong>
 
                         </div>

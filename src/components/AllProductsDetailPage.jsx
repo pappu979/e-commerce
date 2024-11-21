@@ -20,7 +20,7 @@ const categorizeProducts = (products) => {
 };
 
 
-export default function Products() {
+export default function AllProductsDetailPage() {
 
   const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
   const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);

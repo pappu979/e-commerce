@@ -11,6 +11,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useWishlistHandler from "../provider/useWishlistHandler";
 import flipLogo from '../images/flipLogo.png';
 import useDateInfo from "../utils/dateUtilis";
+import { checkPlatformFee } from "../utils/cartCalculations";
 import { calculateTotal, totalDiscountAmount } from "../utils/cartCalculations";
 
 export default function CartPage() {
@@ -22,18 +23,9 @@ export default function CartPage() {
     const { addToSave } = useSaveForLater();
     const isLoggedIn = localStorage.getItem("authToken");
     const navigate = useNavigate();
-    let platformFee = 10;
     let updateCalc = calculateTotal(cartItems);
     let updateDiscount = totalDiscountAmount(cartItems);
-
-    // Check platformFee..
-    if (updateCalc < 100) {
-        platformFee = 0;
-    } else if (updateCalc > 100 && updateCalc < 500) {
-        platformFee = 5;
-    } else {
-        platformFee = 10;
-    }
+    const platformFee = checkPlatformFee(updateCalc);
 
     // ActualPrice...
     let actualPrice = (updateCalc + updateDiscount).toFixed(2);
@@ -48,12 +40,11 @@ export default function CartPage() {
                 position: "top-right",
                 autoClose: 2000,
             })
-            navigate("/checkout", { state: { platformFee } });
+            navigate("/checkout", {state: {platformFee}});
         } else {
             navigate("/signup");
         }
     };
-
 
     // handleSaveForLater Item...
     const handleSaveForLater = (product) => {

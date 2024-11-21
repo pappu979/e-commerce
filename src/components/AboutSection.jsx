@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import imageslide from "../images/about.png";
 
-const AboutSection = ({ AboutSec }) => {
+const AboutSection = () => {
   return (
     <section className="about-section">
       <Container>

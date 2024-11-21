@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { toast } from 'react-toastify';
 import PasswordInput from "./PasswordInput";
 
-export default function Login() {
+export default function LoginDetails() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
@@ -16,11 +16,13 @@ export default function Login() {
     e.preventDefault();
 
     const savedUserData = localStorage.getItem("userData");
+    const authToken = Math.random().toString(36).substring(2);
 
     if (savedUserData) {
       const parsedUserData = JSON.parse(savedUserData);
 
       if (email === parsedUserData.email && password === parsedUserData.password) {
+        localStorage.setItem("authToken", JSON.stringify(authToken));
         toast.info("Login Successful!", {
           position: "top-right",
           autoClose: 3000,
@@ -97,7 +99,7 @@ export default function Login() {
             </div>
             <p className="forgot-password text-right mt-2">
               Don't have an account?
-              <Link to="/SignUp" style={{ textDecoration: "none" }}>SignUp</Link>
+              <Link to="/SignUp" style={{ textDecoration: "none", marginLeft: "6px" }}>SignUp</Link>
             </p>
 
           </div>

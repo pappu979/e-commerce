@@ -12,7 +12,7 @@ import "../styles/cardStyle.css";
 import "../styles/best-seller.css";
 import { fetchCategories, fetchProductsByCategory } from "../utils/api";
 
-const BestSellerSection = () => {
+const TopCategoriesSection = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("beauty");
   const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
   const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
@@ -144,4 +144,4 @@ const BestSellerSection = () => {
   );
 };
 
-export default BestSellerSection;
+export default TopCategoriesSection;

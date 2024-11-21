@@ -1,7 +1,7 @@
 import React from "react";
 import SignupDetail from "../components/SignupDetail";
 
-function Signup() {
+function SignupPage() {
   return (
     <>
       <SignupDetail />
@@ -9,4 +9,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignupPage;

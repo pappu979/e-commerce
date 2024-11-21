@@ -14,3 +14,16 @@ export const totalDiscountAmount = (cartItems) => {
         0
     );
 }
+
+// Check platformFee..
+export const checkPlatformFee = (updateCalc) => {
+    let platformFee = 10;
+    if (updateCalc < 100) {
+        platformFee = 0;
+    } else if (updateCalc > 100 && updateCalc < 500) {
+        platformFee = 5;
+    } else {
+       platformFee = 10;
+    }
+    return platformFee;
+}
