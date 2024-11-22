@@ -8,17 +8,8 @@ import useWishlistHandler from "../provider/useWishlistHandler";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
-import { fetchProducts } from "../utils/api";
+import { fetchProducts, categorizeProducts } from "../utils/api";
 import "../styles/AllProducts.css";
-
-const categorizeProducts = (products) => {
-  return products?.reduce((acc, product) => {
-    acc[product.category] = acc[product.category] || [];
-    acc[product.category].push(product);
-    return acc;
-  }, {});
-};
-
 
 export default function AllProductsDetailPage() {
 

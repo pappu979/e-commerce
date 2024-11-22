@@ -5,13 +5,14 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useLocation } from "react-router-dom";
+import { storeUserData, storedReviews, currentUser } from "../utils/authKeys";
 
 const ReviewPage = () => {
 
-    const [review, setReview] = React.useState("");
+    const [newReview, setNewReview] = React.useState("");
     const [ratingStar, setRatingStar] = React.useState(0);
-    const [reviews, setReviews] = React.useState([]);
-    const [userName, setUserName] = React.useState([]);
+    const [totalReviews, setTotalReviews] = React.useState([]);
+    const [userName, setUserName] = React.useState('');
     const location = useLocation();
     const { product, productID } = location?.state || {};
 
@@ -20,41 +21,36 @@ const ReviewPage = () => {
     };
 
     React.useEffect(() => {
-        const userData = localStorage.getItem("userData");
-        const storedReviews = localStorage.getItem("reviews");
-
-        if (userData) {
-            const parsedData = JSON.parse(userData);
-            setUserName(parsedData?.username || "Unknown User");
+        if (storeUserData) {
+            setUserName(currentUser?.username);
         }
 
         if (storedReviews) {
-            const allReviews = JSON.parse(storedReviews);
-            setReviews(allReviews[productID] || []);
+            setTotalReviews(storedReviews[productID] || []);
         }
     }, [productID]);
 
     const submitReview = () => {
-        if (ratingStar <= 0 || !review.trim()) {
+        if (ratingStar <= 0 || !newReview.trim()) {
             alert("Please leave a rating and write a review!")
         } else {
             const currentDate = new Date().toLocaleDateString("en-GB");
             const payload = {
-                review: review,
+                review: newReview,
                 rating: ratingStar,
                 date: currentDate,
                 userName: userName,
             };
 
-            // Fetch all reviews from localStorage
-            const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
-            const productReviews = storedReviews[productID] || [];  // check the any review inside the storedReviews object 
-
+            // check the any review inside the storedReviews object
+            const productReviews = storedReviews[productID] || [];  
             const updatedReviews = [...productReviews, payload];
-            storedReviews[productID] = updatedReviews; // update the storedReviews object for this particular productId...
 
+            // update the storedReviews object for this particular productId...
+            storedReviews[productID] = updatedReviews; 
+           
             // Add the new review to the reviews array
-            setReviews(updatedReviews);
+            setTotalReviews(updatedReviews);
 
             localStorage.setItem("reviews", JSON.stringify(storedReviews))
             Swal.fire({
@@ -65,18 +61,16 @@ const ReviewPage = () => {
             })
         }
 
-        setReview("");
+        setNewReview("");
         setRatingStar(0);
     }
 
-
     const deleteReview = (index) => {
-        const updateReviews = reviews.filter((_, i) => i !== index);
+        const updateReviews = totalReviews.filter((_, i) => i !== index);
 
-        const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
         storedReviews[productID] = updateReviews;
 
-        setReviews(updateReviews);
+        setTotalReviews(updateReviews);
         localStorage.setItem("reviews", JSON.stringify(storedReviews));
 
         Swal.fire({
@@ -107,8 +101,8 @@ const ReviewPage = () => {
                     placeholder="Leave a comment here"
                     id="floatingTextarea2"
                     style={{ height: 100 }}
-                    value={review}
-                    onChange={(e) => setReview(e.target.value)}
+                    value={newReview}
+                    onChange={(e) => setNewReview(e.target.value)}
                 />
             </div>
 
@@ -128,8 +122,8 @@ const ReviewPage = () => {
 
             <div className="mt-4 container">
                 <h4>Customer Reviews</h4>
-                {reviews?.length > 0 ? (
-                    reviews.map((item, index) => (
+                {totalReviews?.length > 0 ? (
+                    totalReviews.map((item, index) => (
                         <div className="row mt-4"
                             key={index}
                             style={{

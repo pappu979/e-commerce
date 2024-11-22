@@ -4,7 +4,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import '../App.css';
 
-function ImageSection({ images, handleWishlistClick, product, wishlistItem }) {
+function ProductImagesShowSection({ images, handleWishlistClick, product, wishlistItem }) {
   const [img, setImg] = React.useState(images[0] ? images[0] : null);
 
   const changeImage = (index) => {
@@ -55,4 +55,4 @@ function ImageSection({ images, handleWishlistClick, product, wishlistItem }) {
   );
 }
 
-export default ImageSection;
+export default ProductImagesShowSection;

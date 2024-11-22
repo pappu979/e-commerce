@@ -6,42 +6,22 @@ import EditDeliveryAdress from '../components/EditDeliveryadress';
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
+import { 
+  intialEditDeliveryAddressState, 
+  intialPaymentPageState 
+} from "../utils/intialPaymentData";
+import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
 import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
+import { storeUserData, storedAddresses, currentUser } from "../utils/authKeys";
 import "../styles/payment.css";
 
 export default function PaymentPage() {
 
-  const intialState = {
-    selectedAddress: 0,
-    chnageLogin: false,
-    deliveryAdress: true,
-    editDelivery: false,
-    orderSummary: false,
-    selectOrderSummary: false,
-    selectPaymetOption: false,
-    selectedAddressDelivery: null,
-    selectedOption: "UPI",
-    timeLeft: 14 * 60,
-    isEditing: true,
-  }
-
-  const intialEditState = {
-    username: "",
-    mobileNumber: "",
-    pincode: "",
-    locality: "",
-    city: "",
-    state: "",
-    landmark: "",
-    alternate: "",
-    address: "",
-    deliveryOption: ""
-  }
-  const [stateData, setStateData] = React.useState(intialState);
-  const [formData, setFormData] = React.useState(intialEditState);
+  const [stateData, setStateData] = React.useState(intialPaymentPageState);
+  const [formData, setFormData] = React.useState(intialEditDeliveryAddressState);
   const [addresses, setAddresses] = React.useState([]);
-  const [userData, setUserData] = React.useState('');
+  const [userData, setUserData] = React.useState([]);
 
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const navigate = useNavigate();
@@ -68,12 +48,10 @@ export default function PaymentPage() {
   }, [stateData?.timeLeft, navigate]);
 
   React.useEffect(() => {
-    const storedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
     setAddresses(storedAddresses);
   }, []);
 
   React.useEffect(() => {
-    const storeUserData = JSON.parse(localStorage.getItem("userData")) || {};
     setUserData(storeUserData);
   }, []);
 
@@ -170,7 +148,7 @@ export default function PaymentPage() {
     updateLocalStorage(updatedAddresses);
     setAddresses(updatedAddresses);
     updateState("editDelivery", false);
-    setFormData(intialEditState)
+    setFormData(intialEditDeliveryAddressState)
   }
 
   return (
@@ -178,22 +156,8 @@ export default function PaymentPage() {
       <div className="row">
         <div className="col-md-8">
           <div className="login-section">
-            <div className="d-flex align-items-center justify-content-between flex-wrap">
-              <div className="login-title">1 LOGIN ✔️
-                <p style={{ fontSize: "14px" }}>{userData?.mobileNumber || +916352075082}</p>
-              </div>
-              <div className="login-details">
-                <button style={{
-                  background: "#fff",
-                  padding: "11px 16px",
-                  border: "1px solid grey", color: "#000"
-                }}
-                  onClick={handleLoginChange}
-                >
-                  Change
-                </button>
-              </div>
-            </div>
+            
+            <PaymentLoginAccordian currentUser={currentUser} handleLoginChange={handleLoginChange} />
             <div>
               {stateData?.chnageLogin &&
                 <div>
@@ -227,16 +191,16 @@ export default function PaymentPage() {
                 handleDeliveryHere={handleDeliveryHere}
                 handleDeliveryAddressEdit={handleDeliveryAddressEdit}
                 setFormData={setFormData}
-                intialEditState={intialEditState}
+                intialEditState={intialEditDeliveryAddressState}
                 >
               </PaymentDefaultAddress>
             }
             {stateData?.orderSummary && !stateData?.deliveryAdress &&
               <>
                 <p>
-                  {stateData?.selectedAddressDelivery?.username},
+                  {stateData?.selectedAddressDelivery?.username}
                   {stateData?.selectedAddressDelivery?.address}
-                  -{stateData?.selectedAddressDelivery?.pincode}
+                  {stateData?.selectedAddressDelivery?.pincode}
                 </p>
                 <button style={{
                   background: "#fff",
@@ -269,7 +233,7 @@ export default function PaymentPage() {
             deliveryDay={deliveryDay}
             month={currentMonth}
             date={currentDate}
-            userData={userData}
+            currentUser={currentUser}
             handleOrderContinue={handleOrderContinue}
           ></PaymentOrderSummary>
 

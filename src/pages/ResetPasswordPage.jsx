@@ -17,9 +17,9 @@ const ResetPassword = () => {
     const [newPassword, setNewPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [error, setError] = React.useState("");
-    const location = useLocation();
     const navigate = useNavigate();
-    const email = location.state?.email || "";
+    const location = useLocation();
+    const {email} = location?.state;
 
     const handleUpdatePassword = (e) => {
         e.preventDefault();
@@ -44,16 +44,18 @@ const ResetPassword = () => {
             return;
         }
 
-        const userData = JSON.parse(localStorage.getItem("userData")) || {};
-        userData.email = email;
+       let resetPassword = [];
+        const userData = JSON.parse(localStorage.getItem("userData")) || [];
+        const user = userData.find((user) => user.email);
 
-        if(newPassword.length < 6){
-            setError("Password must be at least 6 characters ");
-            return;
-        }
+            if(newPassword.length < 6){
+                setError("Password must be at least 6 characters ");
+                return;
+            }
 
-        userData.password = newPassword;
-        localStorage.setItem("userData", JSON.stringify(userData));
+       user.password  = newPassword;
+       resetPassword.push(user);
+        localStorage.setItem("userData", JSON.stringify(resetPassword));
 
         Swal.fire({
             icon: "success",

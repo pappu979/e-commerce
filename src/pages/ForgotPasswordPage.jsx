@@ -9,6 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { toast } from "react-toastify";
+import { storeUserData } from "../utils/authKeys";
 
 export default function ForgotPassword() {
 
@@ -18,11 +19,10 @@ export default function ForgotPassword() {
   const handleReset = (e) => {
     e.preventDefault();
 
-    // Retrieve user data from localStorage
-    const userData = JSON.parse(localStorage.getItem("userData")) || {};
+    const user = storeUserData.find((user) => user.email === email);
 
     // Simulate sending a reset link
-    if (email === userData.email) {
+    if (email === user.email) {
       toast.success("Check your email for the password reset link.", {
         position: "top-right",
         autoClose: 3000,

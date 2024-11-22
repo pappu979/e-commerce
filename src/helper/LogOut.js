@@ -22,6 +22,8 @@ export const logout = (navigate) => {
   } else {
     // Remove the token 
     localStorage.removeItem(isLoggedIn);
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("currentUserEmail");
 
     // Show success toast for logged out
     toast.success('You have been successfully logged out.', {

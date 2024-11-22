@@ -15,22 +15,22 @@ function SignupDetail() {
   const navigate = useNavigate();
 
   const handleChangeSignupField = (e) => {
-    const {name, value} = e.target;
-    dispatch({type: "UPDATE_FIELD", field: name, value})
+    const { name, value } = e.target;
+    dispatch({ type: "UPDATE_FIELD", field: name, value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const errors = {};
-    if(!state.username) errors.username = "Username is required";
-    if(!state.email.includes('@')) errors.email = "Email is invalid";
-    if(state.password.length < 6) errors.password = "Password must be at least 6 characters";
-    if(state.mobileNumber.length < 10) errors.mobileNumber = "MobileNumber must be at least 10 characters";
+    if (!state.username) errors.username = "Username is required";
+    if (!state.email.includes('@')) errors.email = "Email is invalid";
+    if (state.password.length < 6) errors.password = "Password must be at least 6 characters";
+    if (state.mobileNumber.length < 10) errors.mobileNumber = "MobileNumber must be at least 10 characters";
 
-    if(Object.keys(errors).length > 0){
-     dispatch({type: "SET_ERRORS", errors});
-     return;
+    if (Object.keys(errors).length > 0) {
+      dispatch({ type: "SET_ERRORS", errors });
+      return;
     }
 
     const authToken = Math.random().toString(36).substring(2);
@@ -40,9 +40,32 @@ function SignupDetail() {
       token: authToken
     };
 
-    localStorage.setItem("userData", JSON.stringify(userData));
+    const rawData = localStorage.getItem("userData");
+    let existingUsers = [];
 
+    if (rawData) {
+      try {
+        const parsedData = JSON.parse(rawData);
+        existingUsers = Array.isArray(parsedData) ? parsedData : [];
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        existingUsers = [];
+      }
+    }
+    const userIndex = existingUsers.findIndex((user) => user.email === state.email);
+
+    if (userIndex !== -1) {
+      // Update existing user
+      existingUsers[userIndex] = userData;
+    } else {
+      // Add new user
+      existingUsers.push(userData);
+    }
+
+    localStorage.setItem("userData", JSON.stringify(existingUsers));
     localStorage.setItem("authToken", authToken);
+    localStorage.setItem("currentUserEmail", state.email);
+    localStorage.setItem("currentUser", JSON.stringify(state));
 
     Swal.fire({
       icon: "success",
@@ -50,7 +73,7 @@ function SignupDetail() {
       text: "Data has been stored successfully!",
       confirmButtonText: "Ok",
     }).then(() => {
-     dispatch({type: "RESET_FORM"});
+      dispatch({ type: "RESET_FORM" });
     });
     const redirectTo = location.state?.from || "/";
     navigate(redirectTo);
@@ -62,7 +85,7 @@ function SignupDetail() {
       <div className="container">
         <div className="row my-4">
           <div className="signup-image col-md-6">
-            <img src={signupImage} alt="Login"  />
+            <img src={signupImage} alt="Login" />
           </div>
           <div className="signup-form col-md-6">
             <Form onSubmit={handleSubmit}>
@@ -85,16 +108,16 @@ function SignupDetail() {
                   value={state.email}
                   onChange={handleChangeSignupField}
                 />
-                 {state.errors.email && <span className="error-message">{state.errors.email}</span>}
+                {state.errors.email && <span className="error-message">{state.errors.email}</span>}
               </Form.Group>
 
-              <Form.Group controlId="formGridPassword">               
+              <Form.Group controlId="formGridPassword">
                 <Form.Label>Password</Form.Label>
                 <PasswordInput
-                type="number"
-                name="password"
-                value={state.password}
-                onChange={handleChangeSignupField}
+                  type="number"
+                  name="password"
+                  value={state.password}
+                  onChange={handleChangeSignupField}
                 ></PasswordInput>
                 {state.errors.password && <span className="error-message">{state.errors.password}</span>}
               </Form.Group>
@@ -122,7 +145,7 @@ function SignupDetail() {
             </Form>
 
             <p className="sign-up">
-              Already have an account? <Link to="/login" style={{textDecoration: "none", marginLeft: "6px"}}>Login</Link>
+              Already have an account? <Link to="/login" style={{ textDecoration: "none", marginLeft: "6px" }}>Login</Link>
             </p>
           </div>
         </div>

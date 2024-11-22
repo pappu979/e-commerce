@@ -1,7 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
-import CashOnDelivery from '../components/CashOnDelivery'
+import CashOnDelivery from '../components/CashOnDelivery';
+import { formatTime } from "../utils/cartCalculations";
 
 export default function PaymentAdressDetails({
     selectPaymetOption, 
@@ -12,12 +13,6 @@ export default function PaymentAdressDetails({
     productQuantity, 
     platformFee, 
     indianBanks}) {
-
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
 
     return(
         <div className="address-section">

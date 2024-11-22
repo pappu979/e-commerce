@@ -12,19 +12,6 @@ export const CartProvider = ({ children }) => {
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
   React.useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);

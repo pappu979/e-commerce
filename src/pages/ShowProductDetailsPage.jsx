@@ -6,7 +6,7 @@ import { useWishlist } from "../provider/WishlistProvider";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Swal from "sweetalert2";
 import ReactStars from "react-stars";
-import ImageSection from "../components/ImageSection";
+import ProductImagesShowSection from "../components/ProductImagesShowSection";
 import useWishlistHandler from "../provider/useWishlistHandler";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -74,7 +74,7 @@ function ShowProductDetailsPage() {
             <div className="col-md-6">
               {product?.images?.length > 0 && (
                 <div className="image-section-container">
-                  <ImageSection
+                  <ProductImagesShowSection
                     images={product?.images}
                     wishlistItem={wishlistItem}
                     handleWishlistClick={handleWishlistClick}

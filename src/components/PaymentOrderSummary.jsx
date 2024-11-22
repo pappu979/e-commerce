@@ -7,7 +7,7 @@ export default function PaymentOrderSummary({
   deliveryDay, 
   month, 
   date, 
-  userData, 
+  currentUser, 
   handleOrderContinue
 }) 
 {
@@ -110,7 +110,14 @@ export default function PaymentOrderSummary({
 
                 </div>
                 <div className="mt-4">
-                  <span >Order confirmation email will be sent to <strong style={{ fontSize: "14px" }}>{userData.email}</strong></span>
+                  <span >Order confirmation email will be sent to 
+                    {currentUser ? 
+                    <strong style={{ fontSize: "14px", marginLeft: "6px" }}>{currentUser?.email}</strong>
+                    :
+                    <strong style={{ fontSize: "14px", marginLeft: "6px" }}>No user email found</strong>
+                    }
+                  
+                  </span>
                   <button style={{
                     background: "#fb641b",
                     padding: "11px 22px",
