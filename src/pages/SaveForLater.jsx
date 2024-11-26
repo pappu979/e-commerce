@@ -5,19 +5,20 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useWishlistHandler from '../provider/useWishlistHandler';
 import { useWishlist } from "../provider/WishlistProvider";
 import { useSaveForLater } from '../provider/SaveForLaterProvider';
-import { useCart } from '../provider/CartProvider';
+import { addToCart } from '../features/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import flipLogo from '../images/flipLogo.png';
+import { useDispatch } from 'react-redux';
 
 const SaveForLaterPage = () => {
     const { removeFromSaveForLater, saveForLaterItems } = useSaveForLater();
     const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
     const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
-    const { addToCart } = useCart();
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
+    
     const moveToCart = (product) => {
-        addToCart(product);
+        dispatch(addToCart(product));
         removeFromSaveForLater(product.id)
         navigate('/cart');
     }

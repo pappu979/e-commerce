@@ -22,7 +22,7 @@ export default function ForgotPassword() {
     const user = storeUserData.find((user) => user.email === email);
 
     // Simulate sending a reset link
-    if (email === user.email) {
+    if (user) {
       toast.success("Check your email for the password reset link.", {
         position: "top-right",
         autoClose: 3000,

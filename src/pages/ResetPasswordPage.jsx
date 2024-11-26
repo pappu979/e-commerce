@@ -44,18 +44,18 @@ const ResetPassword = () => {
             return;
         }
 
-       let resetPassword = [];
         const userData = JSON.parse(localStorage.getItem("userData")) || [];
-        const user = userData.find((user) => user.email);
+        const userIndex = userData.findIndex((user) => user.email === email);
 
-            if(newPassword.length < 6){
-                setError("Password must be at least 6 characters ");
-                return;
+          if (userIndex !== -1) {
+            if (newPassword.length < 8) {
+              setError("Password must be at least 8 characters");
+              return;
             }
+        }
 
-       user.password  = newPassword;
-       resetPassword.push(user);
-        localStorage.setItem("userData", JSON.stringify(resetPassword));
+       userData[userIndex].password  = newPassword;
+        localStorage.setItem("userData", JSON.stringify(userData));
 
         Swal.fire({
             icon: "success",

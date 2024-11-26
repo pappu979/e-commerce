@@ -1,13 +1,19 @@
 import React from "react";
 
 export default function PriceDetails ({selectedOption, product, productQuantity, platformFee, savePrice})  {
+   
+     const totalSavings = selectedOption === "CashOnDelivery" ? (savePrice) - 7 - platformFee
+     : savePrice - platformFee;
+     const paybleAmount = selectedOption === "CashOnDelivery" ? (product.price * productQuantity) + 7 + platformFee
+     : (product.price * productQuantity) + platformFee
+
     return (
         <div className="price-details-section col-md-4">
           <h3 className="section-title">PRICE DETAILS</h3>
           <div className="price-breakdown">
             <div className="price-item">
               <span>Price (1 item)</span>
-              <span>₹{product.price * productQuantity}</span>
+              <span>₹{(product.price * productQuantity).toFixed(2)}</span>
             </div>
             <div className="price-item">
               <span>Delivery Charges</span>
@@ -39,17 +45,13 @@ export default function PriceDetails ({selectedOption, product, productQuantity,
             <div className="price-item total-payable">
               <span>Amount Payable</span>
               <span>
-                ₹{selectedOption === "CashOnDelivery" ?
-                  (product.price * productQuantity) + 7 + platformFee
-                  : (product.price * productQuantity) + platformFee}
+                ₹{paybleAmount.toFixed(2)}
               </span>
             </div>
             <div className="price-item savings">
               <span>Your Total Savings on this order</span>
               <span>
-                ₹{selectedOption === "CashOnDelivery" ?
-                  (savePrice) - 7 - platformFee
-                  : savePrice - platformFee}
+                ₹{totalSavings.toFixed(2)}
               </span>
             </div>
           </div>

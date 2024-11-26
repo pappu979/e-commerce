@@ -4,55 +4,52 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import signupImage from "../images/sign.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/SignupDetail.css";
 import PasswordInput from "./PasswordInput";
-import { signupReducer, intialState } from "../reducer/signupReducer";
+import { createAuthToken } from "../utils/authKeys";
+import { validateForm } from "../validation/validation";
+import { storeUserData } from "../utils/authKeys";
+import { setLocalStorageSignupUserData } from "../validation/localStorage";
+import { useSelector, useDispatch } from "react-redux";
+import { updateSignupField, resetSignupForm, setSignupErrors } from "../features/authslice";
+import { setCurrentUser } from "../features/userSlice";
+import "../styles/SignupDetail.css";
 
 function SignupDetail() {
-  const [state, dispatch] = React.useReducer(signupReducer, intialState);
+  const signupState = useSelector((state) => state.auth.signup);
+  const dispatch = useDispatch();
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleChangeSignupField = (e) => {
     const { name, value } = e.target;
-    dispatch({ type: "UPDATE_FIELD", field: name, value })
+    dispatch(updateSignupField({field: name, value}));
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const errors = {};
-    if (!state.username) errors.username = "Username is required";
-    if (!state.email.includes('@')) errors.email = "Email is invalid";
-    if (state.password.length < 6) errors.password = "Password must be at least 6 characters";
-    if (state.mobileNumber.length < 10) errors.mobileNumber = "MobileNumber must be at least 10 characters";
+    const userData = {
+      ...signupState,
+      token: createAuthToken
+    };
+    const errors = validateForm(signupState);
+    let existingUsers = [];
 
     if (Object.keys(errors).length > 0) {
-      dispatch({ type: "SET_ERRORS", errors });
+      dispatch(setSignupErrors(errors));
       return;
     }
 
-    const authToken = Math.random().toString(36).substring(2);
-
-    const userData = {
-      ...state,
-      token: authToken
-    };
-
-    const rawData = localStorage.getItem("userData");
-    let existingUsers = [];
-
-    if (rawData) {
+    if (storeUserData) {
       try {
-        const parsedData = JSON.parse(rawData);
-        existingUsers = Array.isArray(parsedData) ? parsedData : [];
+        existingUsers = Array.isArray(storeUserData) ? storeUserData : [];
       } catch (error) {
         console.error("Failed to parse user data:", error);
         existingUsers = [];
       }
     }
-    const userIndex = existingUsers.findIndex((user) => user.email === state.email);
+    const userIndex = existingUsers.findIndex((user) => user.email === signupState.email);
 
     if (userIndex !== -1) {
       // Update existing user
@@ -61,11 +58,8 @@ function SignupDetail() {
       // Add new user
       existingUsers.push(userData);
     }
-
-    localStorage.setItem("userData", JSON.stringify(existingUsers));
-    localStorage.setItem("authToken", authToken);
-    localStorage.setItem("currentUserEmail", state.email);
-    localStorage.setItem("currentUser", JSON.stringify(state));
+    setLocalStorageSignupUserData(existingUsers, createAuthToken, signupState);
+    dispatch(setCurrentUser(signupState))
 
     Swal.fire({
       icon: "success",
@@ -73,12 +67,11 @@ function SignupDetail() {
       text: "Data has been stored successfully!",
       confirmButtonText: "Ok",
     }).then(() => {
-      dispatch({ type: "RESET_FORM" });
+      dispatch(resetSignupForm());
     });
     const redirectTo = location.state?.from || "/";
     navigate(redirectTo);
   };
-
 
   return (
     <>
@@ -94,10 +87,10 @@ function SignupDetail() {
                 <Form.Control
                   type="text"
                   name="username"
-                  value={state.username}
+                  value={signupState.username}
                   onChange={handleChangeSignupField}
                 />
-                {state.errors.username && <span className="error-message">{state.errors.username}</span>}
+                {signupState.errors.username && <span className="error-message">{signupState.errors.username}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridEmail">
@@ -105,10 +98,10 @@ function SignupDetail() {
                 <Form.Control
                   type="email"
                   name="email"
-                  value={state.email}
+                  value={signupState.email}
                   onChange={handleChangeSignupField}
                 />
-                {state.errors.email && <span className="error-message">{state.errors.email}</span>}
+                {signupState.errors.email && <span className="error-message">{signupState.errors.email}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridPassword">
@@ -116,10 +109,10 @@ function SignupDetail() {
                 <PasswordInput
                   type="number"
                   name="password"
-                  value={state.password}
+                  value={signupState.password}
                   onChange={handleChangeSignupField}
                 ></PasswordInput>
-                {state.errors.password && <span className="error-message">{state.errors.password}</span>}
+                {signupState.errors.password && <span className="error-message">{signupState.errors.password}</span>}
               </Form.Group>
 
               <Form.Group controlId="formGridAddress2">
@@ -127,10 +120,10 @@ function SignupDetail() {
                 <Form.Control
                   type="number"
                   name="mobileNumber"
-                  value={state.mobileNumber}
+                  value={signupState.mobileNumber}
                   onChange={handleChangeSignupField}
                 />
-                {state.errors.mobileNumber && <span className="error-message">{state.errors.mobileNumber}</span>}
+                {signupState.errors.mobileNumber && <span className="error-message">{signupState.errors.mobileNumber}</span>}
               </Form.Group>
 
               <div style={{ marginTop: "20px" }}>

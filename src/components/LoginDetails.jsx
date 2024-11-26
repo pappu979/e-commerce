@@ -5,26 +5,39 @@ import LoginImg from "../images/login[1].svg";
 import Swal from "sweetalert2";
 import { toast } from 'react-toastify';
 import PasswordInput from "./PasswordInput";
-import { storeUserData, authToken } from "../utils/authKeys";
+import { storeUserData, createAuthToken } from "../utils/authKeys";
+import { setLocalStorageLoginUserData } from "../validation/localStorage";
+import { validateLoginForm } from "../validation/validation";
+import { useSelector, useDispatch } from "react-redux";
+import { updateLoginField, setLoginErrors, resetLoginForm } from "../features/authslice";
+import { setCurrentUser } from "../features/userSlice";
 
 export default function LoginDetails() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const loginState = useSelector((state) => state.auth.login);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleChangeLoginField = (e) => {
+    const { name, value } = e.target;
+    dispatch(updateLoginField({field: name, value}));
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(storeUserData)
-    if (storeUserData) {
-    
-      const user = storeUserData.find((user) => user.email === email && user.password === password)
+    const errors = validateLoginForm(loginState);
 
+    if (Object.keys(errors).length > 0) {
+      dispatch(setLoginErrors(errors));
+      return;
+    }
+
+    if (storeUserData) {  
+      const user = storeUserData.find((user) => user.email === loginState.email && user.password === loginState.password);
       if (user) {
-        localStorage.setItem("authToken", JSON.stringify(authToken));
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        localStorage.setItem("currentUserEmail", user.email);
+        setLocalStorageLoginUserData(createAuthToken, user);
+        dispatch(setCurrentUser(user))
         toast.info("Login Successful!", {
           position: "top-right",
           autoClose: 3000,
@@ -51,8 +64,7 @@ export default function LoginDetails() {
       });
     }
 
-    setEmail("");
-    setPassword("");
+    dispatch(resetLoginForm());
   };
 
   return (
@@ -70,18 +82,21 @@ export default function LoginDetails() {
                 type="email"
                 className="form-control mt-1"
                 name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={loginState.email}
+                onChange={handleChangeLoginField}
               />
+              {loginState.errors.email && <span className="error-message">{loginState.errors.email}</span>}
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
               <PasswordInput
+                type="password"
                 name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginState.password}
+                onChange={handleChangeLoginField}
               >
               </PasswordInput>
+              {loginState.errors.password && <span className="error-message">{loginState.errors.password}</span>}
               <p className="forgot-password text-right mt-2">
                 <Link to="/forgot-password"
                   style={{ textDecoration: "none" }}

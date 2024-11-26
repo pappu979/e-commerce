@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useCart } from "../provider/CartProvider";
 import { useWishlist } from "../provider/WishlistProvider";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Swal from "sweetalert2";
@@ -11,9 +10,11 @@ import useWishlistHandler from "../provider/useWishlistHandler";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Rating from '../components/Rating';
+import { addToCart, updateQuantity } from "../features/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 import "../styles/product-page.css";
 import '../App.css';
-
+import { toast } from "react-toastify";
 
 function ShowProductDetailsPage() {
 
@@ -21,33 +22,40 @@ function ShowProductDetailsPage() {
   const [product, setProduct] = React.useState({});
   const [productQuantity, setProductQuantity] = React.useState(1);
   const navigate = useNavigate();
-  const { addToCart, updateQuantity } = useCart();
-  const isLoggedIn = localStorage.getItem("authToken");
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.cart.currentUser);
   const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
   const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
+  const authToken = localStorage.getItem("authToken")
 
   React.useEffect(() => {
     axios.get(`https://dummyjson.com/products/${productID}`)
-    .then((json) => setProduct(json.data))
+      .then((json) => setProduct(json.data))
   }, []);
 
   const handleToAddCart = () => {
+    if (!currentUser) {
+      toast.info("User not logged in!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
     const payload = {
       ...product,
       productQuantity,
       totalPrice: product?.price * productQuantity,
     };
-
-    addToCart(payload);
+  
+    dispatch(addToCart(payload));
 
     Swal.fire({
       title: "Added to Cart!",
       text: "Check your Cart for Check Out",
       icon: "success",
-      confirmButtonText: "Check in cart if you don't login so please login",
     }).then(() => {
-      if (isLoggedIn) {
-        updateQuantity(productID, productQuantity);
+      if (authToken) {
+        dispatch(updateQuantity(productID, productQuantity));
         navigate("/cart")
       } else {
         navigate("/login", { state: { from: location.pathname } })
@@ -57,14 +65,12 @@ function ShowProductDetailsPage() {
 
 
   const handleBuyNow = () => {
-
-    if (isLoggedIn) {
+    if (authToken) {
       navigate("/payment", { state: { product, productQuantity } });
     } else {
       navigate("/login", { state: { from: location.pathname } });
     }
   };
-
 
   return (
     <div className="container pb-5">
@@ -157,7 +163,7 @@ function ShowProductDetailsPage() {
                 </button>
               </div>
               <div>
-                <Link to="/review" state={{product, productID}} style={{ textDecoration: "none" }}>
+                <Link to="/review" state={{ product, productID }} style={{ textDecoration: "none" }}>
                   Leave Review
                 </Link>
               </div>

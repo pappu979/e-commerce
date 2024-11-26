@@ -10,38 +10,38 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
-import { useCart } from "../provider/CartProvider";
 import { useWishlist } from "../provider/WishlistProvider";
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useSaveForLater } from "../provider/SaveForLaterProvider";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../helper/LogOut";
-
+import { useSelector } from "react-redux";
+import { logout } from "../features/userSlice";
+import { useDispatch } from "react-redux";
 
 function NavigationBar() {
-  const { cartItems } = useCart();
+  const cartItems = useSelector((state) => state.cart.items);
   const [hoverEffect, setHoverEffect] = React.useState(false);
   const { wishlistItem } = useWishlist();
   const { saveForLaterItems } = useSaveForLater();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleMouseEnter = () => setHoverEffect(true);
   const handleMouseLeave = () => setHoverEffect(false)
-
-  const handleClick = () => {
-    const isLoggedIn = localStorage.getItem("authToken");
-
-    if (isLoggedIn) {
+  const authToken = localStorage.getItem("authToken");
+  
+  const handleShowCart = () => {   
+    if (authToken) {
       navigate("/cart")
     } else {
-      navigate("/signup")
+      navigate("/login")
     }
   }
 
   const handleLogout = () => {
-    logout(navigate);
+    dispatch(logout());
   };
 
   return (
@@ -115,7 +115,7 @@ function NavigationBar() {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <div className="ms-4 btn position-relative" onClick={handleClick}>
+              <div className="ms-4 btn position-relative" onClick={handleShowCart}>
                 <FontAwesomeIcon icon={faShoppingCart} /> Cart
                 {cartItems.length > 0 && (
                   <span

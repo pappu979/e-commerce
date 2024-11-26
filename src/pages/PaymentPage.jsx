@@ -1,6 +1,5 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { logout } from "../helper/LogOut";
 import PriceDetails from "../components/PriceDetails";
 import EditDeliveryAdress from '../components/EditDeliveryadress';
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
@@ -13,16 +12,16 @@ import {
 import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
 import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
-import { storeUserData, storedAddresses, currentUser } from "../utils/authKeys";
+import {  storedAddresses, currentUser } from "../utils/authKeys";
+import { logout } from "../features/userSlice";
+import { useDispatch } from "react-redux";
 import "../styles/payment.css";
 
 export default function PaymentPage() {
-
+  const dispatch = useDispatch();
   const [stateData, setStateData] = React.useState(intialPaymentPageState);
   const [formData, setFormData] = React.useState(intialEditDeliveryAddressState);
   const [addresses, setAddresses] = React.useState([]);
-  const [userData, setUserData] = React.useState([]);
-
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,10 +48,6 @@ export default function PaymentPage() {
 
   React.useEffect(() => {
     setAddresses(storedAddresses);
-  }, []);
-
-  React.useEffect(() => {
-    setUserData(storeUserData);
   }, []);
 
   const updateLocalStorage = (updatedAddresses) => {
@@ -124,7 +119,7 @@ export default function PaymentPage() {
   }
 
   const handleLogout = () => {
-    logout(navigate)
+    dispatch(logout());
   };
 
   const handleEditSaveChange = (e) => {

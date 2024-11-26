@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../provider/CartProvider";
 import { useWishlist } from "../provider/WishlistProvider";
 import { toast } from 'react-toastify';
 import { useSaveForLater } from "../provider/SaveForLaterProvider";
@@ -13,10 +12,13 @@ import flipLogo from '../images/flipLogo.png';
 import useDateInfo from "../utils/dateUtilis";
 import { checkPlatformFee } from "../utils/cartCalculations";
 import { calculateTotal, totalDiscountAmount } from "../utils/cartCalculations";
+import { clearCart, removeFromCart, updateQuantity } from "../features/cartSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function CartPage() {
-
-    const { cartItems, clearCart, removeFromCart, updateQuantity } = useCart();
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.items);
     const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
     const {currentDate, currentMonth, deliveryDay} = useDateInfo();
     const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
@@ -42,14 +44,14 @@ export default function CartPage() {
             })
             navigate("/checkout", {state: {platformFee}});
         } else {
-            navigate("/signup");
+            navigate("/login");
         }
     };
 
     // handleSaveForLater Item...
     const handleSaveForLater = (product) => {
         addToSave(product);
-        removeFromCart(product.id)
+        dispatch(removeFromCart(product.id))
         navigate("/saveforlater");
     }
 
@@ -71,6 +73,9 @@ export default function CartPage() {
         }
     }
 
+    const handleClearCart = () => {
+        dispatch(clearCart());
+    }
 
     return (
         <div className="container mt-5 ">
@@ -100,7 +105,7 @@ export default function CartPage() {
                                         <button
                                             className="btn  mx-2"
                                             disabled={product.productQuantity <= 1}
-                                            onClick={() => updateQuantity(product.id, product.productQuantity - 1)}
+                                            onClick={() => dispatch(updateQuantity(product.id, product.productQuantity - 1))}
                                             style={{
                                                 padding: "4px 8px",
                                                 border: "1px solid grey",
@@ -120,7 +125,7 @@ export default function CartPage() {
 
                                         <button
                                             className="btn  mx-2"
-                                            onClick={() => updateQuantity(product.id, product.productQuantity + 1)}
+                                            onClick={() => dispatch(updateQuantity(product.id, product.productQuantity + 1))}
                                             style={{
                                                 padding: "4px 8px",
                                                 border: "1px solid grey",
@@ -180,7 +185,7 @@ export default function CartPage() {
 
                                         <button
                                             className="btn p-0 mt-2 fw-bold"
-                                            onClick={() => removeFromCart(product.id)}
+                                            onClick={() => dispatch(removeFromCart(product.id))}
                                             style={{ fontSize: "18px", marginLeft: "16px" }}
                                         >
                                             Remove
@@ -285,7 +290,7 @@ export default function CartPage() {
             {cartItems?.length > 0 && (
                 <div className="text-center my-5">
                     <button
-                        onClick={clearCart}
+                        onClick={handleClearCart}
                         className="btn btn-danger mr-3"
                         style={{
                             backgroundColor: "#ff9f00",

@@ -28,6 +28,7 @@ export const checkPlatformFee = (updateCalc) => {
     return platformFee;
 }
 
+// Time formating..
 export  const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;

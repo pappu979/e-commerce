@@ -1,7 +1,9 @@
 import React from "react";
-import { useCart } from "../provider/CartProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { clearCart } from "../features/cartSlice";
 
 const CheckoutPage = () => {
 
@@ -16,8 +18,9 @@ const CheckoutPage = () => {
         cardExpiry: "",
         cardCvc: ""
     };
-
-    const { cartItems, clearCart, totalAmount } = useCart();
+     const cartItems = useSelector((state) => state.cart.items);
+     const totalAmount = useSelector((state) => state.cart.totalAmount);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formData, setFormData] = React.useState(intialFormData);
 
@@ -36,7 +39,7 @@ const CheckoutPage = () => {
             autoClose: 3000,
         });
         navigate("/confirmation")
-        clearCart();
+        dispatch(clearCart());
 
         setFormData(intialFormData);
     };
