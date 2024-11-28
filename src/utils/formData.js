@@ -1,3 +1,15 @@
+export  const intialCheckoutFormData = {
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    cardNumber: "",
+    cardExpiry: "",
+    cardCvc: ""
+};
+
 export const intialPaymentPageState = {
     selectedAddress: 0,
     chnageLogin: false,

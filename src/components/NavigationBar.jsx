@@ -10,21 +10,19 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
-import { useWishlist } from "../provider/WishlistProvider";
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useSaveForLater } from "../provider/SaveForLaterProvider";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { logout } from "../features/userSlice";
-import { useDispatch } from "react-redux";
+import { logout } from "../reducres/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 
 function NavigationBar() {
   const cartItems = useSelector((state) => state.cart.items);
   const [hoverEffect, setHoverEffect] = React.useState(false);
-  const { wishlistItem } = useWishlist();
-  const { saveForLaterItems } = useSaveForLater();
+  const wishlistItem = useSelector((state) => state.wishlist.items)
+  const saveForLaterItems = useSelector((state) => state.saveForLater.saveItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -41,7 +39,20 @@ function NavigationBar() {
   }
 
   const handleLogout = () => {
-    dispatch(logout());
+    if(!authToken){
+      toast.info("You are already Logout!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }else{
+      dispatch(logout());
+    }
+    navigate("/login")
   };
 
   return (

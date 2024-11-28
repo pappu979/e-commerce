@@ -1,23 +1,18 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useWishlist } from "../provider/WishlistProvider";
-import useWishlistHandler from "../provider/useWishlistHandler";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
 import { fetchProducts, categorizeProducts } from "../utils/api";
+import CheckWishlistItemButton from "./CheckWishListButton";
 import "../styles/AllProducts.css";
+
 
 export default function AllProductsDetailPage() {
 
-  const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
-  const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
-
   const { data: products, isLoading, isError } = useQuery({
-    queryKey: ["products"], 
+    queryKey: ["products"],
     queryFn: fetchProducts,
   });
 
@@ -55,22 +50,11 @@ export default function AllProductsDetailPage() {
                       }}
                     >
                       <div className="image-container">
-                        <button onClick={() => handleWishlistClick(product)} className="btn" data-tooltip-id="wishlistItem-tooltip">
-                          {
-                            wishlistItem.some((item) => item?.id === product?.id) ?
-                              <FavoriteIcon color="error" />
-                              : <FavoriteBorderIcon />
-                          }
-                        </button>
-                        <ReactTooltip
-                          id="wishlistItem-tooltip"
-                          place="top"
-                          key={wishlistItem.some((item) => item?.id === product?.id) ? 'in-wishlist' : 'not-in-wishlist'}
-                          content={wishlistItem.some((item) => item?.id === product?.id)
-                            ? "Remove From Wishlist"
-                            : "Add Item to Wishlist"}
 
+                        <CheckWishlistItemButton
+                          product={product}
                         />
+
                         <Card.Img
                           className="product-image"
                           variant="top"

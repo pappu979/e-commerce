@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { removeLogoutLocalStorage } from '../validation/localStorage';
+import { toast } from 'react-toastify';
 
 const initialUserState = JSON.parse(localStorage.getItem("currentUser")) || null;
 
@@ -16,6 +17,15 @@ const userSlice = createSlice({
     logout: (state) => {
       state.currentUser = null;
       removeLogoutLocalStorage();
+      toast.success("You have successfully logged out!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     },
   },
 });

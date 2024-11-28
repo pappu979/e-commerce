@@ -1,28 +1,22 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useWishlist } from "../provider/WishlistProvider";
 import { toast } from 'react-toastify';
-import { useSaveForLater } from "../provider/SaveForLaterProvider";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import emptyCartImg from '../images/emptyCart.webp';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import useWishlistHandler from "../provider/useWishlistHandler";
 import flipLogo from '../images/flipLogo.png';
 import useDateInfo from "../utils/dateUtilis";
 import { checkPlatformFee } from "../utils/cartCalculations";
 import { calculateTotal, totalDiscountAmount } from "../utils/cartCalculations";
-import { clearCart, removeFromCart, updateQuantity } from "../features/cartSlice";
+import { clearCart, removeFromCart, updateQuantity } from "../reducres/cartReducer";
+import { addSaveforLater } from "../reducres/saveForLaterReducer";
+import CheckWishlistItemButton from "../components/CheckWishListButton";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 export default function CartPage() {
     const dispatch = useDispatch();
     const cartItems = useSelector((state) => state.cart.items);
-    const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
-    const {currentDate, currentMonth, deliveryDay} = useDateInfo();
-    const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
-    const { addToSave } = useSaveForLater();
+    const { currentDate, currentMonth, deliveryDay } = useDateInfo();
     const isLoggedIn = localStorage.getItem("authToken");
     const navigate = useNavigate();
     let updateCalc = calculateTotal(cartItems);
@@ -42,7 +36,7 @@ export default function CartPage() {
                 position: "top-right",
                 autoClose: 2000,
             })
-            navigate("/checkout", {state: {platformFee}});
+            navigate("/checkout", { state: { platformFee } });
         } else {
             navigate("/login");
         }
@@ -50,7 +44,7 @@ export default function CartPage() {
 
     // handleSaveForLater Item...
     const handleSaveForLater = (product) => {
-        addToSave(product);
+        dispatch(addSaveforLater(product));
         dispatch(removeFromCart(product.id))
         navigate("/saveforlater");
     }
@@ -89,13 +83,11 @@ export default function CartPage() {
                                 key={product.id}
                                 style={{ borderBottom: '1px solid #ddd' }}>
                                 <div className="col-md-3">
-                                    <button onClick={() => handleWishlistClick(product)} className="btn text-start">
-                                        {
-                                            wishlistItem.some((item) => item.id === product.id) ?
-                                                <FavoriteIcon color="error" />
-                                                : <FavoriteBorderIcon />
-                                        }
-                                    </button>
+                            
+                                    <CheckWishlistItemButton
+                                        product={product}
+                                    />
+                                    <ReactTooltip id="processingOrder-tooltip" place="top" content="Processing Order For Checkout" />
                                     <img
                                         src={product.thumbnail}
                                         alt={product.title}
@@ -138,69 +130,69 @@ export default function CartPage() {
                                 </div>
                                 <div className="col-md-9">
                                     <div className="row">
-                                    <div className="col-md-6">
-                                        <h6>{product.title}</h6>
+                                        <div className="col-md-6">
+                                            <h6>{product.title}</h6>
 
-                                        <p>
-                                            <span>Seller: {product.seller || "Unknown"}</span>
-                                            <img
-                                                src={flipLogo} alt="flip Logo"
-                                                height="20px"
-                                                style={{ paddingLeft: "8px" }}
-                                            />
-                                        </p>
+                                            <p>
+                                                <span>Seller: {product.seller || "Unknown"}</span>
+                                                <img
+                                                    src={flipLogo} alt="flip Logo"
+                                                    height="20px"
+                                                    style={{ paddingLeft: "8px" }}
+                                                />
+                                            </p>
 
-                                        <div className=" text-right mb-2">
-                                            <span style={{
-                                                textDecoration: 'line-through',
-                                                color: '#888'
-                                            }}
+                                            <div className=" text-right mb-2">
+                                                <span style={{
+                                                    textDecoration: 'line-through',
+                                                    color: '#888'
+                                                }}
+                                                >
+                                                    ₹{(product.price + ((product.price * product.discountPercentage) / 100)).toFixed(2)}
+                                                </span>
+                                                <span style={{
+                                                    marginLeft: "10px"
+                                                }}
+                                                >
+                                                    ₹{(product.price * product.productQuantity).toFixed(2)}
+                                                </span>
+                                                <span style={{
+                                                    position: "relative",
+                                                    left: "12px",
+                                                    color: "#388e3c",
+                                                    fontWeight: "500"
+                                                }}
+                                                >
+                                                    {product.discountPercentage}% Off
+                                                </span>
+                                            </div>
+
+                                            <button
+                                                className="btn  p-0 mt-2 fw-bold"
+                                                style={{ fontSize: "18px" }}
+                                                onClick={() => handleSaveForLater(product)}
                                             >
-                                                ₹{(product.price + ((product.price * product.discountPercentage) / 100)).toFixed(2)}
-                                            </span>
-                                            <span style={{
-                                                marginLeft: "10px"
-                                            }}
+                                                Save for Later
+                                            </button>
+
+                                            <button
+                                                className="btn p-0 mt-2 fw-bold"
+                                                onClick={() => dispatch(removeFromCart(product.id))}
+                                                style={{ fontSize: "18px", marginLeft: "16px" }}
                                             >
-                                                ₹{(product.price * product.productQuantity).toFixed(2)}
-                                            </span>
-                                            <span style={{
-                                                position: "relative",
-                                                left: "12px",
-                                                color: "#388e3c",
-                                                fontWeight: "500"
-                                            }}
-                                            >
-                                                {product.discountPercentage}% Off
-                                            </span>
+                                                Remove
+                                            </button>
+
                                         </div>
+                                        <div className="col-md-6">
+                                            <p>
+                                                <span style={{ paddingRight: "4px" }}>Delivery by {deliveryDay} {currentMonth} {currentDate + 3} |</span>
 
-                                        <button
-                                            className="btn  p-0 mt-2 fw-bold"
-                                            style={{ fontSize: "18px" }}
-                                            onClick={() => handleSaveForLater(product)}
-                                        >
-                                            Save for Later
-                                        </button>
+                                                <span style={{ textDecoration: "line-through", paddingLeft: "4px" }}>₹40</span>
 
-                                        <button
-                                            className="btn p-0 mt-2 fw-bold"
-                                            onClick={() => dispatch(removeFromCart(product.id))}
-                                            style={{ fontSize: "18px", marginLeft: "16px" }}
-                                        >
-                                            Remove
-                                        </button>
-
-                                    </div>
-                                    <div className="col-md-6">
-                                        <p>
-                                            <span style={{ paddingRight: "4px" }}>Delivery by {deliveryDay} {currentMonth} {currentDate + 3} |</span>
-
-                                            <span style={{ textDecoration: "line-through", paddingLeft: "4px" }}>₹40</span>
-
-                                            <span style={{ paddingLeft: "4px", color: "#388e3c" }}>Free</span>
-                                        </p>
-                                    </div>
+                                                <span style={{ paddingLeft: "4px", color: "#388e3c" }}>Free</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

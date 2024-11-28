@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function PriceDetails ({selectedOption, product, productQuantity, platformFee, savePrice})  {
+export default function PriceDetails ({
+  selectedOption, 
+  product, 
+  productQuantity, 
+  platformFee, 
+  savePrice
+})  {
    
      const totalSavings = selectedOption === "CashOnDelivery" ? (savePrice) - 7 - platformFee
      : savePrice - platformFee;

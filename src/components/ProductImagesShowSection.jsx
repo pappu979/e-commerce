@@ -1,10 +1,8 @@
 import React from "react";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
+import CheckWishlistItemButton from "./CheckWishListButton";
 import '../App.css';
 
-function ProductImagesShowSection({ images, handleWishlistClick, product, wishlistItem }) {
+function ProductImagesShowSection({ images, product }) {
   const [img, setImg] = React.useState(images[0] ? images[0] : null);
 
   const changeImage = (index) => {
@@ -35,14 +33,10 @@ function ProductImagesShowSection({ images, handleWishlistClick, product, wishli
             ))}
           </div>
           <div className="col-md-9 border ">
-            <button onClick={() => handleWishlistClick(product)} className="btn" data-tooltip-id="wishlist-tooltip">
-              {
-                wishlistItem.some((item) => item.id === product.id) ?
-                  <FavoriteIcon color="error" />
-                  : <FavoriteBorderIcon />
-              }
-            </button>
-            <ReactTooltip id="wishlist-tooltip" place="top" content="Add Item In WishList" />
+            <CheckWishlistItemButton
+              product={product}
+            />
+
             <div>
 
               <img src={img} alt="" className="product-image" />

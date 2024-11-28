@@ -9,30 +9,36 @@ import { createAuthToken } from "../utils/authKeys";
 import { validateForm } from "../validation/validation";
 import { storeUserData } from "../utils/authKeys";
 import { setLocalStorageSignupUserData } from "../validation/localStorage";
-import { useSelector, useDispatch } from "react-redux";
-import { updateSignupField, resetSignupForm, setSignupErrors } from "../features/authslice";
-import { setCurrentUser } from "../features/userSlice";
+import {  useDispatch } from "react-redux";
+import { updateSignupField, resetSignupForm, setSignupErrors } from "../reducres/authReducer";
+import { setCurrentUser } from "../reducres/userReducer";
+import { connect } from "react-redux";
 import "../styles/SignupDetail.css";
 
-function SignupDetail() {
-  const signupState = useSelector((state) => state.auth.signup);
+function SignupDetail({signupState}) {
   const dispatch = useDispatch();
-
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleChangeSignupField = (e) => {
     const { name, value } = e.target;
-    dispatch(updateSignupField({field: name, value}));
+    dispatch(updateSignupField({ field: name, value }));
   }
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const existingEmail = storeUserData.some((user) => user.email === signupState.email);
+    if(existingEmail){
+     alert("This email is already registered. Please use a different email.");
+     return;
+    };
 
     const userData = {
       ...signupState,
       token: createAuthToken
     };
+
     const errors = validateForm(signupState);
     let existingUsers = [];
 
@@ -45,20 +51,20 @@ function SignupDetail() {
       try {
         existingUsers = Array.isArray(storeUserData) ? storeUserData : [];
       } catch (error) {
-        console.error("Failed to parse user data:", error);
+        alert ("Failed to parse user data:", error);
         existingUsers = [];
       }
     }
+    
     const userIndex = existingUsers.findIndex((user) => user.email === signupState.email);
 
     if (userIndex !== -1) {
-      // Update existing user
       existingUsers[userIndex] = userData;
     } else {
-      // Add new user
       existingUsers.push(userData);
     }
-    setLocalStorageSignupUserData(existingUsers, createAuthToken, signupState);
+    
+    setLocalStorageSignupUserData(existingUsers, createAuthToken);
     dispatch(setCurrentUser(signupState))
 
     Swal.fire({
@@ -72,6 +78,8 @@ function SignupDetail() {
     const redirectTo = location.state?.from || "/";
     navigate(redirectTo);
   };
+
+
 
   return (
     <>
@@ -147,4 +155,11 @@ function SignupDetail() {
   );
 }
 
-export default SignupDetail;
+const mapToProps = (state) => ({
+  signupState: state.auth.signup
+});
+
+export default connect(mapToProps, {
+
+})(SignupDetail)
+

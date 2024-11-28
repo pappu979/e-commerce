@@ -3,11 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 import Slider from "react-slick";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useWishlist } from "../provider/WishlistProvider";
-import { toast } from 'react-toastify';
+import CheckWishlistItemButton from "../components/CheckWishListButton";
 import Rating from "../components/Rating";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -37,7 +34,6 @@ const CustomNextArrow = (props) => {
 export default function CategoryPage() {
   const { categoryName } = useParams();
   const [products, setProducts] = React.useState([]);
-  const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
 
   React.useEffect(() => {
     axios
@@ -73,31 +69,6 @@ export default function CategoryPage() {
     nextArrow: <CustomNextArrow />,
   };
 
-
-  const handleWishlistClick = (product) => {
-    const isAlreadyWishlisted = wishlistItem.some((item) => item.id === product.id);
-
-    if (isAlreadyWishlisted) {
-      // If the product is already in the wishlist, remove it
-      removeFromWishList(product.id);
-    } else {
-      // If the product is not in the wishlist, add it
-      addToWishList(product);
-
-      // Show success message when added to wishlist
-      toast.success(`${product.title} has been added to your wishlist!`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  };
-
-
   return (
     <div className="container">
       <div className="my-6 text-center text-dark">
@@ -113,7 +84,7 @@ export default function CategoryPage() {
       <Slider {...sliderSettings}
         className="product-slider"
       >
-        {products.map((val, key) => (
+        {products.map((product, key) => (
           <div
             className="product-card-container mt-4"
             key={key}
@@ -127,16 +98,13 @@ export default function CategoryPage() {
                 height: "100%",
               }}
             >
-              <button onClick={() => handleWishlistClick(val)} className="btn text-end">
-                {
-                  wishlistItem.some((item) => item.id === val.id) ?
-                    <FavoriteIcon color="error" />
-                    : <FavoriteBorderIcon />
-                }
-              </button>
+
+              <CheckWishlistItemButton
+                product={product}
+              />
               <Card.Img
                 variant="top"
-                src={val.thumbnail}
+                src={product.thumbnail}
                 style={{
                   maxHeight: "250px",
                   height: "100%",
@@ -144,9 +112,9 @@ export default function CategoryPage() {
                 }}
               />
               <Card.Body className="d-flex flex-column h-100">
-                <Card.Title>{val.title}</Card.Title>
-                
-                <Rating product={val}></Rating>
+                <Card.Title>{product.title}</Card.Title>
+
+                <Rating product={product}></Rating>
 
                 <div className="mt-auto">
                   <Card.Text>
@@ -158,7 +126,7 @@ export default function CategoryPage() {
                         paddingRight: "8px"
                       }}
                     >
-                      ₹{(val?.price).toFixed(2)}
+                      ₹{(product?.price).toFixed(2)}
                     </span>
 
                     <span
@@ -167,7 +135,7 @@ export default function CategoryPage() {
                         color: '#888',
                       }}
                     >
-                      ₹{(val?.price + ((val?.price * val?.discountPercentage) / 100)).toFixed(2)}
+                      ₹{(product?.price + ((product?.price * product?.discountPercentage) / 100)).toFixed(2)}
                     </span>
                     <span
                       style={{
@@ -178,13 +146,13 @@ export default function CategoryPage() {
                         paddingLeft: "8px"
                       }}
                     >
-                      {val?.discountPercentage}% off
+                      {product?.discountPercentage}% off
                     </span>
                   </Card.Text>
                   <button className="btn mb-2" style={{ background: "#e1997e" }}>
                     <Link
                       className="text-decoration-none text-danger mt-2"
-                      to={`/products/${val.id}`}
+                      to={`/products/${product.id}`}
                     >
                       Product Details
                     </Link>

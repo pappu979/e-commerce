@@ -2,20 +2,16 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useWishlist } from "../provider/WishlistProvider";
-import useWishlistHandler from "../provider/useWishlistHandler";
+import { fetchCategories, fetchProductsByCategory } from "../utils/api";
+import CheckWishlistItemButton from "./CheckWishListButton";
 import Rating from "./Rating";
 import image1 from "../images/m1.jpg";
 import "../styles/cardStyle.css";
 import "../styles/best-seller.css";
-import { fetchCategories, fetchProductsByCategory } from "../utils/api";
+
 
 const TopCategoriesSection = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("beauty");
-  const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
-  const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
 
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
@@ -60,7 +56,7 @@ const TopCategoriesSection = () => {
                 >
                   <Card.Body>
                     <Card.Title>
-                    {key + 1} - {typeof val === "string" ? val.toUpperCase().replace("-", " ") : val.slug?.toUpperCase().replace("-", " ")}
+                      {key + 1} - {typeof val === "string" ? val.toUpperCase().replace("-", " ") : val.slug?.toUpperCase().replace("-", " ")}
                     </Card.Title>
                   </Card.Body>
                 </Card>
@@ -80,13 +76,10 @@ const TopCategoriesSection = () => {
               {relatedProducts?.map((product) => (
                 <div className="col-md-4 mb-4" key={product?.id}>
                   <Card className="product-card" style={{ height: "100%" }}>
-                    <button onClick={() => handleWishlistClick(product)} className="btn text-end">
-                      {wishlistItem.some((item) => item.id === product?.id) ? (
-                        <FavoriteIcon color="error" />
-                      ) : (
-                        <FavoriteBorderIcon />
-                      )}
-                    </button>
+
+                    <CheckWishlistItemButton
+                      product={product}
+                    />
                     <Card.Img
                       variant="top"
                       src={product?.thumbnail || image1}

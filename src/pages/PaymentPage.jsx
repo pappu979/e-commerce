@@ -5,29 +5,33 @@ import EditDeliveryAdress from '../components/EditDeliveryadress';
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
-import { 
-  intialEditDeliveryAddressState, 
-  intialPaymentPageState 
-} from "../utils/intialPaymentData";
+import {
+  intialEditDeliveryAddressState,
+  intialPaymentPageState
+} from "../utils/formData";
 import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
 import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
-import {  storedAddresses, currentUser } from "../utils/authKeys";
-import { logout } from "../features/userSlice";
-import { useDispatch } from "react-redux";
+import { logout } from "../reducres/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { addAddress, editAddress } from "../reducres/addressReducer";
+import { checkPlatformFee } from "../utils/cartCalculations";
 import "../styles/payment.css";
 
+
 export default function PaymentPage() {
+
   const dispatch = useDispatch();
-  const [stateData, setStateData] = React.useState(intialPaymentPageState);
-  const [formData, setFormData] = React.useState(intialEditDeliveryAddressState);
-  const [addresses, setAddresses] = React.useState([]);
-  const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const navigate = useNavigate();
   const location = useLocation();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const address = useSelector((state) => state.address.addresses);
+  const [stateData, setStateData] = React.useState(intialPaymentPageState);
+  const [formData, setFormData] = React.useState(intialEditDeliveryAddressState);
+  const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const { product, productQuantity } = location?.state || {};
-  let platformFee = 0;
-  let savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
+  const platformFee = checkPlatformFee(product?.price);
+  const savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -46,25 +50,9 @@ export default function PaymentPage() {
     return () => clearInterval(interval);
   }, [stateData?.timeLeft, navigate]);
 
-  React.useEffect(() => {
-    setAddresses(storedAddresses);
-  }, []);
-
-  const updateLocalStorage = (updatedAddresses) => {
-    localStorage.setItem("addresses", JSON.stringify(updatedAddresses));
-    setAddresses(updatedAddresses)
-  }
 
   if (!product || !productQuantity) {
     navigate("/products");
-  }
-
-  if (product?.price < 100) {
-    platformFee = 0;
-  } else if (product?.price > 100 && product?.price < 500) {
-    platformFee = 5;
-  } else {
-    platformFee = 10;
   }
 
   const updateState = (key, value) => {
@@ -129,19 +117,20 @@ export default function PaymentPage() {
       [name]: value,
     }))
   }
-  
+
 
   const handleEditSaveSubmit = (e) => {
     e.preventDefault();
-    const updatedAddresses = [...addresses];
 
     if (stateData.isEditing) {
-      updatedAddresses.push(formData);
+      dispatch(addAddress(formData));
     } else {
-      updatedAddresses[stateData?.selectedAddress] = formData;
+      dispatch(editAddress({
+        id: stateData?.selectedAddress,
+        updatedAddress: formData,
+      }));
     }
-    updateLocalStorage(updatedAddresses);
-    setAddresses(updatedAddresses);
+
     updateState("editDelivery", false);
     setFormData(intialEditDeliveryAddressState)
   }
@@ -151,8 +140,11 @@ export default function PaymentPage() {
       <div className="row">
         <div className="col-md-8">
           <div className="login-section">
-            
-            <PaymentLoginAccordian currentUser={currentUser} handleLoginChange={handleLoginChange} />
+
+            <PaymentLoginAccordian
+              currentUser={currentUser}
+              handleLoginChange={handleLoginChange}
+            />
             <div>
               {stateData?.chnageLogin &&
                 <div>
@@ -180,14 +172,14 @@ export default function PaymentPage() {
 
             {stateData?.deliveryAdress && !stateData?.editDelivery &&
               <PaymentDefaultAddress
-                addresses={addresses}
+                addresses={address}
                 selectedAddress={stateData?.selectedAddress}
                 updateState={updateState}
                 handleDeliveryHere={handleDeliveryHere}
                 handleDeliveryAddressEdit={handleDeliveryAddressEdit}
                 setFormData={setFormData}
                 intialEditState={intialEditDeliveryAddressState}
-                >
+              >
               </PaymentDefaultAddress>
             }
             {stateData?.orderSummary && !stateData?.deliveryAdress &&

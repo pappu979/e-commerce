@@ -5,10 +5,11 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useLocation } from "react-router-dom";
-import { storeUserData, storedReviews, currentUser } from "../utils/authKeys";
+import { storeUserData, storedReviews } from "../utils/authKeys";
+import { useSelector } from "react-redux";
 
 const ReviewPage = () => {
-
+    const currentUser = useSelector((state) => state.user.currentUser);
     const [newReview, setNewReview] = React.useState("");
     const [ratingStar, setRatingStar] = React.useState(0);
     const [totalReviews, setTotalReviews] = React.useState([]);

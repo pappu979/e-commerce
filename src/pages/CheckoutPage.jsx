@@ -3,26 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { clearCart } from "../features/cartSlice";
+import { clearCart } from "../reducres/cartReducer";
+import { intialCheckoutFormData } from "../utils/formData";
 
 const CheckoutPage = () => {
-
-    const intialFormData = {
-        name: "",
-        email: "",
-        address: "",
-        city: "",
-        state: "",
-        zip: "",
-        cardNumber: "",
-        cardExpiry: "",
-        cardCvc: ""
-    };
      const cartItems = useSelector((state) => state.cart.items);
      const totalAmount = useSelector((state) => state.cart.totalAmount);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [formData, setFormData] = React.useState(intialFormData);
+    const [formData, setFormData] = React.useState(intialCheckoutFormData);
 
     const location = useLocation();
     let { platformFee } = location?.state || {};

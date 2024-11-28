@@ -1,6 +1,14 @@
 import React from "react";
 
-export default function PaymentDefaultAddress({ addresses, selectedAddress, updateState, handleDeliveryHere, handleDeliveryAddressEdit, setFormData, intialEditState }) {
+export default function PaymentDefaultAddress({ 
+  addresses, 
+  selectedAddress, 
+  updateState, 
+  handleDeliveryHere, 
+  handleDeliveryAddressEdit, 
+  setFormData, 
+  intialEditState 
+}) {
   return (
     <>
       {addresses.map((addr, index) => (
@@ -14,9 +22,9 @@ export default function PaymentDefaultAddress({ addresses, selectedAddress, upda
             onChange={() => updateState("selectedAddress", index)}
           />
           <div className="address-content">
-          <p style={{background: "#717478", display: "inline-block", padding: "0px 5px", marginRight: "8px"}}>{addr.deliveryOption}</p>
-            <span>{addr.username}</span> <span style={{ marginLeft: "6px" }}>+91{addr.mobileNumber}</span>
-            <p>{addr.address} {addr.pincode}</p>
+          <p style={{background: "#717478", display: "inline-block", padding: "0px 5px", marginRight: "8px"}}>{addr?.deliveryOption}</p>
+            <span>{addr?.username}</span> <span style={{ marginLeft: "6px" }}>+91{addr?.mobileNumber}</span>
+            <p>{addr?.address} {addr?.pincode}</p>
             {selectedAddress === index &&
               <button style={{
                 background: "#fb641b",

@@ -1,20 +1,19 @@
 import React from "react";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useWishlist } from "../provider/WishlistProvider";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Swal from "sweetalert2";
 import ReactStars from "react-stars";
 import ProductImagesShowSection from "../components/ProductImagesShowSection";
-import useWishlistHandler from "../provider/useWishlistHandler";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Rating from '../components/Rating';
-import { addToCart, updateQuantity } from "../features/cartSlice";
+import { toast } from "react-toastify";
+import { addToCart, updateQuantity } from "../reducres/cartReducer";
 import { useDispatch, useSelector } from "react-redux";
 import "../styles/product-page.css";
 import '../App.css';
-import { toast } from "react-toastify";
+
 
 function ShowProductDetailsPage() {
 
@@ -24,8 +23,6 @@ function ShowProductDetailsPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.cart.currentUser);
-  const { addToWishList, wishlistItem, removeFromWishList } = useWishlist();
-  const { handleWishlistClick } = useWishlistHandler(wishlistItem, addToWishList, removeFromWishList);
   const authToken = localStorage.getItem("authToken")
 
   React.useEffect(() => {
@@ -82,8 +79,6 @@ function ShowProductDetailsPage() {
                 <div className="image-section-container">
                   <ProductImagesShowSection
                     images={product?.images}
-                    wishlistItem={wishlistItem}
-                    handleWishlistClick={handleWishlistClick}
                     product={product}
                   />
                 </div>
@@ -164,7 +159,7 @@ function ShowProductDetailsPage() {
               </div>
               <div>
                 <Link to="/review" state={{ product, productID }} style={{ textDecoration: "none" }}>
-                  Leave Review
+                  Write a Review
                 </Link>
               </div>
 

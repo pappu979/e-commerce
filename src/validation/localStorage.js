@@ -1,17 +1,14 @@
 
-export function setLocalStorageLoginUserData (authToken, user) {
+export function setLocalStorageLoginUserData (authToken) {
   localStorage.setItem("authToken", JSON.stringify(authToken));
-  localStorage.setItem("currentUserEmail", user.email);
 };
 
-export function setLocalStorageSignupUserData (existingUsers, authToken, state) {
+export function setLocalStorageSignupUserData (existingUsers, authToken) {
   localStorage.setItem("userData", JSON.stringify(existingUsers));
   localStorage.setItem("authToken", authToken);
-  localStorage.setItem("currentUserEmail", state.email);
 }
 
 export function removeLogoutLocalStorage () {
   localStorage.removeItem("authToken");
   localStorage.removeItem("currentUser");
-  localStorage.removeItem("currentUserEmail");
 }

@@ -9,8 +9,8 @@ import { storeUserData, createAuthToken } from "../utils/authKeys";
 import { setLocalStorageLoginUserData } from "../validation/localStorage";
 import { validateLoginForm } from "../validation/validation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateLoginField, setLoginErrors, resetLoginForm } from "../features/authslice";
-import { setCurrentUser } from "../features/userSlice";
+import { updateLoginField, setLoginErrors, resetLoginForm } from "../reducres/authReducer";
+import { setCurrentUser } from "../reducres/userReducer";
 
 export default function LoginDetails() {
   const loginState = useSelector((state) => state.auth.login);
@@ -20,7 +20,7 @@ export default function LoginDetails() {
 
   const handleChangeLoginField = (e) => {
     const { name, value } = e.target;
-    dispatch(updateLoginField({field: name, value}));
+    dispatch(updateLoginField({ field: name, value }));
   }
 
   const handleSubmit = (e) => {
@@ -33,18 +33,25 @@ export default function LoginDetails() {
       return;
     }
 
-    if (storeUserData) {  
+    if (storeUserData) {
       const user = storeUserData.find((user) => user.email === loginState.email && user.password === loginState.password);
       if (user) {
-        setLocalStorageLoginUserData(createAuthToken, user);
-        dispatch(setCurrentUser(user))
-        toast.info("Login Successful!", {
+        setLocalStorageLoginUserData(createAuthToken);
+        dispatch(setCurrentUser(user));
+
+        toast.success("Login Successful!", {
           position: "top-right",
           autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
         })
+        
         const redirectTo = location.state?.from || "/";
         navigate(redirectTo);
-
+        dispatch(resetLoginForm());
       } else {
         Swal.fire({
           icon: "error",
@@ -63,8 +70,6 @@ export default function LoginDetails() {
         navigate("/signup", { state: { from: location.pathname } });
       });
     }
-
-    dispatch(resetLoginForm());
   };
 
   return (

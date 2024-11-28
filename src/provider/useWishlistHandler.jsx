@@ -1,13 +1,18 @@
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../reducres/wishListReducer";
 
-const useWishlistHandler = (wishlistItem, addToWishList, removeFromWishList) => {
+const useWishlistHandler = () => {
+  const dispatch = useDispatch();
+  const wishlistItem = useSelector((state) => state.wishlist.items);
+
   const handleWishlistClick = (product) => {
     const isAlreadyWishlisted = wishlistItem.some((item) => item.id === product.id);
 
     if (isAlreadyWishlisted) {
-      removeFromWishList(product.id);
+      dispatch(removeFromWishlist(product.id));
     } else {
-      addToWishList(product);
+      dispatch(addToWishlist(product));
       
       toast.success(`${product.title} has been added to your wishlist!`, {
         position: "top-right",

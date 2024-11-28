@@ -1,15 +1,17 @@
 import React from "react";
-import { useWishlist } from "../provider/WishlistProvider";
 import emptyCartImg from '../images/emptyCart.webp';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import flipLogo from '../images/flipLogo.png'
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromWishlist } from "../reducres/wishListReducer";
 
 
 const WishListPage = () => {
-    const { wishlistItem, removeFromWishList } = useWishlist();
+    const dispatch = useDispatch();
+    const wishlistItem = useSelector((state) => state.wishlist.items)
 
     return (
         <div className="container mt-5">
@@ -110,7 +112,7 @@ const WishListPage = () => {
                                     <div>
                                         <FontAwesomeIcon
                                             icon={faTrash}
-                                            onClick={() => removeFromWishList(product.id)}
+                                            onClick={() => dispatch(removeFromWishlist(product.id))}
                                             style={{ cursor: "pointer" }}
                                             data-tooltip-id="delete-tooltip"
                                         >
