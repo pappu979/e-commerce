@@ -6,6 +6,7 @@ import Sale from "../components/Sale";
 import TopCategoriesSection from "../components/TopCategoriesSection";
 import News from "../components/News";
 import CategoriesSection from "../components/CategorySection";
+import CheckList from "../components/CheckList";
 
 function Home() {
   return (
@@ -17,6 +18,7 @@ function Home() {
       <CategoriesSection></CategoriesSection>
       <Sale />
       <News />
+      <CheckList></CheckList>
     </>
   );
 }

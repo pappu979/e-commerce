@@ -13,6 +13,6 @@ const rootReducer = combineReducers({
         wishlist,
         saveForLater,
         address,
-})
+});
 
 export default rootReducer;
