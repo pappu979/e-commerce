@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/Login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoginImg from "../images/login[1].svg";
 import Swal from "sweetalert2";
@@ -11,6 +10,7 @@ import { validateLoginForm } from "../validation/validation";
 import { useSelector, useDispatch } from "react-redux";
 import { updateLoginField, setLoginErrors, resetLoginForm } from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
+import "../styles/Login.css";
 
 export default function LoginDetails() {
   const loginState = useSelector((state) => state.auth.login);

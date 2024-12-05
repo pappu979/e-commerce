@@ -31,7 +31,6 @@ export default function PaymentPage() {
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const { product, productQuantity } = location?.state || {};
   const platformFee = checkPlatformFee(product?.price);
-  const savePrice = ((product?.price * product?.discountPercentage) / 100).toFixed(2);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -244,7 +243,6 @@ export default function PaymentPage() {
           productQuantity={productQuantity}
           product={product}
           platformFee={platformFee}
-          savePrice={savePrice}
         >
         </PriceDetails>
       </div>
