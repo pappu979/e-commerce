@@ -2,13 +2,17 @@ import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoginImg from "../images/login[1].svg";
 import Swal from "sweetalert2";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import PasswordInput from "./PasswordInput";
-import { storeUserData, createAuthToken } from "../utils/authKeys";
+import { createAuthToken } from "../utils/authKeys";
 import { setLocalStorageLoginUserData } from "../validation/localStorage";
 import { validateLoginForm } from "../validation/validation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateLoginField, setLoginErrors, resetLoginForm } from "../reducres/authReducer";
+import {
+  updateLoginField,
+  setLoginErrors,
+  resetLoginForm,
+} from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
 import "../styles/Login.css";
 
@@ -21,7 +25,7 @@ export default function LoginDetails() {
   const handleChangeLoginField = (e) => {
     const { name, value } = e.target;
     dispatch(updateLoginField({ field: name, value }));
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,8 +37,14 @@ export default function LoginDetails() {
       return;
     }
 
+    const storeUserData = JSON.parse(localStorage.getItem("userData")) || [];
+
     if (storeUserData) {
-      const user = storeUserData.find((user) => user.email === loginState.email && user.password === loginState.password);
+      const user = storeUserData.find(
+        (user) =>
+          user.email === loginState.email &&
+          user.password === loginState.password
+      );
       if (user) {
         setLocalStorageLoginUserData(createAuthToken);
         dispatch(setCurrentUser(user));
@@ -46,9 +56,9 @@ export default function LoginDetails() {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined
-        })
-        
+          progress: undefined,
+        });
+
         const redirectTo = location.state?.from || "/";
         navigate(redirectTo);
         dispatch(resetLoginForm());
@@ -90,7 +100,9 @@ export default function LoginDetails() {
                 value={loginState.email}
                 onChange={handleChangeLoginField}
               />
-              {loginState.errors.email && <span className="error-message">{loginState.errors.email}</span>}
+              {loginState.errors.email && (
+                <span className="error-message">{loginState.errors.email}</span>
+              )}
             </div>
             <div className="form-group mt-3">
               <label>Password</label>
@@ -99,13 +111,14 @@ export default function LoginDetails() {
                 name="password"
                 value={loginState.password}
                 onChange={handleChangeLoginField}
-              >
-              </PasswordInput>
-              {loginState.errors.password && <span className="error-message">{loginState.errors.password}</span>}
+              ></PasswordInput>
+              {loginState.errors.password && (
+                <span className="error-message">
+                  {loginState.errors.password}
+                </span>
+              )}
               <p className="forgot-password text-right mt-2">
-                <Link to="/forgot-password"
-                  style={{ textDecoration: "none" }}
-                >
+                <Link to="/forgot-password" style={{ textDecoration: "none" }}>
                   Forgot Password?
                 </Link>
               </p>
@@ -114,16 +127,30 @@ export default function LoginDetails() {
               <button
                 type="submit"
                 className="btn"
-                style={{ background: " #e1997e" }}
+                style={{
+                  background: " #e1997e",
+                  color: "white",
+                  fontWeight: "800",
+                }}
               >
-                Submit
+                Log In
               </button>
             </div>
-            <p className="forgot-password text-right mt-2">
+            <p
+              className="forgot-password text-right mt-2"
+              style={{ color: "#e1997e" }}
+            >
               Don't have an account?
-              <Link to="/SignUp" style={{ textDecoration: "none", marginLeft: "6px" }}>SignUp</Link>
+              <Link
+                to="/SignUp"
+                style={{
+                  textDecoration: "none",
+                  marginLeft: "8px",
+                }}
+              >
+                SignUp
+              </Link>
             </p>
-
           </div>
         </form>
       </div>

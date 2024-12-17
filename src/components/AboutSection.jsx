@@ -28,7 +28,12 @@ const AboutSection = () => {
 
           <Col lg="6" md="6">
             <div className="about-image">
-              <img src={imageslide} alt="" className="w-100" style={{maxHeight: "300px", height: "100%"}} />
+              <img
+                src={imageslide}
+                alt=""
+                className="w-100"
+                style={{ maxHeight: "300px", height: "100%" }}
+              />
             </div>
           </Col>
         </Row>

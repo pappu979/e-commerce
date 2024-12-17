@@ -9,13 +9,18 @@ import { createAuthToken } from "../utils/authKeys";
 import { validateForm } from "../validation/validation";
 import { storeUserData } from "../utils/authKeys";
 import { setLocalStorageSignupUserData } from "../validation/localStorage";
-import {  useDispatch } from "react-redux";
-import { updateSignupField, resetSignupForm, setSignupErrors } from "../reducres/authReducer";
+import { useDispatch } from "react-redux";
+import {
+  updateSignupField,
+  resetSignupForm,
+  setSignupErrors,
+} from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
 import { connect } from "react-redux";
 import "../styles/SignupDetail.css";
 
-function SignupDetail({signupState}) {
+function SignupDetail({ signupState }) {
+  const [isChecked, setIsChecked] = React.useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,20 +28,26 @@ function SignupDetail({signupState}) {
   const handleChangeSignupField = (e) => {
     const { name, value } = e.target;
     dispatch(updateSignupField({ field: name, value }));
-  }
-  
+  };
+
+  const handleCheckBoxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const existingEmail = storeUserData.some((user) => user.email === signupState.email);
-    if(existingEmail){
-     alert("This email is already registered. Please use a different email.");
-     return;
-    };
+    const existingEmail = storeUserData.some(
+      (user) => user.email === signupState.email
+    );
+    if (existingEmail) {
+      alert("This email is already registered. Please use a different email.");
+      return;
+    }
 
     const userData = {
       ...signupState,
-      token: createAuthToken
+      token: createAuthToken,
     };
 
     const errors = validateForm(signupState);
@@ -51,21 +62,23 @@ function SignupDetail({signupState}) {
       try {
         existingUsers = Array.isArray(storeUserData) ? storeUserData : [];
       } catch (error) {
-        alert ("Failed to parse user data:", error);
+        alert("Failed to parse user data:", error);
         existingUsers = [];
       }
     }
-    
-    const userIndex = existingUsers.findIndex((user) => user.email === signupState.email);
+
+    const userIndex = existingUsers.findIndex(
+      (user) => user.email === signupState.email
+    );
 
     if (userIndex !== -1) {
       existingUsers[userIndex] = userData;
     } else {
       existingUsers.push(userData);
     }
-    
+
     setLocalStorageSignupUserData(existingUsers, createAuthToken);
-    dispatch(setCurrentUser(signupState))
+    dispatch(setCurrentUser(signupState));
 
     Swal.fire({
       icon: "success",
@@ -78,8 +91,6 @@ function SignupDetail({signupState}) {
     const redirectTo = location.state?.from || "/";
     navigate(redirectTo);
   };
-
-
 
   return (
     <>
@@ -98,7 +109,11 @@ function SignupDetail({signupState}) {
                   value={signupState.username}
                   onChange={handleChangeSignupField}
                 />
-                {signupState.errors.username && <span className="error-message">{signupState.errors.username}</span>}
+                {signupState.errors.username && (
+                  <span className="error-message">
+                    {signupState.errors.username}
+                  </span>
+                )}
               </Form.Group>
 
               <Form.Group controlId="formGridEmail">
@@ -109,7 +124,11 @@ function SignupDetail({signupState}) {
                   value={signupState.email}
                   onChange={handleChangeSignupField}
                 />
-                {signupState.errors.email && <span className="error-message">{signupState.errors.email}</span>}
+                {signupState.errors.email && (
+                  <span className="error-message">
+                    {signupState.errors.email}
+                  </span>
+                )}
               </Form.Group>
 
               <Form.Group controlId="formGridPassword">
@@ -120,7 +139,11 @@ function SignupDetail({signupState}) {
                   value={signupState.password}
                   onChange={handleChangeSignupField}
                 ></PasswordInput>
-                {signupState.errors.password && <span className="error-message">{signupState.errors.password}</span>}
+                {signupState.errors.password && (
+                  <span className="error-message">
+                    {signupState.errors.password}
+                  </span>
+                )}
               </Form.Group>
 
               <Form.Group controlId="formGridAddress2">
@@ -131,22 +154,45 @@ function SignupDetail({signupState}) {
                   value={signupState.mobileNumber}
                   onChange={handleChangeSignupField}
                 />
-                {signupState.errors.mobileNumber && <span className="error-message">{signupState.errors.mobileNumber}</span>}
+                {signupState.errors.mobileNumber && (
+                  <span className="error-message">
+                    {signupState.errors.mobileNumber}
+                  </span>
+                )}
               </Form.Group>
 
               <div style={{ marginTop: "20px" }}>
                 <Form.Group controlId="formGridCheckbox">
-                  <Form.Check type="checkbox" label="Check me out" />
+                  <Form.Check
+                    type="checkbox"
+                    label="Check me out"
+                    onChange={handleCheckBoxChange}
+                  />
                 </Form.Group>
               </div>
 
-              <Button variant="primary" type="submit" >
-                Submit
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ fontWeight: "800" }}
+                disabled={!isChecked}
+              >
+                Sign Up
               </Button>
             </Form>
 
             <p className="sign-up">
-              Already have an account? <Link to="/login" style={{ textDecoration: "none", marginLeft: "6px" }}>Login</Link>
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                  marginLeft: "6px",
+                  color: "#007BFF",
+                }}
+              >
+                Login
+              </Link>
             </p>
           </div>
         </div>
@@ -156,10 +202,7 @@ function SignupDetail({signupState}) {
 }
 
 const mapToProps = (state) => ({
-  signupState: state.auth.signup
+  signupState: state.auth.signup,
 });
 
-export default connect(mapToProps, {
-
-})(SignupDetail)
-
+export default connect(mapToProps, {})(SignupDetail);

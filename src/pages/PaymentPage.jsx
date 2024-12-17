@@ -1,13 +1,13 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PriceDetails from "../components/PriceDetails";
-import EditDeliveryAdress from '../components/EditDeliveryadress';
+import EditDeliveryAdress from "../components/EditDeliveryadress";
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
 import {
   intialEditDeliveryAddressState,
-  intialPaymentPageState
+  intialPaymentPageState,
 } from "../utils/formData";
 import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
 import useDateInfo from "../utils/dateUtilis";
@@ -18,19 +18,19 @@ import { addAddress, editAddress } from "../reducres/addressReducer";
 import { checkPlatformFee } from "../utils/cartCalculations";
 import "../styles/payment.css";
 
-
 export default function PaymentPage() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = useSelector((state) => state.user.currentUser);
   const address = useSelector((state) => state.address.addresses);
   const [stateData, setStateData] = React.useState(intialPaymentPageState);
-  const [formData, setFormData] = React.useState(intialEditDeliveryAddressState);
+  const [formData, setFormData] = React.useState(
+    intialEditDeliveryAddressState
+  );
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
   const { product, productQuantity } = location?.state || {};
-  const platformFee = checkPlatformFee(product?.price);
+  const platformFee = checkPlatformFee(product?.price * productQuantity);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -42,13 +42,12 @@ export default function PaymentPage() {
 
     if (stateData?.timeLeft <= 0) {
       clearInterval(interval);
-      alert('Time up! Redirecting you to the products page.');
-      navigate('/products');
+      alert("Time up! Redirecting you to the products page.");
+      navigate("/products");
     }
 
     return () => clearInterval(interval);
   }, [stateData?.timeLeft, navigate]);
-
 
   if (!product || !productQuantity) {
     navigate("/products");
@@ -58,15 +57,15 @@ export default function PaymentPage() {
     setStateData((prevState) => ({
       ...prevState,
       [key]: value,
-    }))
-  }
+    }));
+  };
 
   const handleOpenDelivaryAddress = () => {
     updateState("deliveryAdress", true);
     updateState("chnageLogin", false);
     updateState("selectOrderSummary", false);
     updateState("selectPaymetOption", false);
-  }
+  };
 
   const handlePaymentOptionChange = (event) => {
     updateState("selectedOption", event.target.value);
@@ -76,34 +75,34 @@ export default function PaymentPage() {
     updateState("selectedAddressDelivery", addr);
     updateState("selectOrderSummary", true);
     updateState("orderSummary", true);
-    updateState("deliveryAdress", false)
+    updateState("deliveryAdress", false);
   };
 
   const handleLoginChange = () => {
     updateState("selectedAddressDelivery", false);
     updateState("chnageLogin", true);
     updateState("selectPaymetOption", false);
-    updateState("deliveryAdress", false)
-  }
+    updateState("deliveryAdress", false);
+  };
   const handleCheckOutContinue = () => {
     updateState("chnageLogin", false);
     updateState("selectOrderSummary", false);
-    updateState("deliveryAdress", true)
-  }
+    updateState("deliveryAdress", true);
+  };
 
   const handleDeliveryAddressEdit = () => {
     updateState("editDelivery", true);
     updateState("isEditing", false);
-  }
+  };
 
   const handleDeliveryAddressCancel = () => {
-    updateState("editDelivery", false)
-  }
+    updateState("editDelivery", false);
+  };
 
   const handleOrderContinue = () => {
     updateState("selectOrderSummary", false);
     updateState("selectPaymetOption", true);
-  }
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -114,9 +113,8 @@ export default function PaymentPage() {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
-
+    }));
+  };
 
   const handleEditSaveSubmit = (e) => {
     e.preventDefault();
@@ -124,44 +122,52 @@ export default function PaymentPage() {
     if (stateData.isEditing) {
       dispatch(addAddress(formData));
     } else {
-      dispatch(editAddress({
-        id: stateData?.selectedAddress,
-        updatedAddress: formData,
-      }));
+      dispatch(
+        editAddress({
+          id: stateData?.selectedAddress,
+          updatedAddress: formData,
+        })
+      );
     }
 
     updateState("editDelivery", false);
-    setFormData(intialEditDeliveryAddressState)
-  }
+    setFormData(intialEditDeliveryAddressState);
+  };
 
   return (
     <div className="container my-3">
       <div className="row">
         <div className="col-md-8">
           <div className="login-section">
-
             <PaymentLoginAccordian
               currentUser={currentUser}
               handleLoginChange={handleLoginChange}
             />
             <div>
-              {stateData?.chnageLogin &&
+              {stateData?.chnageLogin && (
                 <div>
-                  <button className="mb-2"
+                  <button
+                    className="mb-2"
                     style={{ color: "blue", border: "none", display: "block" }}
                     onClick={handleLogout}
                   >
-                    Logout & sign up to another account</button>
-                  <button style={{
-                    backgroundColor: "#fb641b",
-                    padding: "11px 16px", color: "#fff",
-                    fontSize: "17px", fontWeight: "700",
-                    border: "none"
-                  }}
+                    Logout & sign up to another account
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "#fb641b",
+                      padding: "11px 16px",
+                      color: "#fff",
+                      fontSize: "17px",
+                      fontWeight: "700",
+                      border: "none",
+                    }}
                     onClick={handleCheckOutContinue}
-                  >Checkout continue</button>
+                  >
+                    Checkout continue
+                  </button>
                 </div>
-              }
+              )}
             </div>
           </div>
 
@@ -169,7 +175,7 @@ export default function PaymentPage() {
           <div className="address-section">
             <h3 className="section-title">2 DELIVERY ADDRESS</h3>
 
-            {stateData?.deliveryAdress && !stateData?.editDelivery &&
+            {stateData?.deliveryAdress && !stateData?.editDelivery && (
               <PaymentDefaultAddress
                 addresses={address}
                 selectedAddress={stateData?.selectedAddress}
@@ -178,37 +184,38 @@ export default function PaymentPage() {
                 handleDeliveryAddressEdit={handleDeliveryAddressEdit}
                 setFormData={setFormData}
                 intialEditState={intialEditDeliveryAddressState}
-              >
-              </PaymentDefaultAddress>
-            }
-            {stateData?.orderSummary && !stateData?.deliveryAdress &&
+              ></PaymentDefaultAddress>
+            )}
+            {stateData?.orderSummary && !stateData?.deliveryAdress && (
               <>
                 <p>
                   {stateData?.selectedAddressDelivery?.username}
                   {stateData?.selectedAddressDelivery?.address}
                   {stateData?.selectedAddressDelivery?.pincode}
                 </p>
-                <button style={{
-                  background: "#fff",
-                  padding: "11px 16px",
-                  border: "1px solid grey", color: "#000"
-                }}
+                <button
+                  style={{
+                    background: "#fff",
+                    padding: "11px 16px",
+                    border: "1px solid grey",
+                    color: "#000",
+                  }}
                   onClick={handleOpenDelivaryAddress}
                 >
                   Change
                 </button>
               </>
-            }
+            )}
 
             {/* Edit Address Section */}
-            {stateData?.editDelivery &&
+            {stateData?.editDelivery && (
               <EditDeliveryAdress
                 handleDeliveryAddressCancel={handleDeliveryAddressCancel}
                 handleEditSaveChange={handleEditSaveChange}
                 handleEditSaveSubmit={handleEditSaveSubmit}
                 formData={formData}
               ></EditDeliveryAdress>
-            }
+            )}
           </div>
 
           {/* Order Summary Section */}
@@ -233,8 +240,7 @@ export default function PaymentPage() {
             productQuantity={productQuantity}
             platformFee={platformFee}
             indianBanks={bank}
-          >
-          </PaymentAdressDetails>
+          ></PaymentAdressDetails>
         </div>
 
         {/* Price Details Section */}
@@ -243,9 +249,8 @@ export default function PaymentPage() {
           productQuantity={productQuantity}
           product={product}
           platformFee={platformFee}
-        >
-        </PriceDetails>
+        ></PriceDetails>
       </div>
-    </div >
+    </div>
   );
 }

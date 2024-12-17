@@ -1,0 +1,8 @@
+.wishlistClear-btn {
+  background-color: #ffc107;
+  width: 210px !important;
+  margin: 0 auto;
+  border: none;
+  padding: 11px;
+  cursor: pointer;
+}

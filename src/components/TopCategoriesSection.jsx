@@ -9,7 +9,6 @@ import image1 from "../images/m1.jpg";
 import "../styles/cardStyle.css";
 import "../styles/best-seller.css";
 
-
 const TopCategoriesSection = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("beauty");
 
@@ -21,17 +20,16 @@ const TopCategoriesSection = () => {
   const {
     data: relatedProducts,
     isLoading: isProductsLoading,
-    error: productsError
+    error: productsError,
   } = useQuery({
     queryKey: ["products", selectedCategory],
     queryFn: () => fetchProductsByCategory(selectedCategory),
     enabled: !!selectedCategory,
-  })
+  });
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
-
 
   return (
     <div className="container">
@@ -47,16 +45,19 @@ const TopCategoriesSection = () => {
           {isCategoriesLoading ? (
             <p>Loading categories...</p>
           ) : (
-            categories?.map((val, key) => (
+            categories?.map((product, key) => (
               <div className="col-md-12 my-2" key={key}>
                 <Card
                   className="h-100 text-dark"
                   style={{ border: "2px solid #e1997e", cursor: "pointer" }}
-                  onClick={() => handleCategoryClick(val.slug || val)}
+                  onClick={() => handleCategoryClick(product.slug || product)}
                 >
                   <Card.Body>
                     <Card.Title>
-                      {key + 1} - {typeof val === "string" ? val.toUpperCase().replace("-", " ") : val.slug?.toUpperCase().replace("-", " ")}
+                      {key + 1} -{" "}
+                      {typeof product === "string"
+                        ? product.toUpperCase().replace("-", " ")
+                        : product.slug?.toUpperCase().replace("-", " ")}
                     </Card.Title>
                   </Card.Body>
                 </Card>
@@ -76,10 +77,7 @@ const TopCategoriesSection = () => {
               {relatedProducts?.map((product) => (
                 <div className="col-md-4 mb-4" key={product?.id}>
                   <Card className="product-card" style={{ height: "100%" }}>
-
-                    <CheckWishlistItemButton
-                      product={product}
-                    />
+                    <CheckWishlistItemButton product={product} />
                     <Card.Img
                       variant="top"
                       src={product?.thumbnail || image1}
@@ -122,7 +120,10 @@ const TopCategoriesSection = () => {
                           {product?.discountPercentage}% off
                         </span>
                       </Card.Text>
-                      <Link to={`/products/${product?.id}`} className="btn btn-primary mb-2">
+                      <Link
+                        to={`/products/${product?.id}`}
+                        className="btn btn-primary mb-2"
+                      >
                         View Product
                       </Link>
                     </Card.Body>

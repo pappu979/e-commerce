@@ -5,12 +5,15 @@ import { fetchCategories } from "../utils/api";
 import "../styles/cardStyle.css";
 import { useQuery } from "@tanstack/react-query";
 
-
 export default function CategoriesSection() {
-  
-  const {data: categories, isLoading, isError, error} = useQuery({
+  const {
+    data: categories,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["categories"],
-    queryFn: fetchCategories
+    queryFn: fetchCategories,
   });
 
   if (isLoading) {

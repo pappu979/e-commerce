@@ -31,7 +31,9 @@ const wishlistSlice = createSlice({
       if (!userId) return;
 
       const userWishlistKey = `wishlistItems_${userId}`;
-      const existingItem = state.items.find((item) => item.id === action.payload.id);
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
 
       if (!existingItem) {
         state.items.push(action.payload);
@@ -59,6 +61,11 @@ const wishlistSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, addToWishlist, removeFromWishlist, clearWishlist } = wishlistSlice.actions;
+export const {
+  setCurrentUser,
+  addToWishlist,
+  removeFromWishlist,
+  clearWishlist,
+} = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;

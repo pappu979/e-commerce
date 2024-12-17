@@ -7,39 +7,41 @@ import imageL from "../images/12.png";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 function NavigationBar() {
-  const cartItems = useSelector((state) => state.cart.items);
   const [hoverEffect, setHoverEffect] = React.useState(false);
-  const wishlistItem = useSelector((state) => state.wishlist.items)
-  const saveForLaterItems = useSelector((state) => state.saveForLater.saveItems);
+  const cartItems = useSelector((state) => state.cart.items);
+  const wishlistItem = useSelector((state) => state.wishlist.items);
+  const saveForLaterItems = useSelector(
+    (state) => state.saveForLater.saveItems
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleMouseEnter = () => setHoverEffect(true);
-  const handleMouseLeave = () => setHoverEffect(false)
+  const handleMouseLeave = () => setHoverEffect(false);
   const authToken = localStorage.getItem("authToken");
-  
-  const handleShowCart = () => {   
+
+  const handleShowCart = () => {
     if (authToken) {
-      navigate("/cart")
+      navigate("/cart");
     } else {
-      navigate("/login")
+      navigate("/login");
     }
-  }
+  };
 
   const handleLogout = () => {
-    if(!authToken){
+    if (!authToken) {
       toast.info("You are already Logout!", {
         position: "top-right",
         autoClose: 3000,
@@ -49,10 +51,10 @@ function NavigationBar() {
         draggable: true,
         progress: undefined,
       });
-    }else{
+    } else {
       dispatch(logout());
     }
-    navigate("/login")
+    navigate("/login");
   };
 
   return (
@@ -86,35 +88,43 @@ function NavigationBar() {
                 onMouseLeave={handleMouseLeave}
                 show={hoverEffect}
               >
-
                 <Dropdown.Toggle variant="btn" id="dropdown-basic">
                   Account
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ top: "35px" }}>
                   <Dropdown.Item as={Link} to="/profile">
-                    <FontAwesomeIcon icon={faUserCircle} style={{ marginRight: "6px" }} />
+                    <FontAwesomeIcon
+                      icon={faUserCircle}
+                      style={{ marginRight: "6px" }}
+                    />
                     My Profile
                   </Dropdown.Item>
                   <hr />
                   <Dropdown.Item as={Link} to="/signup">
-                  <PersonAddIcon style={{ marginRight: "15px" }} />
+                    <PersonAddIcon style={{ marginRight: "15px" }} />
                     Sign Up
                   </Dropdown.Item>
                   <hr />
                   <Dropdown.Item as={Link} to="/login">
-                  <LoginIcon style={{ marginRight: "15px" }} />
-                    Login 
+                    <LoginIcon style={{ marginRight: "15px" }} />
+                    Login
                   </Dropdown.Item>
                   <hr />
                   <Dropdown.Item as={Link} to="/wishlist">
-                    <FontAwesomeIcon icon={faHeart} style={{ marginRight: "8px" }} />
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      style={{ marginRight: "8px" }}
+                    />
                     My Wishlist
                     <span className="ms-2">{wishlistItem.length}</span>
                   </Dropdown.Item>
                   <hr />
                   <Dropdown.Item as={Link} to="/saveforlater">
-                    <FontAwesomeIcon icon={faSave} style={{ marginRight: "8px" }} />
+                    <FontAwesomeIcon
+                      icon={faSave}
+                      style={{ marginRight: "8px" }}
+                    />
                     Save List
                     <span className="ms-2">{saveForLaterItems.length}</span>
                   </Dropdown.Item>
@@ -126,7 +136,10 @@ function NavigationBar() {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <div className="ms-4 btn position-relative" onClick={handleShowCart}>
+              <div
+                className="ms-4 btn position-relative"
+                onClick={handleShowCart}
+              >
                 <FontAwesomeIcon icon={faShoppingCart} /> Cart
                 {cartItems.length > 0 && (
                   <span

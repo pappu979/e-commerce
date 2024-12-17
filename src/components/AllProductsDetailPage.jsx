@@ -1,24 +1,26 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
 import { fetchProducts, categorizeProducts } from "../utils/api";
 import CheckWishlistItemButton from "./CheckWishListButton";
 import "../styles/AllProducts.css";
 
-
 export default function AllProductsDetailPage() {
-
-  const { data: products, isLoading, isError } = useQuery({
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
   });
 
   const categorizedProducts = React.useMemo(() => {
     return products ? categorizeProducts(products) : {};
-  }, [products])
+  }, [products]);
 
   if (isError) {
     return <div>Error fetching products. Please try again later.</div>;
@@ -41,7 +43,6 @@ export default function AllProductsDetailPage() {
               ) : (
                 categorizedProducts[category]?.map((product) => (
                   <div className="col-md-4 mb-4" key={product.id}>
-
                     <Card
                       className="product-card"
                       style={{
@@ -50,10 +51,7 @@ export default function AllProductsDetailPage() {
                       }}
                     >
                       <div className="image-container">
-
-                        <CheckWishlistItemButton
-                          product={product}
-                        />
+                        <CheckWishlistItemButton product={product} />
 
                         <Card.Img
                           className="product-image"
@@ -73,7 +71,7 @@ export default function AllProductsDetailPage() {
                             style={{
                               fontSize: "18px",
                               fontWeight: "bold",
-                              paddingRight: "8px"
+                              paddingRight: "8px",
                             }}
                           >
                             ₹{(product?.price).toFixed(2)}
@@ -81,11 +79,16 @@ export default function AllProductsDetailPage() {
 
                           <span
                             style={{
-                              textDecoration: 'line-through',
-                              color: '#888',
+                              textDecoration: "line-through",
+                              color: "#888",
                             }}
                           >
-                            ₹{(product?.price + ((product?.price * product?.discountPercentage) / 100)).toFixed(2)}
+                            ₹
+                            {(
+                              product?.price +
+                              (product?.price * product?.discountPercentage) /
+                                100
+                            ).toFixed(2)}
                           </span>
                           <span
                             style={{
@@ -93,21 +96,26 @@ export default function AllProductsDetailPage() {
                               position: "relative",
                               color: "#26a541",
                               fontWeight: "bold",
-                              paddingLeft: "8px"
+                              paddingLeft: "8px",
                             }}
                           >
                             {product?.discountPercentage}% off
                           </span>
                         </Card.Text>
                         <div className="mt-auto mb-2">
-                          <Link to={`/products/${product.id}`}
+                          <Link
+                            to={`/products/${product.id}`}
                             className="btn"
                             style={{ backgroundColor: "rgb(225, 153, 126)" }}
                             data-tooltip-id="viewProduct-tooltip"
                           >
                             View Product Details
                           </Link>
-                          <ReactTooltip id="viewProduct-tooltip" place="top" content="View Product Details" />
+                          <ReactTooltip
+                            id="viewProduct-tooltip"
+                            place="top"
+                            content="View Product Details"
+                          />
                         </div>
                       </Card.Body>
                     </Card>

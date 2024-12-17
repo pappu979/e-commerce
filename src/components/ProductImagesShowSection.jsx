@@ -1,6 +1,6 @@
 import React from "react";
 import CheckWishlistItemButton from "./CheckWishListButton";
-import '../App.css';
+import "../App.css";
 
 function ProductImagesShowSection({ images, product }) {
   const [img, setImg] = React.useState(images[0] ? images[0] : null);
@@ -17,9 +17,7 @@ function ProductImagesShowSection({ images, product }) {
             {images?.map((val, key) => (
               <div
                 className={
-                  img == images[key]
-                    ? "border border-danger p-2"
-                    : null
+                  img == images[key] ? "border border-danger p-2" : null
                 }
                 onClick={() => changeImage(key)}
                 key={key}
@@ -33,17 +31,13 @@ function ProductImagesShowSection({ images, product }) {
             ))}
           </div>
           <div className="col-md-9 border ">
-            <CheckWishlistItemButton
-              product={product}
-            />
+            <CheckWishlistItemButton product={product} />
 
             <div>
-
               <img src={img} alt="" className="product-image" />
             </div>
           </div>
         </div>
-
       </div>
     </>
   );
