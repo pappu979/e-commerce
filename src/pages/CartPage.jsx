@@ -70,10 +70,6 @@ export default function CartPage() {
     }
   };
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  };
-
   return (
     <div className="container mt-5 ">
       {cartItems?.length > 0 ? (
@@ -339,7 +335,7 @@ export default function CartPage() {
       {cartItems?.length > 0 && (
         <div className="text-center my-5">
           <button
-            onClick={handleClearCart}
+            onClick={() => dispatch(clearCart())}
             className="btn btn-danger mr-3"
             style={{
               backgroundColor: "#ff9f00",

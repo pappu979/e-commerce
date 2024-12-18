@@ -22,32 +22,32 @@ import ReviewPage from "../pages/ReviewPage";
 const Layout = () => (
   <>
     <NavigationBar />
-    <Outlet />  
+    <Outlet />
     <FooterSection />
   </>
 );
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Layout />,
-        children: [
-          { path: "/", element: <Home /> },
-          { path: "login", element: <Login /> },
-          { path: "signup", element: <SignupPage /> },
-          { path: "products", element: <ProductPage /> },
-          { path: "products/:productID", element: <ShowProductDetailsPage /> },
-          { path: "products/category/:categoryName", element: <CategoryPage /> },
-          { path: "cart", element: <CartPage /> },
-          { path: "payment", element: <PaymentPage /> },
-          { path: "confirmation", element: <ConfirmationPage /> },
-          { path: "checkout", element: <CheckoutPage /> },
-          { path: "wishlist", element: <WishListPage /> },
-          { path: "saveforlater", element: <SaveForLaterPage /> },
-          { path: "forgot-password", element: <ForgotPassword />},
-          { path: "reset-password", element: <ResetPassword />},
-          { path: "review", element: <ReviewPage />},
-          { path: "*", element: <Page404 /> },
-        ],
-    }
-])
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "login", element: <Login /> },
+      { path: "signup", element: <SignupPage /> },
+      { path: "products", element: <ProductPage /> },
+      { path: "products/:productID", element: <ShowProductDetailsPage /> },
+      { path: "products/category/:categoryName", element: <CategoryPage /> },
+      { path: "cart", element: <CartPage /> },
+      { path: "payment", element: <PaymentPage /> },
+      { path: "confirmation", element: <ConfirmationPage /> },
+      { path: "checkout", element: <CheckoutPage /> },
+      { path: "wishlist", element: <WishListPage /> },
+      { path: "saveforlater", element: <SaveForLaterPage /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "reset-password", element: <ResetPassword /> },
+      { path: "review", element: <ReviewPage /> },
+      { path: "*", element: <Page404 /> },
+    ],
+  },
+]);

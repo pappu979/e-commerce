@@ -1,9 +1,9 @@
 .btn-icon {
-    display: inline-flex; /* Makes the button size fit its content */
-    align-items: center; /* Centers the icon vertically */
-    justify-content: center; /* Centers the icon horizontally */
-    padding: 0; /* Remove extra padding */
-    border: none; /* Remove border */
-    background: transparent; /* Transparent background */
-    cursor: pointer; 
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: start;
+  padding: 2px 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

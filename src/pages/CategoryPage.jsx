@@ -10,7 +10,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/ProductSlider.css";
 
-
 // CustomPrevArrow component
 const CustomPrevArrow = (props) => {
   const { className, onClick } = props;
@@ -81,15 +80,9 @@ export default function CategoryPage() {
         </p>
       </div>
 
-      <Slider {...sliderSettings}
-        className="product-slider"
-      >
+      <Slider {...sliderSettings} className="product-slider">
         {products.map((product, key) => (
-          <div
-            className="product-card-container mt-4"
-            key={key}
-          >
-
+          <div className="product-card-container mt-4" key={key}>
             <Card
               className="product-card text-dark"
               style={{
@@ -98,17 +91,14 @@ export default function CategoryPage() {
                 height: "100%",
               }}
             >
-
-              <CheckWishlistItemButton
-                product={product}
-              />
+              <CheckWishlistItemButton product={product} />
               <Card.Img
                 variant="top"
                 src={product.thumbnail}
                 style={{
                   maxHeight: "250px",
                   height: "100%",
-                  objectFit: "contain"
+                  objectFit: "contain",
                 }}
               />
               <Card.Body className="d-flex flex-column h-100">
@@ -118,12 +108,11 @@ export default function CategoryPage() {
 
                 <div className="mt-auto">
                   <Card.Text>
-
                     <span
                       style={{
                         fontSize: "18px",
                         fontWeight: "bold",
-                        paddingRight: "8px"
+                        paddingRight: "8px",
                       }}
                     >
                       ₹{(product?.price).toFixed(2)}
@@ -131,11 +120,15 @@ export default function CategoryPage() {
 
                     <span
                       style={{
-                        textDecoration: 'line-through',
-                        color: '#888',
+                        textDecoration: "line-through",
+                        color: "#888",
                       }}
                     >
-                      ₹{(product?.price + ((product?.price * product?.discountPercentage) / 100)).toFixed(2)}
+                      ₹
+                      {(
+                        product?.price +
+                        (product?.price * product?.discountPercentage) / 100
+                      ).toFixed(2)}
                     </span>
                     <span
                       style={{
@@ -143,23 +136,24 @@ export default function CategoryPage() {
                         position: "relative",
                         color: "#26a541",
                         fontWeight: "bold",
-                        paddingLeft: "8px"
+                        paddingLeft: "8px",
                       }}
                     >
                       {product?.discountPercentage}% off
                     </span>
                   </Card.Text>
-                  <button className="btn mb-2" style={{ background: "#e1997e" }}>
+                  <button
+                    className="btn mb-2"
+                    style={{ background: "#e1997e" }}
+                  >
                     <Link
                       className="text-decoration-none text-danger mt-2"
                       to={`/products/${product.id}`}
                     >
                       Product Details
                     </Link>
-
                   </button>
                 </div>
-
               </Card.Body>
             </Card>
           </div>

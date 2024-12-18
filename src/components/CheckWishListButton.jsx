@@ -14,7 +14,7 @@ const CheckWishlistItemButton = ({ product }) => {
     <>
       <button
         onClick={() => handleWishlistClick(product)}
-        className="btn"
+        className="btn-icon"
         data-tooltip-id="wishlist-tooltip"
         data-tooltip-content={
           isInWishlist ? "Already in Wishlist" : "Add Item to Wishlist"

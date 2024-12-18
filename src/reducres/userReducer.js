@@ -1,11 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { removeLogoutLocalStorage } from '../validation/localStorage';
-import { toast } from 'react-toastify';
+import { createSlice } from "@reduxjs/toolkit";
+import { removeLogoutLocalStorage } from "../validation/localStorage";
+import { toast } from "react-toastify";
 
-const initialUserState = JSON.parse(localStorage.getItem("currentUser")) || null;
+const initialUserState =
+  JSON.parse(localStorage.getItem("currentUser")) || null;
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     currentUser: initialUserState,
   },
