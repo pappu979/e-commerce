@@ -77,7 +77,7 @@
 //     });
 //   };
 
-//   const clearCart = () => {    
+//   const clearCart = () => {
 //     Swal.fire({
 //       title: "Cart Emptied",
 //       text: "Your cart is now empty. Log in to save your favorite items or start shopping to add more!",
@@ -105,7 +105,7 @@
 //       navigate('/login');
 //     }, 3000);
 //   } else {
-//     // Remove the token 
+//     // Remove the token
 //     removeLogoutLocalStorage();
 
 //     // Show success toast for logged out
@@ -129,18 +129,17 @@
 //   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.productQuantity, 0);
 
 //   return (
-//     <CartContext.Provider 
-//     value={{ 
-//       cartItems, 
-//       addToCart, 
-//       clearCart, 
-//       removeFromCart, 
-//       updateQuantity, 
-//       totalAmount, 
-//       logout,  
+//     <CartContext.Provider
+//     value={{
+//       cartItems,
+//       addToCart,
+//       clearCart,
+//       removeFromCart,
+//       updateQuantity,
+//       totalAmount,
+//       logout,
 //       }}>
 //       {children}
 //     </CartContext.Provider>
 //   );
 // };
-

@@ -25,15 +25,15 @@ function NavigationBar() {
   const saveForLaterItems = useSelector(
     (state) => state.saveForLater.saveItems
   );
+  const isLoggedIn = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleMouseEnter = () => setHoverEffect(true);
   const handleMouseLeave = () => setHoverEffect(false);
-  const authToken = localStorage.getItem("authToken");
 
   const handleShowCart = () => {
-    if (authToken) {
+    if (isLoggedIn) {
       navigate("/cart");
     } else {
       navigate("/login");
@@ -41,7 +41,7 @@ function NavigationBar() {
   };
 
   const handleLogout = () => {
-    if (!authToken) {
+    if (!isLoggedIn) {
       toast.info("You are already Logout!", {
         position: "top-right",
         autoClose: 3000,

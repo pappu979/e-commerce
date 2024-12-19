@@ -7,13 +7,15 @@ const useWishlistHandler = () => {
   const wishlistItem = useSelector((state) => state.wishlist.items);
 
   const handleWishlistClick = (product) => {
-    const isAlreadyWishlisted = wishlistItem.some((item) => item.id === product.id);
+    const isAlreadyWishlisted = wishlistItem.some(
+      (item) => item.id === product.id
+    );
 
     if (isAlreadyWishlisted) {
       dispatch(removeFromWishlist(product.id));
     } else {
       dispatch(addToWishlist(product));
-      
+
       toast.success(`${product.title} has been added to your wishlist!`, {
         position: "top-right",
         autoClose: 3000,

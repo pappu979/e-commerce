@@ -1,117 +1,119 @@
 .payment-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 20px;
-  }
-  
-  .login-section, .address-section, .price-details-section {
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-  }
-  
-  .login-title {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .login-details {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .change-btn {
-    background-color: transparent;
-    color: #007bff;
-    border: none;
-    cursor: pointer;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.login-section,
+.address-section,
+.price-details-section {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+.login-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.login-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.change-btn {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+}
 /*   
   .address-section {
     width: 70%;
   } */
-  
-  .section-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .address-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    cursor: pointer;
-  }
-  
-  .selected {
-    border-color: #007bff;
-  }
-  
-  .address-content {
-    flex-grow: 1;
-    margin-left: 10px;
-  }
-  
-  .edit-btn {
-    background-color: transparent;
-    color: #007bff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .add-new-btn {
-    background-color: transparent;
-    color: #007bff;
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-  
-  .price-details-section {
-    /* width: 100vw; */
-    padding: 15px;
-    border: 1px solid #ddd;
-  }
-  
-  .price-breakdown {
-    margin-top: 10px;
-  }
-  
-  .price-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .total-payable {
-    font-weight: bold;
-    font-size: 18px;
-  }
-  
-  .savings {
-    color: green;
-    font-weight: bold;
-  }
-  
-  .free-charge {
-    color: green;
-  }
 
-  .payment-credit-cvv {
-    padding: 8px 12px;
-    width: 100%;
-  }
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-  .bankSelect {
-    width: 50%;
-  }  
+.address-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.selected {
+  border-color: #007bff;
+}
+
+.address-content {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.edit-btn {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+}
+
+.add-new-btn {
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.price-details-section {
+  /* width: 100vw; */
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.price-breakdown {
+  margin-top: 10px;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.total-payable {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.savings {
+  color: green;
+  font-weight: bold;
+}
+
+.free-charge {
+  color: green;
+}
+
+.payment-credit-cvv {
+  padding: 8px 12px;
+  width: 100%;
+}
+
+.bankSelect {
+  width: 50%;
+}
 
 .generate-number {
   padding: 8px 12px;
@@ -124,15 +126,15 @@
 }
 
 @media (max-width: 768px) {
-  .debit-card input{
+  .debit-card input {
     margin-top: 10px;
     width: 100%;
     margin-left: 0px;
   }
 }
 
-@media (max-width: 767px){
-  .debit-card input{
+@media (max-width: 767px) {
+  .debit-card input {
     margin-top: 10px;
     width: 100%;
     margin-left: 0px;
@@ -142,12 +144,11 @@
     margin-top: 0rem;
   }
 
-  .cod div{
+  .cod div {
     margin-top: 10px;
   }
 
   .bankSelect {
     width: 100%;
-  } 
-  
+  }
 }

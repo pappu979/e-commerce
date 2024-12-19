@@ -1,38 +1,37 @@
 .AbtSec-item {
+  column-gap: 3rem;
+}
+
+.AbtSec-item p i {
+  color: #f9a826;
+  font-size: 1.1rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .AbtSec-content h2 {
+    font-size: 1.5rem;
+  }
+  .AbtSec-item {
     column-gap: 3rem;
   }
-  
-  .AbtSec-item p i {
-    color: #f9a826;
-    font-size: 1.1rem;
+  .AbtSec-item p {
+    font-size: 0.6rem;
+    margin-bottom: 0;
   }
-  
-  @media only screen and (max-width: 992px) {
-    .AbtSec-content h2 {
-      font-size: 1.5rem;
-    }
-    .AbtSec-item {
-      column-gap: 3rem;
-    }
-    .AbtSec-item p {
-      font-size: 0.6rem;
-      margin-bottom: 0;
-    }
-  
-    .section__description i {
-      font-size: 0.8rem !important;
-    }
+
+  .section__description i {
+    font-size: 0.8rem !important;
   }
-  
-  @media only screen and (max-width: 768px) {
-    .about__img {
-      margin-top: 30px;
-    }
+}
+
+@media only screen and (max-width: 768px) {
+  .about__img {
+    margin-top: 30px;
   }
-  
-  @media only screen and (max-width: 576px) {
-    .AbtSec {
-      margin-top: 280px;
-    }
+}
+
+@media only screen and (max-width: 576px) {
+  .AbtSec {
+    margin-top: 280px;
   }
-  
+}

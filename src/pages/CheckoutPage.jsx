@@ -8,15 +8,14 @@ import { intialCheckoutFormData } from "../utils/formData";
 import { checkOutValidate } from "../validation/validation";
 
 const CheckoutPage = () => {
-  const cartItems = useSelector((state) => state.cart.items);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const cartItems = useSelector((state) => state.cart.items);
+  const totalAmount = useSelector((state) => state.cart.totalAmount);
   const [formData, setFormData] = React.useState(intialCheckoutFormData);
   const [errors, setErrors] = React.useState("");
-
-  const location = useLocation();
-  let { platformFee } = location?.state || {};
+  const { platformFee } = location?.state || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;

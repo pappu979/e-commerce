@@ -6,7 +6,7 @@
 // export const useWishlist = () => React.useContext(WishlistContext);
 
 // export const WishlistProvider = ({ children }) => {
-    
+
 //     const [wishlistItem, setWishlistItem] = React.useState(() => {
 //         const savedWishListItem = localStorage.getItem("wishlistItem");
 //         return savedWishListItem ? JSON.parse(savedWishListItem) : [];
@@ -20,9 +20,9 @@
 //         setWishlistItem((prevItems) => {
 //             const existingItem = prevItems.find((item) => item.id === product.id);
 //             if (existingItem) {
-//                 return prevItems;  
+//                 return prevItems;
 //             } else {
-//                 return [...prevItems, product]; 
+//                 return [...prevItems, product];
 //             }
 //         });
 //     };

@@ -20,14 +20,13 @@
 //         setSaveForLaterItems((prevItems) => {
 //             const existingItem = prevItems.find((item) => item.id === product.id);
 //             if (existingItem) {
-//                 return prevItems; 
+//                 return prevItems;
 //             } else {
-//                 return [...prevItems, product]; 
+//                 return [...prevItems, product];
 //             }
 //         });
 //     };
 
-   
 //     const removeFromSaveForLater = (productId) => {
 //         Swal.fire({
 //             title: "Are you sure?",
@@ -39,7 +38,7 @@
 //             confirmButtonText: "Yes, delete it!"
 //         }).then((result) => {
 //             if (result.isConfirmed) {
-                
+
 //                 setSaveForLaterItems((prevItems) => prevItems.filter((item) => item.id !== productId));
 //                 Swal.fire({
 //                     title: "Deleted!",

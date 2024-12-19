@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -73,7 +73,7 @@ const ProductCarousel = () => {
                       style={{
                         borderColor: "black",
                         margin: "0 15px",
-                        padding: "5px 8px"
+                        padding: "5px 8px",
                       }}
                     >
                       <Card.Img
@@ -83,8 +83,9 @@ const ProductCarousel = () => {
                         alt={`Product ${startIndex + index + 1}`}
                       />
                       <Card.Body>
-                        <Card.Title>{`Product ${startIndex + index + 1
-                          }`}</Card.Title>
+                        <Card.Title>{`Product ${
+                          startIndex + index + 1
+                        }`}</Card.Title>
                         <Button
                           variant="dark"
                           className="w-100"
@@ -96,7 +97,6 @@ const ProductCarousel = () => {
                           >
                             Sale
                           </Link>
-
                         </Button>
                       </Card.Body>
                     </Card>
