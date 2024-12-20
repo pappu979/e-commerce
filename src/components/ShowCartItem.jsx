@@ -3,18 +3,19 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import { removeFromCart, updateQuantity } from "../reducres/cartReducer";
 import CheckWishlistItemButton from "./CheckWishListButton";
 import flipLogo from "../images/flipLogo.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDateInfo from "../utils/dateUtilis";
 
 const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
   const dispatch = useDispatch();
   const { currentDate, currentMonth, deliveryDay } = useDateInfo();
+  const currentUser = useSelector((state) => state.user.currentUser);
   return (
-    <div>
+    <>
       {cartItems?.map((product) => (
         <div
           className="row mb-4 d-flex align-items-center justify-content-center"
-          key={product.id}
+          key={product?.addProduct?.id}
           style={{ borderBottom: "1px solid #ddd" }}
         >
           <div className="col-md-3">
@@ -25,19 +26,20 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
               content="Processing Order For Checkout"
             />
             <img
-              src={product.thumbnail}
-              alt={product.title}
+              src={product?.thumbnail}
+              alt={product?.title}
               style={{ width: "100%" }}
             />
             <div className="d-flex align-items-center justify-content-center mt-2 mb-2">
               <button
                 className="btn  mx-2"
-                disabled={product.productQuantity <= 1}
+                disabled={product?.productQuantity <= 1}
                 onClick={() =>
                   dispatch(
                     updateQuantity({
-                      id: product.id,
-                      quantity: product.productQuantity - 1,
+                      userId: currentUser.id,
+                      id: product?.id,
+                      quantity: product?.productQuantity - 1,
                     })
                   )
                 }
@@ -56,7 +58,7 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
                   border: "1px solid grey",
                 }}
               >
-                {product.productQuantity}
+                {product?.productQuantity}
               </span>
 
               <button
@@ -64,8 +66,9 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
                 onClick={() =>
                   dispatch(
                     updateQuantity({
-                      id: product.id,
-                      quantity: product.productQuantity + 1,
+                      userId: currentUser.id,
+                      id: product?.id,
+                      quantity: product?.productQuantity + 1,
                     })
                   )
                 }
@@ -82,10 +85,10 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
           <div className="col-md-9">
             <div className="row">
               <div className="col-md-6">
-                <h6>{product.title}</h6>
+                <h6>{product?.title}</h6>
 
                 <p>
-                  <span>Seller: {product.seller || "Unknown"}</span>
+                  <span>Seller: {product?.seller || "Unknown"}</span>
                   <img
                     src={flipLogo}
                     alt="flip Logo"
@@ -103,8 +106,8 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
                   >
                     ₹
                     {(
-                      product.price +
-                      (product.price * product.discountPercentage) / 100
+                      product?.price +
+                      (product?.price * product?.discountPercentage) / 100
                     ).toFixed(2)}
                   </span>
                   <span
@@ -112,7 +115,7 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
                       marginLeft: "10px",
                     }}
                   >
-                    ₹{(product.price * product.productQuantity).toFixed(2)}
+                    ₹{(product?.price * product?.productQuantity).toFixed(2)}
                   </span>
                   <span
                     style={{
@@ -122,7 +125,7 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
                       fontWeight: "500",
                     }}
                   >
-                    {product.discountPercentage}% Off
+                    {product?.discountPercentage}% Off
                   </span>
                 </div>
 
@@ -136,7 +139,14 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
 
                 <button
                   className="btn p-0 mt-2 fw-bold"
-                  onClick={() => dispatch(removeFromCart(product.id))}
+                  onClick={() =>
+                    dispatch(
+                      removeFromCart({
+                        userId: currentUser?.id,
+                        id: product?.id,
+                      })
+                    )
+                  }
                   style={{ fontSize: "18px", marginLeft: "16px" }}
                 >
                   Remove
@@ -166,7 +176,7 @@ const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

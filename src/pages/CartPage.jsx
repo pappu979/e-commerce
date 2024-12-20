@@ -4,7 +4,11 @@ import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { checkPlatformFee } from "../utils/cartCalculations";
 import { totalDiscountAmount } from "../utils/cartCalculations";
-import { clearCart, removeFromCart } from "../reducres/cartReducer";
+import {
+  clearCart,
+  loadUserCartItems,
+  removeFromCart,
+} from "../reducres/cartReducer";
 import { addSaveforLater } from "../reducres/saveForLaterReducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -15,15 +19,21 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
-  const isLoggedIn = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const updateDiscount = totalDiscountAmount(cartItems);
   const platformFee = checkPlatformFee(totalAmount);
   const actualPrice = (totalAmount + updateDiscount).toFixed(2);
 
+  React.useEffect(() => {
+    if (currentUser) {
+      dispatch(loadUserCartItems({ userId: currentUser.id }));
+    }
+  }, [currentUser, dispatch]);
+
   // handleBuyNow Option....
   const handlePlaceOrder = () => {
-    if (isLoggedIn) {
+    if (currentUser) {
       toast.info("Processing your order...", {
         position: "top-right",
         autoClose: 2000,
@@ -37,13 +47,13 @@ export default function CartPage() {
   // handleSaveForLater Item...
   const handleSaveForLater = (product) => {
     dispatch(addSaveforLater(product));
-    dispatch(removeFromCart(product.id));
+    dispatch(removeFromCart({ userId: currentUser.id, id: product.id }));
     navigate("/saveforlater");
   };
 
   // If user Login then send to HomePage otherwise Login Page....
   const handleLoginCart = () => {
-    if (isLoggedIn) {
+    if (currentUser) {
       toast.info("Your cart is empty. Add items before proceeding!", {
         position: "top-right",
         autoClose: 3000,
@@ -74,7 +84,7 @@ export default function CartPage() {
               <h5>PRICE DETAILS</h5>
               <hr />
               <div className="d-flex justify-content-between mb-2">
-                <span>Price ({cartItems.length} items)</span>
+                <span>Price ({cartItems?.length} items)</span>
                 <span>₹{actualPrice}</span>
               </div>
 
@@ -170,7 +180,7 @@ export default function CartPage() {
       {cartItems?.length > 0 && (
         <div className="text-center my-5">
           <button
-            onClick={() => dispatch(clearCart())}
+            onClick={() => dispatch(clearCart({ userId: currentUser.id }))}
             className="btn btn-danger mr-3"
             style={{
               backgroundColor: "#ff9f00",

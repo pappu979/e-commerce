@@ -11,11 +11,12 @@ const SaveForLaterPage = () => {
   const saveForLaterItems = useSelector(
     (state) => state.saveForLater.saveItems
   );
+  const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const moveToCart = (product) => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({ userId: currentUser.id, addProduct: product }));
     dispatch(removeForSaveLater(product.id));
     navigate("/cart");
   };

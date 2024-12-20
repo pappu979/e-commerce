@@ -20,7 +20,7 @@ function ShowProductDetailsPage() {
   const [productQuantity, setProductQuantity] = React.useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.cart.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   React.useEffect(() => {
     axios
@@ -36,13 +36,18 @@ function ShowProductDetailsPage() {
       });
       return;
     }
-    const payload = {
+    const addProduct = {
       ...product,
       productQuantity,
       totalPrice: product?.price * productQuantity,
     };
 
-    dispatch(addToCart(payload));
+    dispatch(
+      addToCart({
+        userId: currentUser.id,
+        addProduct: addProduct,
+      })
+    );
 
     Swal.fire({
       title: "Added to Cart!",
@@ -50,7 +55,13 @@ function ShowProductDetailsPage() {
       icon: "success",
     }).then(() => {
       if (currentUser) {
-        dispatch(updateQuantity(productID, productQuantity));
+        dispatch(
+          updateQuantity({
+            userId: currentUser.id,
+            id: productID,
+            quantity: productQuantity,
+          })
+        );
         navigate("/cart");
       } else {
         navigate("/login", { state: { from: location.pathname } });

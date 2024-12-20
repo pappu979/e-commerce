@@ -3,7 +3,7 @@ export const totalDiscountAmount = (cartItems) => {
   return cartItems.reduce(
     (total, item) =>
       total +
-      (item.price * item.discountPercentage * item.productQuantity) / 100,
+      (item?.price * item?.discountPercentage * item?.productQuantity) / 100,
     0
   );
 };

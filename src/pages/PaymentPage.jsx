@@ -14,7 +14,11 @@ import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress, editAddress } from "../reducres/addressReducer";
+import {
+  addAddress,
+  editAddress,
+  loadUserAddresses,
+} from "../reducres/addressReducer";
 import { checkPlatformFee } from "../utils/cartCalculations";
 import "../styles/payment.css";
 
@@ -59,6 +63,12 @@ export default function PaymentPage() {
       [key]: value,
     }));
   };
+
+  React.useEffect(() => {
+    if (currentUser) {
+      dispatch(loadUserAddresses({ userId: currentUser.id }));
+    }
+  }, [currentUser, dispatch]);
 
   const handleOpenDelivaryAddress = () => {
     updateState("deliveryAdress", true);
@@ -120,10 +130,16 @@ export default function PaymentPage() {
     e.preventDefault();
 
     if (stateData.isEditing) {
-      dispatch(addAddress(formData));
+      dispatch(
+        addAddress({
+          userId: currentUser.id,
+          address: formData,
+        })
+      );
     } else {
       dispatch(
         editAddress({
+          userId: currentUser.id,
           id: stateData?.selectedAddress,
           updatedAddress: formData,
         })

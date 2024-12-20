@@ -21,34 +21,27 @@ export default function LoginDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const API_URL = "https://6765379052b2a7619f5ecdb1.mockapi.io/login/users";
 
   const handleChangeLoginField = (e) => {
     const { name, value } = e.target;
     dispatch(updateLoginField({ field: name, value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch(API_URL);
+      const users = await response.json();
+      console.log(users);
 
-    const errors = validateLoginForm(loginState);
-
-    if (Object.keys(errors).length > 0) {
-      dispatch(setLoginErrors(errors));
-      return;
-    }
-
-    const storeUserData = JSON.parse(localStorage.getItem("userData")) || [];
-
-    if (storeUserData) {
-      const user = storeUserData.find(
+      const user = users.find(
         (user) =>
           user.email === loginState.email &&
           user.password === loginState.password
       );
-      if (user) {
-        setLocalStorageLoginUserData(createAuthToken);
-        dispatch(setCurrentUser(user));
 
+      if (user) {
         toast.success("Login Successful!", {
           position: "top-right",
           autoClose: 3000,
@@ -58,9 +51,13 @@ export default function LoginDetails() {
           draggable: true,
           progress: undefined,
         });
+        const errors = validateLoginForm(loginState);
 
-        const redirectTo = location.state?.from || "/";
-        navigate(redirectTo);
+        if (Object.keys(errors).length > 0) {
+          dispatch(setLoginErrors(errors));
+          return;
+        }
+        dispatch(setCurrentUser(user));
         dispatch(resetLoginForm());
       } else {
         Swal.fire({
@@ -70,16 +67,65 @@ export default function LoginDetails() {
           confirmButtonText: "Ok",
         });
       }
-    } else {
+    } catch (error) {
       Swal.fire({
         icon: "error",
         title: "No Account Found",
         text: "No account found with the provided credentials. Please sign up first.",
         confirmButtonText: "Ok",
-      }).then(() => {
-        navigate("/signup", { state: { from: location.pathname } });
       });
     }
+
+    // const errors = validateLoginForm(loginState);
+
+    // if (Object.keys(errors).length > 0) {
+    //   dispatch(setLoginErrors(errors));
+    //   return;
+    // }
+
+    // const storeUserData = JSON.parse(localStorage.getItem("userData")) || [];
+
+    // if (storeUserData) {
+    //   const user = storeUserData.find(
+    //     (user) =>
+    //       user.email === loginState.email &&
+    //       user.password === loginState.password
+    //   );
+    //   if (user) {
+    //     setLocalStorageLoginUserData(createAuthToken);
+    //     dispatch(setCurrentUser(user));
+
+    //     toast.success("Login Successful!", {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //     });
+
+    //     const redirectTo = location.state?.from || "/";
+    //     navigate(redirectTo);
+    //     dispatch(resetLoginForm());
+    //   } else {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Invalid Credentials",
+    //       text: "Please check your email and password.",
+    //       confirmButtonText: "Ok",
+    //     });
+    //   }
+    // } else {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "No Account Found",
+    //     text: "No account found with the provided credentials. Please sign up first.",
+    //     confirmButtonText: "Ok",
+    //   }).then(() => {
+    //     navigate("/signup", { state: { from: location.pathname } });
+    //   });
+    // }
   };
 
   return (
