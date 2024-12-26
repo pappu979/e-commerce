@@ -46,7 +46,7 @@ export default function CartPage() {
 
   // handleSaveForLater Item...
   const handleSaveForLater = (product) => {
-    dispatch(addSaveforLater(product));
+    dispatch(addSaveforLater({ userId: currentUser.id, saveProduct: product }));
     dispatch(removeFromCart({ userId: currentUser.id, id: product.id }));
     navigate("/saveforlater");
   };
@@ -127,7 +127,7 @@ export default function CartPage() {
 
               <div className="d-flex justify-content-between font-weight-bold">
                 <span>Total Amount</span>
-                <span>₹{totalAmount + platformFee}</span>
+                <span>₹{(totalAmount + platformFee).toFixed(2)}</span>
               </div>
 
               <p
@@ -194,7 +194,7 @@ export default function CartPage() {
           </button>
           <ReactTooltip id="clear-tooltip" place="top" content="Clear Cart" />
           <Link
-            to="/products"
+            to="/"
             className="btn btn-secondary"
             style={{
               backgroundColor: "#fb641b",

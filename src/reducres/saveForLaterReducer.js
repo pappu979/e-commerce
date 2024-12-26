@@ -1,62 +1,53 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import Swal from 'sweetalert2';
+import {
+  getLocalStorageForUser,
+  saveLocalStorageForUser,
+} from "../validation/localStorage";
 
 const initialState = {
-  currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
   saveItems: [],
 };
-
-if (initialState.currentUser) {
-  const userSaveitemKey = `saveForLaterItem_${initialState.currentUser?.id}`;
-  initialState.saveItems =
-    JSON.parse(localStorage.getItem(userSaveitemKey)) || [];
-}
 
 const saveForLaterSlice = createSlice({
   name: "saveForLater",
   initialState,
   reducers: {
-    setCurrentUser: (state, action) => {
-      state.currentUser = action.payload;
-      localStorage.setItem("currentUser", JSON.stringify(action.payload));
+    loadUserSaveItems: (state, action) => {
+      const { userId } = action.payload;
+      if (!userId) return;
 
-      if (action.payload) {
-        const userSaveitemKey = `saveForLaterItem_${action.payload.id}`;
-        state.saveItems =
-          JSON.parse(localStorage.getItem(userSaveitemKey)) || [];
-      } else {
-        state.saveItems = [];
-      }
+      state.saveItems = getLocalStorageForUser(userId, "saveForLaterItem");
     },
 
     addSaveforLater: (state, action) => {
-      const userId = state.currentUser?.id;
+      const { userId, saveProduct } = action.payload;
       if (!userId) return;
 
-      const userSaveitemKey = `saveForLaterItem_${userId}`;
-      const existingItem = state.saveItems.find(
+      const currentSaveItems = getLocalStorageForUser(
+        userId,
+        "saveForLaterItem"
+      );
+      const existingItem = currentSaveItems.find(
         (item) => item.id === action.payload.id
       );
 
       if (!existingItem) {
-        state.saveItems.push(action.payload);
-        localStorage.setItem(userSaveitemKey, JSON.stringify(state.saveItems));
+        state.saveItems.push(saveProduct);
+        saveLocalStorageForUser(userId, "saveForLaterItem", state.saveItems);
       }
     },
 
     removeForSaveLater: (state, action) => {
-      const userId = state.currentUser?.id;
+      const { userId, id } = action.payload;
       if (!userId) return;
 
-      const userSaveitemKey = `saveForLaterItem_${userId}`;
-      state.saveItems = state.saveItems.filter(
-        (item) => item.id !== action.payload
-      );
-      localStorage.setItem(userSaveitemKey, JSON.stringify(state.saveItems));
+      const updateSaveItem = state.saveItems.filter((item) => item.id !== id);
+      state.saveItems = updateSaveItem;
+      saveLocalStorageForUser(userId, "saveForLaterItem", state.saveItems);
     },
 
-    clearSaveForLater: (state) => {
-      const userId = state.currentUser?.id;
+    clearSaveForLater: (state, action) => {
+      const { userId } = action.payload;
       if (!userId) return;
 
       const userSaveitemKey = `saveForLaterItem_${userId}`;
@@ -67,10 +58,10 @@ const saveForLaterSlice = createSlice({
 });
 
 export const {
+  loadUserSaveItems,
   addSaveforLater,
   removeForSaveLater,
   clearSaveForLater,
-  setCurrentUser,
 } = saveForLaterSlice.actions;
 
 export default saveForLaterSlice.reducer;

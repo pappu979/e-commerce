@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
-import ProductPage from "../pages/ProductPage";
+import ShopPage from "../pages/ShopPage";
 import ShowProductDetailsPage from "../pages/ShowProductDetailsPage";
 import CategoryPage from "../pages/CategoryPage";
 import Login from "../pages/LoginPage";
@@ -18,6 +18,7 @@ import ResetPassword from "../pages/ResetPasswordPage";
 import WishListPage from "../pages/WishListPage";
 import SaveForLaterPage from "../pages/SaveForLater";
 import ReviewPage from "../pages/ReviewPage";
+import MyProfilePage from "../pages/MyProfilePage";
 
 const Layout = () => (
   <>
@@ -35,7 +36,7 @@ export const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <SignupPage /> },
-      { path: "products", element: <ProductPage /> },
+      { path: "shop", element: <ShopPage /> },
       { path: "products/:productID", element: <ShowProductDetailsPage /> },
       { path: "products/category/:categoryName", element: <CategoryPage /> },
       { path: "cart", element: <CartPage /> },
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       { path: "forgot-password", element: <ForgotPassword /> },
       { path: "reset-password", element: <ResetPassword /> },
       { path: "review", element: <ReviewPage /> },
+      { path: "profile", element: <MyProfilePage /> },
       { path: "*", element: <Page404 /> },
     ],
   },

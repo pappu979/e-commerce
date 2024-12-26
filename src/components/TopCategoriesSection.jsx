@@ -5,7 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCategories, fetchProductsByCategory } from "../utils/api";
 import CheckWishlistItemButton from "./CheckWishListButton";
 import Rating from "./Rating";
+import Loader from "./Loader";
 import image1 from "../images/m1.jpg";
+import { capitalizeSegments } from "../utils/cartCalculations";
 import "../styles/cardStyle.css";
 import "../styles/best-seller.css";
 
@@ -31,6 +33,8 @@ const TopCategoriesSection = () => {
     setSelectedCategory(category);
   };
 
+  const result = capitalizeSegments(selectedCategory);
+
   return (
     <div className="container">
       <div className="title mb-4">
@@ -41,9 +45,9 @@ const TopCategoriesSection = () => {
       </div>
 
       <div className="d-flex products-items-home">
-        <div className="col-md-3 mt-5 products-items-list">
+        <div className="col-md-3 mt-5 mb-3 products-items-list">
           {isCategoriesLoading ? (
-            <p>Loading categories...</p>
+            <Loader></Loader>
           ) : (
             categories?.map((product, key) => (
               <div className="col-md-12 my-2" key={key}>
@@ -67,9 +71,9 @@ const TopCategoriesSection = () => {
         </div>
 
         <div className="col-md-9 mx-3">
-          <h3 className="mb-3 text-center">{selectedCategory} Products</h3>
+          <h3 className="mb-3 text-center">{result} Products</h3>
           {isProductsLoading ? (
-            <p>Loading products...</p>
+            <Loader></Loader>
           ) : productsError ? (
             <p>Error loading products: {productsError?.message}</p>
           ) : (

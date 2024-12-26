@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
-import axios from "axios";
 import Slider from "react-slick";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import CheckWishlistItemButton from "../components/CheckWishListButton";
@@ -9,6 +8,7 @@ import Rating from "../components/Rating";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/ProductSlider.css";
+import Loader from "../components/Loader";
 
 // CustomPrevArrow component
 const CustomPrevArrow = (props) => {
@@ -33,12 +33,27 @@ const CustomNextArrow = (props) => {
 export default function CategoryPage() {
   const { categoryName } = useParams();
   const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
   React.useEffect(() => {
-    axios
-      .get(`https://dummyjson.com/products/category/${categoryName}`)
-      .then((json) => setProducts(json.data.products));
-  }, [categoryName]);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://dummyjson.com/products/category/${categoryName}`
+        );
+        const result = await response.json();
+        setProducts(result.products);
+      } catch (error) {
+        setError("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const sliderSettings = {
     dots: true,
@@ -81,83 +96,88 @@ export default function CategoryPage() {
       </div>
 
       <Slider {...sliderSettings} className="product-slider">
-        {products.map((product, key) => (
-          <div className="product-card-container mt-4" key={key}>
-            <Card
-              className="product-card text-dark"
-              style={{
-                backgroundColor: "white",
-                border: "2px solid #e1997e",
-                height: "100%",
-              }}
-            >
-              <CheckWishlistItemButton product={product} />
-              <Card.Img
-                variant="top"
-                src={product.thumbnail}
+        {loading ? (
+          <Loader></Loader>
+        ) : (
+          products.map((product, key) => (
+            <div className="product-card-container mt-4" key={key}>
+              <Card
+                className="product-card text-dark"
                 style={{
-                  maxHeight: "250px",
+                  backgroundColor: "white",
+                  border: "2px solid #e1997e",
                   height: "100%",
-                  objectFit: "contain",
                 }}
-              />
-              <Card.Body className="d-flex flex-column h-100">
-                <Card.Title>{product.title}</Card.Title>
+              >
+                <CheckWishlistItemButton product={product} />
+                <Card.Img
+                  variant="top"
+                  src={product.thumbnail}
+                  style={{
+                    maxHeight: "250px",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+                <Card.Body className="d-flex flex-column h-100">
+                  <Card.Title>{product.title}</Card.Title>
 
-                <Rating product={product}></Rating>
+                  <Rating product={product}></Rating>
 
-                <div className="mt-auto">
-                  <Card.Text>
-                    <span
-                      style={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        paddingRight: "8px",
-                      }}
-                    >
-                      ₹{(product?.price).toFixed(2)}
-                    </span>
+                  <div className="mt-auto">
+                    <Card.Text>
+                      <span
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                          paddingRight: "8px",
+                        }}
+                      >
+                        ₹{(product?.price).toFixed(2)}
+                      </span>
 
-                    <span
-                      style={{
-                        textDecoration: "line-through",
-                        color: "#888",
-                      }}
+                      <span
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#888",
+                        }}
+                      >
+                        ₹
+                        {(
+                          product?.price +
+                          (product?.price * product?.discountPercentage) / 100
+                        ).toFixed(2)}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "18px",
+                          position: "relative",
+                          color: "#26a541",
+                          fontWeight: "bold",
+                          paddingLeft: "8px",
+                        }}
+                      >
+                        {product?.discountPercentage}% off
+                      </span>
+                    </Card.Text>
+                    <button
+                      className="btn mb-2"
+                      style={{ background: "#e1997e" }}
                     >
-                      ₹
-                      {(
-                        product?.price +
-                        (product?.price * product?.discountPercentage) / 100
-                      ).toFixed(2)}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "18px",
-                        position: "relative",
-                        color: "#26a541",
-                        fontWeight: "bold",
-                        paddingLeft: "8px",
-                      }}
-                    >
-                      {product?.discountPercentage}% off
-                    </span>
-                  </Card.Text>
-                  <button
-                    className="btn mb-2"
-                    style={{ background: "#e1997e" }}
-                  >
-                    <Link
-                      className="text-decoration-none text-danger mt-2"
-                      to={`/products/${product.id}`}
-                    >
-                      Product Details
-                    </Link>
-                  </button>
-                </div>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
+                      <Link
+                        className="text-decoration-none text-danger mt-2"
+                        to={`/products/${product.id}`}
+                      >
+                        Product Details
+                      </Link>
+                    </button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </div>
+          ))
+        )}
+        {error && <p>{error}</p>}
       </Slider>
     </div>
   );

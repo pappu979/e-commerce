@@ -8,6 +8,11 @@
 
 .product-image {
   height: 100% !important;
+  object-fit: contain;
+}
+
+.slide-item {
+  width: 300px;
 }
 
 @keyframes shimmer-animation {

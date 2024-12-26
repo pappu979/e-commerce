@@ -1,6 +1,9 @@
 import React from "react";
 import emptyCartImg from "../images/emptyCart.webp";
-import { removeForSaveLater } from "../reducres/saveForLaterReducer";
+import {
+  loadUserSaveItems,
+  removeForSaveLater,
+} from "../reducres/saveForLaterReducer";
 import { addToCart } from "../reducres/cartReducer";
 import { useNavigate } from "react-router-dom";
 import flipLogo from "../images/flipLogo.png";
@@ -15,9 +18,15 @@ const SaveForLaterPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    if (currentUser) {
+      dispatch(loadUserSaveItems({ userId: currentUser.id }));
+    }
+  }, [currentUser, dispatch]);
+
   const moveToCart = (product) => {
     dispatch(addToCart({ userId: currentUser.id, addProduct: product }));
-    dispatch(removeForSaveLater(product.id));
+    dispatch(removeForSaveLater({ userId: currentUser.id, id: product.id }));
     navigate("/cart");
   };
 
@@ -104,7 +113,14 @@ const SaveForLaterPage = () => {
                   </button>
                   <button
                     className="btn btn-link p-0 text-danger"
-                    onClick={() => dispatch(removeForSaveLater(product.id))}
+                    onClick={() =>
+                      dispatch(
+                        removeForSaveLater({
+                          userId: currentUser.id,
+                          id: product.id,
+                        })
+                      )
+                    }
                     style={{
                       fontSize: "16px",
                       fontWeight: "bold",

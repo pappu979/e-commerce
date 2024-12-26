@@ -5,7 +5,7 @@ import WhyUs from "../components/WhyUs";
 import Sale from "../components/Sale";
 import TopCategoriesSection from "../components/TopCategoriesSection";
 import News from "../components/News";
-import CategoriesSection from "../components/CategorySection";
+import HomeCategoriesSection from "../components/HomeCategorySection";
 
 function Home() {
   return (
@@ -14,7 +14,7 @@ function Home() {
       <AboutSection />
       <WhyUs />
       <TopCategoriesSection />
-      <CategoriesSection></CategoriesSection>
+      <HomeCategoriesSection></HomeCategoriesSection>
       <Sale />
       <News />
     </>

@@ -137,7 +137,7 @@ function EditDeliveryAdress({
             onClick={handleEditSaveSubmit}
             className="mx-2"
           >
-            SAVE AND DELIVERY HERE
+            SAVE
           </Button>
           <Button
             as={Col}

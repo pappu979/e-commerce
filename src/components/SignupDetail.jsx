@@ -5,10 +5,7 @@ import { Link } from "react-router-dom";
 import signupImage from "../images/sign.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
-import { createAuthToken } from "../utils/authKeys";
 import { validateForm } from "../validation/validation";
-import { storeUserData } from "../utils/authKeys";
-import { setLocalStorageSignupUserData } from "../validation/localStorage";
 import { useDispatch } from "react-redux";
 import {
   updateSignupField,
@@ -17,6 +14,7 @@ import {
 } from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
 import { connect } from "react-redux";
+import { API_URL } from "../utils/authKeys";
 import "../styles/SignupDetail.css";
 
 function SignupDetail({ signupState }) {
@@ -24,7 +22,6 @@ function SignupDetail({ signupState }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const API_URL = "https://6765379052b2a7619f5ecdb1.mockapi.io/login/users";
 
   const handleChangeSignupField = (e) => {
     const { name, value } = e.target;
@@ -41,16 +38,21 @@ function SignupDetail({ signupState }) {
     try {
       const getResponse = await fetch(API_URL);
       const users = await getResponse.json();
-      console.log(users);
 
       const isEmailAlreadyTaken = users.some(
         (user) => user.email === signupState.email
       );
-
       if (isEmailAlreadyTaken) {
         alert(
           "This email is already registered. Please use a different email."
         );
+        return;
+      }
+
+      const errors = validateForm(signupState);
+
+      if (Object.keys(errors).length > 0) {
+        dispatch(setSignupErrors(errors));
         return;
       }
 
@@ -72,67 +74,15 @@ function SignupDetail({ signupState }) {
           confirmButtonText: "Ok",
         }).then(() => {
           dispatch(resetSignupForm());
+          const redirectTo = location.state?.from || "/";
+          navigate(redirectTo);
         });
       } else {
-        console.error("Failed to create user", response.statusText);
+        alert("Failed to create user", response.statusText);
       }
     } catch (error) {
-      console.error("Error while creating user:", error);
+      alert("Error while creating user:", error);
     }
-
-    // const existingEmail = storeUserData.some(
-    //   (user) => user.email === signupState.email
-    // );
-    // if (existingEmail) {
-    //   alert("This email is already registered. Please use a different email.");
-    //   return;
-    // }
-
-    // const userData = {
-    //   ...signupState,
-    //   token: createAuthToken,
-    // };
-
-    const errors = validateForm(signupState);
-    // let existingUsers = [];
-
-    if (Object.keys(errors).length > 0) {
-      dispatch(setSignupErrors(errors));
-      return;
-    }
-
-    // if (storeUserData) {
-    //   try {
-    //     existingUsers = Array.isArray(storeUserData) ? storeUserData : [];
-    //   } catch (error) {
-    //     alert("Failed to parse user data:", error);
-    //     existingUsers = [];
-    //   }
-    // }
-
-    // const userIndex = existingUsers.findIndex(
-    //   (user) => user.email === signupState.email
-    // );
-
-    // if (userIndex !== -1) {
-    //   existingUsers[userIndex] = userData;
-    // } else {
-    //   existingUsers.push(userData);
-    // }
-
-    // setLocalStorageSignupUserData(existingUsers, createAuthToken);
-    // dispatch(setCurrentUser(signupState));
-
-    // Swal.fire({
-    //   icon: "success",
-    //   title: "Form Submitted",
-    //   text: "Data has been stored successfully!",
-    //   confirmButtonText: "Ok",
-    // }).then(() => {
-    //   dispatch(resetSignupForm());
-    // });
-    // const redirectTo = location.state?.from || "/";
-    // navigate(redirectTo);
   };
 
   return (

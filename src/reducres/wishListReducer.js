@@ -1,68 +1,66 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  getLocalStorageForUser,
+  saveLocalStorageForUser,
+} from "../validation/localStorage";
 
 const initialState = {
-  currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
-  items: [],
+  wishlistItems: [],
 };
-
-if (initialState.currentUser) {
-  const userWishlistKey = `wishlistItems_${initialState.currentUser?.id}`;
-  initialState.items = JSON.parse(localStorage.getItem(userWishlistKey)) || [];
-}
 
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
-    setCurrentUser: (state, action) => {
-      state.currentUser = action.payload;
-      localStorage.setItem("currentUser", JSON.stringify(action.payload));
+    loadUserWishlistItem: (state, action) => {
+      const { userId } = action.payload;
+      if (!userId) return;
 
-      if (action.payload) {
-        const userWishlistKey = `wishlistItems_${action.payload.id}`;
-        state.items = JSON.parse(localStorage.getItem(userWishlistKey)) || [];
-      } else {
-        state.items = [];
-      }
+      state.wishlistItems = getLocalStorageForUser(userId, "wishlistItems");
     },
 
     addToWishlist: (state, action) => {
-      const userId = state.currentUser?.id;
+      const { userId, addProduct } = action.payload;
       if (!userId) return;
 
-      const userWishlistKey = `wishlistItems_${userId}`;
-      const existingItem = state.items.find(
+      const currentWishlistItem = getLocalStorageForUser(
+        userId,
+        "wishlistItems"
+      );
+      const existingItem = currentWishlistItem.find(
         (item) => item.id === action.payload.id
       );
 
       if (!existingItem) {
-        state.items.push(action.payload);
-        localStorage.setItem(userWishlistKey, JSON.stringify(state.items));
+        state.wishlistItems.push(addProduct);
+        saveLocalStorageForUser(userId, "wishlistItems", state.wishlistItems);
       }
     },
 
     removeFromWishlist: (state, action) => {
-      const userId = state.currentUser?.id;
+      const { userId, id } = action.payload;
       if (!userId) return;
 
-      const userWishlistKey = `wishlistItems_${userId}`;
-      state.items = state.items.filter((item) => item.id !== action.payload);
-      localStorage.setItem(userWishlistKey, JSON.stringify(state.items));
+      const updateWishlist = state.wishlistItems.filter(
+        (item) => item.id !== id
+      );
+      state.wishlistItems = updateWishlist;
+      saveLocalStorageForUser(userId, "wishlistItems", state.wishlistItems);
     },
 
-    clearWishlist: (state) => {
-      const userId = state.currentUser?.id;
+    clearWishlist: (state, action) => {
+      const { userId } = action.payload;
       if (!userId) return;
 
       const userWishlistKey = `wishlistItems_${userId}`;
-      state.items = [];
+      state.wishlistItems = [];
       localStorage.removeItem(userWishlistKey);
     },
   },
 });
 
 export const {
-  setCurrentUser,
+  loadUserWishlistItem,
   addToWishlist,
   removeFromWishlist,
   clearWishlist,

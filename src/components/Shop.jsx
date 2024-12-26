@@ -6,9 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
 import { fetchProducts, categorizeProducts } from "../utils/api";
 import CheckWishlistItemButton from "./CheckWishListButton";
+import SliderForShop from "./SliderForShop";
+import Loader from "./Loader";
 import "../styles/AllProducts.css";
 
-export default function AllProductsDetailPage() {
+export default function ShopNow() {
   const {
     data: products,
     isLoading,
@@ -22,26 +24,21 @@ export default function AllProductsDetailPage() {
     return products ? categorizeProducts(products) : {};
   }, [products]);
 
-  if (isError) {
-    return <div>Error fetching products. Please try again later.</div>;
-  }
-
+  const allProducts = Object.values(categorizedProducts).flat();
   return (
     <div className="products-container" style={{ color: "#e1997e" }}>
       <div className="container">
-        <h1 className="text-center mb-5">All Products</h1>
-        {Object.keys(categorizedProducts)?.map((category) => (
-          <div className="category-row" key={category}>
-            <h2 className="category-title mb-4">{category}</h2>
-            <div className="row justify-content-center">
-              {isLoading ? (
-                <>
-                  <div className="col-md-4 mb-4 shimmer-card" />
-                  <div className="col-md-4 mb-4 shimmer-card" />
-                  <div className="col-md-4 mb-4 shimmer-card" />
-                </>
-              ) : (
-                categorizedProducts[category]?.map((product) => (
+        <SliderForShop allProducts={allProducts}></SliderForShop>
+        {isLoading ? (
+          <>
+            <Loader></Loader>
+          </>
+        ) : (
+          Object.keys(categorizedProducts)?.map((category) => (
+            <div className="category-row mt-5" key={category}>
+              <h2 className="category-title mb-4">{category}</h2>
+              <div className="row justify-content-center">
+                {categorizedProducts[category]?.map((product) => (
                   <div className="col-md-4 mb-4" key={product.id}>
                     <Card
                       className="product-card"
@@ -120,11 +117,16 @@ export default function AllProductsDetailPage() {
                       </Card.Body>
                     </Card>
                   </div>
-                ))
-              )}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
+        {isError && (
+          <p className="text-center">
+            Error fetching products. Please try again later.
+          </p>
+        )}
       </div>
     </div>
   );

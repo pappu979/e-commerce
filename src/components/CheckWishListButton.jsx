@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import "../styles/wishlistButton.css";
 
 const CheckWishlistItemButton = ({ product }) => {
-  const wishlistItem = useSelector((state) => state.wishlist.items);
+  const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);
   const isInWishlist = wishlistItem.some((item) => item.id === product.id);
   const { handleWishlistClick } = useWishlistHandler();
   return (

@@ -1,3 +1,11 @@
+// Total Amount
+export const calculateTotalAmount = (items) => {
+  return items.reduce(
+    (total, item) => total + item?.price * item?.productQuantity,
+    0
+  );
+};
+
 // TotalDiscountAmount....
 export const totalDiscountAmount = (cartItems) => {
   return cartItems.reduce(
@@ -59,3 +67,18 @@ export const totalPayableAmountCashOnDelivery = (
 
   return payAbleAmount;
 };
+
+export const chunkProducts = (products, chunkSize) => {
+  const chunks = [];
+  for (let i = 0; i < products.length; i += chunkSize) {
+    chunks.push(products.slice(i, i + chunkSize));
+  }
+  return chunks;
+};
+
+export function capitalizeSegments(input) {
+  return input
+    .split(/[-,\s]/)
+    .map((str) => str[0].toUpperCase() + str.slice(1))
+    .join("-");
+}

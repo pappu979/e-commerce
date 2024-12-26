@@ -5,7 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useLocation } from "react-router-dom";
-import { storeUserData, storedReviews } from "../utils/authKeys";
+import { storedReviews } from "../utils/authKeys";
 import { useSelector } from "react-redux";
 
 const ReviewPage = () => {
@@ -13,7 +13,6 @@ const ReviewPage = () => {
   const [newReview, setNewReview] = React.useState("");
   const [ratingStar, setRatingStar] = React.useState(0);
   const [totalReviews, setTotalReviews] = React.useState([]);
-  const [userName, setUserName] = React.useState("");
   const location = useLocation();
   const { product, productID } = location?.state || {};
 
@@ -22,10 +21,6 @@ const ReviewPage = () => {
   };
 
   React.useEffect(() => {
-    if (storeUserData) {
-      setUserName(currentUser?.username);
-    }
-
     if (storedReviews) {
       setTotalReviews(storedReviews[productID] || []);
     }
@@ -40,7 +35,7 @@ const ReviewPage = () => {
         review: newReview,
         rating: ratingStar,
         date: currentDate,
-        userName: userName,
+        userName: currentUser.username,
       };
 
       // check the any review inside the storedReviews object

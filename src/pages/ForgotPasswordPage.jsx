@@ -9,45 +9,52 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { toast } from "react-toastify";
-import { storeUserData } from "../utils/authKeys";
+import { API_URL } from "../utils/authKeys";
 
 export default function ForgotPassword() {
   const [email, setEmail] = React.useState("");
   const navigate = useNavigate();
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
 
-    const user = storeUserData.find((user) => user.email === email);
+    try {
+      const getResponse = await fetch(API_URL);
+      const users = await getResponse.json();
 
-    // Simulate sending a reset link
-    if (user) {
-      toast.success("Check your email for the password reset link.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      const user = users.find((user) => user.email === email);
 
-      // Navigate after toast is shown
-      setTimeout(() => {
-        navigate("/reset-password", { state: { email } });
-      }, 3000);
+      // Simulate sending a reset link
+      if (user) {
+        toast.success("Check your email for the password reset link.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
 
-      setEmail("");
-    } else {
-      toast.error("Please enter a valid email address.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+        // Navigate after toast is shown
+        setTimeout(() => {
+          navigate("/reset-password", { state: { email } });
+        }, 3000);
+
+        setEmail("");
+      } else {
+        toast.error("Please enter a valid email address.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      alert("Error while creating user:", error);
     }
   };
 

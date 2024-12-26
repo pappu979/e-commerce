@@ -1,17 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  getLocalStorageForUser,
+  saveLocalStorageForUser,
+} from "../validation/localStorage";
 
 const initialState = {
   addresses: [],
-};
-
-const getAddressesForUser = (userId) => {
-  const userAddressKey = `addresses_${userId}`;
-  return JSON.parse(localStorage.getItem(userAddressKey)) || [];
-};
-
-const saveAddressesForUser = (userId, addresses) => {
-  const userAddressKey = `addresses_${userId}`;
-  localStorage.setItem(userAddressKey, JSON.stringify(addresses));
 };
 
 const addressSlice = createSlice({
@@ -22,17 +16,17 @@ const addressSlice = createSlice({
       const { userId } = action.payload;
       if (!userId) return;
 
-      state.addresses = getAddressesForUser(userId);
+      state.addresses = getLocalStorageForUser(userId, "addresses");
     },
 
     addAddress: (state, action) => {
       const { userId, address } = action.payload;
       if (!userId) return;
 
-      const updateAddresses = getAddressesForUser(userId);
+      const updateAddresses = getLocalStorageForUser(userId, "addresses");
       updateAddresses.push(address);
       state.addresses = updateAddresses;
-      saveAddressesForUser(userId, updateAddresses);
+      saveLocalStorageForUser(userId, "addresses", updateAddresses);
     },
 
     editAddress: (state, action) => {
@@ -46,18 +40,18 @@ const addressSlice = createSlice({
 
       state.addresses[id] = updatedAddress;
 
-      saveAddressesForUser(userId, state.addresses);
+      saveLocalStorageForUser(userId, "addresses", state.addresses);
     },
 
     removeAddress: (state, action) => {
       const { userId, addressId } = action.payload;
       if (!userId) return;
 
-      const addresses = getAddressesForUser(userId).filter(
+      const addresses = getLocalStorageForUser(userId, "addresses").filter(
         (address) => address.id !== addressId
       );
 
-      saveAddressesForUser(userId, addresses);
+      saveLocalStorageForUser(userId, "addresses", addresses);
       state.addresses = addresses;
     },
 

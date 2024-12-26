@@ -1,0 +1,12 @@
+.personal-input {
+  padding: 20px;
+  margin-left: 8px;
+}
+
+.edit-button {
+  padding: 8px 22px;
+  margin-top: 12px;
+  background: #2874f0;
+  border: none;
+  border-radius: 6px;
+}

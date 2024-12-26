@@ -2,38 +2,49 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { Dropdown } from "react-bootstrap";
 import imageL from "../images/12.png";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { loadUserCartItems } from "../reducres/cartReducer";
+import { loadUserSaveItems } from "../reducres/saveForLaterReducer";
+import { loadUserWishlistItem } from "../reducres/wishListReducer";
 
 function NavigationBar() {
   const [hoverEffect, setHoverEffect] = React.useState(false);
   const cartItems = useSelector((state) => state.cart.items);
-  const wishlistItem = useSelector((state) => state.wishlist.items);
+  const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);
   const saveForLaterItems = useSelector(
     (state) => state.saveForLater.saveItems
   );
-  const isLoggedIn = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (currentUser) {
+      dispatch(loadUserCartItems({ userId: currentUser.id }));
+      dispatch(loadUserSaveItems({ userId: currentUser.id }));
+      dispatch(loadUserWishlistItem({ userId: currentUser.id }));
+    }
+  }, [currentUser, dispatch]);
 
   const handleMouseEnter = () => setHoverEffect(true);
   const handleMouseLeave = () => setHoverEffect(false);
 
   const handleShowCart = () => {
-    if (isLoggedIn) {
+    if (currentUser) {
       navigate("/cart");
     } else {
       navigate("/login");
@@ -41,7 +52,7 @@ function NavigationBar() {
   };
 
   const handleLogout = () => {
-    if (!isLoggedIn) {
+    if (!currentUser) {
       toast.info("You are already Logout!", {
         position: "top-right",
         autoClose: 3000,
@@ -79,8 +90,8 @@ function NavigationBar() {
               <Link className="ms-4 btn " to="/">
                 Home
               </Link>
-              <Link className="ms-4 btn " to="/products">
-                Products
+              <Link className="ms-4 btn " to="/shop">
+                Shop
               </Link>
               <Dropdown
                 className="ms-4 d-flex justify-content-center align-items-center"

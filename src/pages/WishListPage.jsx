@@ -11,7 +11,10 @@ import "../styles/wishlist.css";
 
 const WishListPage = () => {
   const dispatch = useDispatch();
-  const wishlistItem = useSelector((state) => state.wishlist.items);
+  const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  console.log(wishlistItem);
 
   return (
     <div className="container mt-5">
@@ -128,7 +131,14 @@ const WishListPage = () => {
                     <div>
                       <FontAwesomeIcon
                         icon={faTrash}
-                        onClick={() => dispatch(removeFromWishlist(product.id))}
+                        onClick={() =>
+                          dispatch(
+                            removeFromWishlist({
+                              userId: currentUser.id,
+                              id: product.id,
+                            })
+                          )
+                        }
                         style={{ cursor: "pointer" }}
                         data-tooltip-id="delete-tooltip"
                       ></FontAwesomeIcon>
@@ -146,7 +156,9 @@ const WishListPage = () => {
           <div className="row mb-4 mt-2">
             <button
               className="wishlistClear-btn"
-              onClick={() => dispatch(clearWishlist())}
+              onClick={() =>
+                dispatch(clearWishlist({ userId: currentUser.id }))
+              }
             >
               Clear Wishlist
             </button>

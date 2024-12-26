@@ -4,7 +4,8 @@ import { addToWishlist, removeFromWishlist } from "../reducres/wishListReducer";
 
 const useWishlistHandler = () => {
   const dispatch = useDispatch();
-  const wishlistItem = useSelector((state) => state.wishlist.items);
+  const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const handleWishlistClick = (product) => {
     const isAlreadyWishlisted = wishlistItem.some(
@@ -12,9 +13,9 @@ const useWishlistHandler = () => {
     );
 
     if (isAlreadyWishlisted) {
-      dispatch(removeFromWishlist(product.id));
+      dispatch(removeFromWishlist({ userId: currentUser.id, id: product.id }));
     } else {
-      dispatch(addToWishlist(product));
+      dispatch(addToWishlist({ userId: currentUser.id, addProduct: product }));
 
       toast.success(`${product.title} has been added to your wishlist!`, {
         position: "top-right",

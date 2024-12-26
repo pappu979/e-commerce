@@ -5,21 +5,21 @@ import EditDeliveryAdress from "../components/EditDeliveryadress";
 import PaymentAdressDetails from "../components/PaymentAdressDetails";
 import PaymentOrderSummary from "../components/PaymentOrderSummary";
 import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
-import {
-  intialEditDeliveryAddressState,
-  intialPaymentPageState,
-} from "../utils/formData";
 import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
 import useDateInfo from "../utils/dateUtilis";
 import bank from "../data/indianBanks.json";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { checkPlatformFee } from "../utils/cartCalculations";
 import {
   addAddress,
   editAddress,
   loadUserAddresses,
 } from "../reducres/addressReducer";
-import { checkPlatformFee } from "../utils/cartCalculations";
+import {
+  intialEditDeliveryAddressState,
+  intialPaymentPageState,
+} from "../utils/formData";
 import "../styles/payment.css";
 
 export default function PaymentPage() {

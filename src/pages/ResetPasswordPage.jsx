@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { Card, CardContent } from "@mui/material";
 import PasswordInput from "../components/PasswordInput";
 import { setCurrentUser } from "../reducres/userReducer";
+import { API_URL } from "../utils/authKeys";
 import { useDispatch } from "react-redux";
 
 const ResetPassword = () => {
@@ -21,53 +22,68 @@ const ResetPassword = () => {
   const location = useLocation();
   const { email } = location?.state;
 
-  const handleUpdatePassword = (e) => {
+  const handleUpdatePassword = async (e) => {
     e.preventDefault();
 
-    if (newPassword === "") {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Password",
-        text: "Please enter a new password.",
-        confirmButtonText: "Ok",
-      });
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      Swal.fire({
-        icon: "error",
-        title: "Password Mismatch",
-        text: "The passwords do not match. Please try again.",
-        confirmButtonText: "Ok",
-      });
-      return;
-    }
-
-    const userData = JSON.parse(localStorage.getItem("userData")) || [];
-    const userIndex = userData.findIndex((user) => user.email === email);
-    const currentUpdateUser = userData.find((user) => user.email === email);
-
-    if (userIndex !== -1) {
-      if (newPassword.length < 8) {
-        setError("Password must be at least 8 characters");
+    try {
+      if (newPassword === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Password",
+          text: "Please enter a new password.",
+          confirmButtonText: "Ok",
+        });
         return;
       }
+
+      if (newPassword !== confirmPassword) {
+        Swal.fire({
+          icon: "error",
+          title: "Password Mismatch",
+          text: "The passwords do not match. Please try again.",
+          confirmButtonText: "Ok",
+        });
+        return;
+      }
+
+      const getResponse = await fetch(API_URL);
+      const users = await getResponse.json();
+
+      const userIndex = users.findIndex((user) => user.email === email);
+
+      if (userIndex !== -1) {
+        if (newPassword.length < 8) {
+          setError("Password must be at least 8 characters");
+          return;
+        }
+      }
+
+      const updateUser = { ...users[userIndex], password: newPassword };
+      const updateResponse = await fetch(`${API_URL}/${updateUser.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      if (updateResponse.ok) {
+        const responseData = await updateResponse.json();
+        dispatch(setCurrentUser(responseData));
+        Swal.fire({
+          icon: "success",
+          title: "Password Updated",
+          text: "Your password has been updated successfully!",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          navigate("/login");
+        });
+      } else {
+        throw new Error("Failed to update password");
+      }
+    } catch (error) {
+      alert("An error occurred while updating the password", error);
     }
-
-    userData[userIndex].password = newPassword;
-    currentUpdateUser.password = newPassword;
-    dispatch(setCurrentUser(currentUpdateUser));
-    localStorage.setItem("userData", JSON.stringify(userData));
-
-    Swal.fire({
-      icon: "success",
-      title: "Password Updated",
-      text: "Your password has been updated successfully!",
-      confirmButtonText: "Ok",
-    }).then(() => {
-      navigate("/login");
-    });
   };
 
   return (

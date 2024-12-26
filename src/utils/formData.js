@@ -36,3 +36,11 @@ export const intialEditDeliveryAddressState = {
   address: "",
   deliveryOption: "",
 };
+
+export const intialInformation = {
+  firstname: "",
+  lastname: "",
+  gender: "",
+  email: "pappoosinghshekhawat@gmail.com",
+  mobileNumber: "+916352075082",
+};

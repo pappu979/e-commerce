@@ -1,25 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { calculateTotalAmount } from "../utils/cartCalculations";
+import {
+  getLocalStorageForUser,
+  saveLocalStorageForUser,
+} from "../validation/localStorage";
 
 const initialState = {
   items: [],
   totalAmount: 0,
-};
-
-const calculateTotalAmount = (items) => {
-  return items.reduce(
-    (total, item) => total + item?.price * item?.productQuantity,
-    0
-  );
-};
-
-const getCartItemForUser = (userId) => {
-  const userCartItemKey = `cartItems_${userId}`;
-  return JSON.parse(localStorage.getItem(userCartItemKey)) || [];
-};
-
-const saveCartItemForUser = (userId, cartItem) => {
-  const userCartItemKey = `cartItems_${userId}`;
-  localStorage.setItem(userCartItemKey, JSON.stringify(cartItem));
 };
 
 const cartSlice = createSlice({
@@ -30,7 +18,7 @@ const cartSlice = createSlice({
       const { userId } = action.payload;
       if (!userId) return;
 
-      state.items = getCartItemForUser(userId);
+      state.items = getLocalStorageForUser(userId, "cartItems");
       state.totalAmount = calculateTotalAmount(state.items);
     },
 
@@ -38,7 +26,7 @@ const cartSlice = createSlice({
       const { userId, addProduct } = action.payload;
       if (!userId) return;
 
-      const currentItems = getCartItemForUser(userId);
+      const currentItems = getLocalStorageForUser(userId, "cartItems");
 
       const existingItem = currentItems.find(
         (item) => item.id === addProduct.id
@@ -61,7 +49,7 @@ const cartSlice = createSlice({
       }
 
       state.totalAmount = calculateTotalAmount(state.items);
-      saveCartItemForUser(userId, state.items);
+      saveLocalStorageForUser(userId, "cartItems", state.items);
     },
 
     removeFromCart: (state, action) => {
@@ -72,7 +60,7 @@ const cartSlice = createSlice({
       state.items = updatedItems;
 
       state.totalAmount = calculateTotalAmount(state.items);
-      saveCartItemForUser(userId, state.items);
+      saveLocalStorageForUser(userId, "cartItems", state.items);
     },
 
     updateQuantity: (state, action) => {
@@ -85,7 +73,7 @@ const cartSlice = createSlice({
       state.items = updatedItems;
       // console.log(state.items);
       state.totalAmount = calculateTotalAmount(state.items);
-      saveCartItemForUser(userId, state.items);
+      saveLocalStorageForUser(userId, "cartItems", state.items);
     },
 
     clearCart: (state, action) => {
