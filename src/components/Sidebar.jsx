@@ -86,7 +86,12 @@ const Sidebar = () => {
                   Payments
                 </Accordion.Header>
                 <Accordion.Body>
-                  <Nav.Link href="#">Gift Cards</Nav.Link>
+                  <Nav.Link
+                    href="#"
+                    onClick={() => handleSelectedOptionClick("Gift Cards")}
+                  >
+                    Gift Cards
+                  </Nav.Link>
                   <Nav.Link href="#">Saved UPI</Nav.Link>
                   <Nav.Link href="#">Saved Cards</Nav.Link>
                 </Accordion.Body>

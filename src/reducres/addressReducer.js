@@ -24,9 +24,9 @@ const addressSlice = createSlice({
       if (!userId) return;
 
       const updateAddresses = getLocalStorageForUser(userId, "addresses");
-      updateAddresses.push(address);
-      state.addresses = updateAddresses;
-      saveLocalStorageForUser(userId, "addresses", updateAddresses);
+      const newAddAddress = [...updateAddresses, address];
+      state.addresses = newAddAddress;
+      saveLocalStorageForUser(userId, "addresses", newAddAddress);
     },
 
     editAddress: (state, action) => {

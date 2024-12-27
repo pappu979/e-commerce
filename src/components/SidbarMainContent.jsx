@@ -3,6 +3,7 @@ import ProfileInformationContent from "./ProfilrInformationContent";
 import ManageAddresses from "./ManageAddresses";
 import PanCardInformation from "./PanCardInformation";
 import WishListPage from "../pages/WishListPage";
+import GiftCard from "./GiftCard";
 
 const SidbarMainContent = ({ selectedOption }) => {
   return (
@@ -17,6 +18,7 @@ const SidbarMainContent = ({ selectedOption }) => {
         <PanCardInformation selectedOption={selectedOption} />
       )}
       {selectedOption === "My Wishlist" && <WishListPage />}
+      {selectedOption === "Gift Cards" && <GiftCard />}
     </div>
   );
 };

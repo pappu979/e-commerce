@@ -1,0 +1,76 @@
+.add-gift-card {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.buy-gift-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+}
+
+.gift-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid grey;
+  padding: 35px;
+  background-color: #f5f5f5;
+}
+
+.gift-card-form input,
+.gift-card-form select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.gift-card-preview {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.giftcard-page {
+  border: 1px solid grey;
+  text-align: center;
+  width: 350px;
+  padding: 20px;
+}
+
+.giftCard-number {
+  padding: 12px;
+}
+
+.giftCard-button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 9px;
+}
+
+.giftcard-corporate {
+  border: 1px solid grey;
+  padding: 35px;
+  background-color: #f5f5f5;
+}
+
+.giftcard-businessInput {
+  padding: 12px;
+  margin-right: 12px;
+}
