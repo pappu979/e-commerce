@@ -1,11 +1,12 @@
 import React from "react";
-import { intialInformation } from "../utils/formData";
+import { intialProfileInformation } from "../utils/formData";
 import Faqs from "./Faqs";
 
 const ProfileInformationContent = () => {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [personlInformation, setPersonlInformation] =
-    React.useState(intialInformation);
+  const [personlInformation, setPersonlInformation] = React.useState(
+    intialProfileInformation
+  );
 
   const handleEditClick = () => {
     setIsEditing((prev) => !prev);
@@ -20,7 +21,7 @@ const ProfileInformationContent = () => {
     e.preventDefault();
     console.log(personlInformation);
     setIsEditing((prev) => !prev);
-    setPersonlInformation(intialInformation);
+    setPersonlInformation(intialProfileInformation);
   };
 
   return (

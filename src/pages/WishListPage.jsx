@@ -14,8 +14,6 @@ const WishListPage = () => {
   const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);
   const currentUser = useSelector((state) => state.user.currentUser);
 
-  console.log(wishlistItem);
-
   return (
     <div className="container mt-5">
       <h2>My WishList ({wishlistItem.length})</h2>

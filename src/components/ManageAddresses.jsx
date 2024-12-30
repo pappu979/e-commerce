@@ -18,7 +18,7 @@ const ManageAddresses = ({ selectedOption }) => {
   }, []);
 
   const handleAddaddress = () => {
-    setAddaddress(true);
+    setAddaddress((prev) => !prev);
   };
 
   const handleEditSaveChange = (e) => {
@@ -38,7 +38,6 @@ const ManageAddresses = ({ selectedOption }) => {
     const updatedAddresses = [...allAddAddress, addAddressData];
     setAllAddAddress(updatedAddresses);
     localStorage.setItem("manageAddresses", JSON.stringify(updatedAddresses));
-    console.log(allAddAddress);
     setAddAddressData(intialEditDeliveryAddressState);
     setAddaddress(false);
   };

@@ -6,3 +6,8 @@
 .image-section-container img {
   height: 150px;
 }
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

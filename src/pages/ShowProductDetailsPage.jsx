@@ -21,6 +21,8 @@ function ShowProductDetailsPage() {
   const [productQuantity, setProductQuantity] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
+  // const [isHovered, setIsHovered] = React.useState(false);
+  // const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -43,6 +45,16 @@ function ShowProductDetailsPage() {
 
     fetchData();
   }, []);
+
+  // const handleMouseEnter = () => setIsHovered(true);
+  // const handleMouseLeave = () => setIsHovered(false);
+
+  // const handleMouseMove = (e) => {
+  //   const rect = e.target.getBoundingClientRect();
+  //   const x = ((e.clientX - rect.left) / rect.width) * 100;
+  //   const y = ((e.clientY - rect.top) / rect.height) * 100;
+  //   setMousePosition({ x, y });
+  // };
 
   const handleToAddCart = () => {
     if (!currentUser) {
@@ -112,7 +124,7 @@ function ShowProductDetailsPage() {
                 )}
               </div>
 
-              <div className="col-md-6 productPage-col-2 mt-4">
+              <div className={`col-md-6 productPage-col-2 mt-4 `}>
                 <h2 style={{ color: "#e1997e" }}>
                   {product.title}
                   <br />

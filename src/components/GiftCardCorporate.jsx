@@ -1,6 +1,22 @@
 import React from "react";
+import { initialgiftCardCorporateData } from "../utils/formData";
 
 const GiftCardCorporate = () => {
+  const [giftCardCorporateState, setGiftCardCorporateState] = React.useState(
+    initialgiftCardCorporateData
+  );
+
+  const handleGiftCardCorporateChange = (e) => {
+    const { name, value } = e.target;
+    setGiftCardCorporateState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGiftCardCorporatesubmit = (e) => {
+    e.preventDefault();
+    console.log("giftCardCorporateState", giftCardCorporateState);
+    setGiftCardCorporateState(initialgiftCardCorporateData);
+  };
+
   return (
     <div className="mt-4 giftcard-corporate">
       <p style={{ fontWeight: "700" }}>
@@ -10,11 +26,17 @@ const GiftCardCorporate = () => {
         <input
           type="text"
           placeholder="FIRST NAME"
+          name="firstname"
+          value={giftCardCorporateState.firstname}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
         <input
           type="text"
           placeholder="LAST NAME(OPTIONAL)"
+          name="lastname"
+          value={giftCardCorporateState.lastname}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
       </div>
@@ -23,11 +45,17 @@ const GiftCardCorporate = () => {
         <input
           type="text"
           placeholder="MOBILE NUMBER"
+          name="mobileNumber"
+          value={giftCardCorporateState.mobileNumber}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
         <input
           type="text"
           placeholder="EMAIL ID"
+          name="email"
+          value={giftCardCorporateState.email}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
       </div>
@@ -36,11 +64,17 @@ const GiftCardCorporate = () => {
         <input
           type="text"
           placeholder="LOCATION"
+          name="location"
+          value={giftCardCorporateState.location}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
         <input
           type="text"
           placeholder="COMPANY NAME"
+          name="companyName"
+          value={giftCardCorporateState.companyName}
+          onChange={handleGiftCardCorporateChange}
           className="giftcard-businessInput"
         />
       </div>
@@ -57,7 +91,12 @@ const GiftCardCorporate = () => {
         <span style={{ color: "#007bff" }}>pappoosinghshekhawat@gmail.com</span>
       </p>
       <div>
-        <button className="add-gift-card">SUBMIT DETAILS</button>
+        <button
+          className="add-gift-card"
+          onClick={handleGiftCardCorporatesubmit}
+        >
+          SUBMIT DETAILS
+        </button>
       </div>
     </div>
   );

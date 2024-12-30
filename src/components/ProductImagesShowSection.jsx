@@ -1,6 +1,6 @@
 import React from "react";
 import CheckWishlistItemButton from "./CheckWishListButton";
-import "../App.css";
+import "../styles/imageSection.css";
 
 function ProductImagesShowSection({ images, product }) {
   const [img, setImg] = React.useState(images[0] ? images[0] : null);
@@ -34,7 +34,7 @@ function ProductImagesShowSection({ images, product }) {
             <CheckWishlistItemButton product={product} />
 
             <div>
-              <img src={img} alt="" className="product-image" />
+              <img src={img} alt="" className={`product-image `} />
             </div>
           </div>
         </div>

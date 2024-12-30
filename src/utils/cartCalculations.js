@@ -82,3 +82,10 @@ export function capitalizeSegments(input) {
     .map((str) => str[0].toUpperCase() + str.slice(1))
     .join("-");
 }
+
+export const giftCardcalculateTotal = (formData) => {
+  return formData.reduce(
+    (total, card) => total + card.cardValue * card.quantity,
+    0
+  );
+};

@@ -23,13 +23,13 @@ const GiftCard = () => {
 
   const handleGiftCardAccount = (e) => {
     e.preventDefault();
-    console.log(giftCardState);
+    console.log("giftCardState", giftCardState);
     setGiftCard((prev) => !prev);
   };
 
   return (
     <div className="container">
-      <h1>Irfah Rovers Gift Card</h1>
+      <h1>Irfah Rovers's Gift Card</h1>
       <button className="add-gift-card" onClick={handleAddGiftCard}>
         + Add a Gift Card
       </button>

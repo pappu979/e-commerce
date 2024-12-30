@@ -37,10 +37,34 @@ export const intialEditDeliveryAddressState = {
   deliveryOption: "",
 };
 
-export const intialInformation = {
+export const intialProfileInformation = {
   firstname: "",
   lastname: "",
   gender: "",
   email: "pappoosinghshekhawat@gmail.com",
   mobileNumber: "+916352075082",
+};
+
+export const intialPanCardData = {
+  pancardNumber: "",
+  fullName: "",
+  isChecked: false,
+};
+
+export const initialBuygiftCardData = {
+  email: "",
+  receiverName: "",
+  cardValue: 0,
+  quantity: 1,
+  gifterName: "",
+  message: "",
+};
+
+export const initialgiftCardCorporateData = {
+  email: "",
+  firstname: "",
+  lastname: "",
+  mobileNumber: "",
+  location: "",
+  companyName: "",
 };
