@@ -1,13 +1,5 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import PriceDetails from "../components/PriceDetails";
-import EditDeliveryAdress from "../components/EditDeliveryadress";
-import PaymentAdressDetails from "../components/PaymentAdressDetails";
-import PaymentOrderSummary from "../components/PaymentOrderSummary";
-import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
-import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
-import useDateInfo from "../utils/dateUtilis";
-import bank from "../data/indianBanks.json";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { checkPlatformFee } from "../utils/cartCalculations";
@@ -20,6 +12,14 @@ import {
   intialEditDeliveryAddressState,
   intialPaymentPageState,
 } from "../utils/formData";
+import PriceDetails from "../components/PriceDetails";
+import EditDeliveryAdress from "../components/EditDeliveryadress";
+import PaymentAdressDetails from "../components/PaymentAdressDetails";
+import PaymentOrderSummary from "../components/PaymentOrderSummary";
+import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
+import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
+import useDateInfo from "../utils/dateUtilis";
+import bank from "../data/indianBanks.json";
 import "../styles/payment.css";
 
 export default function PaymentPage() {
@@ -93,6 +93,7 @@ export default function PaymentPage() {
     updateState("chnageLogin", true);
     updateState("selectPaymetOption", false);
     updateState("deliveryAdress", false);
+    updateState("selectOrderSummary", false);
   };
   const handleCheckOutContinue = () => {
     updateState("chnageLogin", false);

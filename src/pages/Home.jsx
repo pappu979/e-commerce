@@ -6,15 +6,17 @@ import Sale from "../components/Sale";
 import TopCategoriesSection from "../components/TopCategoriesSection";
 import News from "../components/News";
 import HomeCategoriesSection from "../components/HomeCategorySection";
+import ToggleHeader from "../components/ToggleHeader";
 
 function Home() {
   return (
     <>
       <Carouselstart />
+      <ToggleHeader />
       <AboutSection />
       <WhyUs />
       <TopCategoriesSection />
-      <HomeCategoriesSection></HomeCategoriesSection>
+      <HomeCategoriesSection />
       <Sale />
       <News />
     </>

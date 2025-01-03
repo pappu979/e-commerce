@@ -23,6 +23,7 @@ const CashOnDelivery = ({ selectedOption }) => {
   const confirmOrder = () => {
     if (inputCode === randomCode) {
       setOrderConfirmed(true);
+      setInputCode("");
     } else {
       alert("Incorrect code, please try again.");
     }

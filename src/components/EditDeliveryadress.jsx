@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
+import states from "../data/states.json";
 
 function EditDeliveryAdress({
   handleDeliveryAddressCancel,
@@ -76,12 +77,19 @@ function EditDeliveryAdress({
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>State</Form.Label>
-            <Form.Control
+            <Form.Select
               type="text"
               name="state"
               value={formData.state}
               onChange={handleEditSaveChange}
-            ></Form.Control>
+            >
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state.code} value={state.code}>
+                  {state.name}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
         </Row>
 

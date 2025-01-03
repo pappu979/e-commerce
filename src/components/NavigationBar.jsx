@@ -75,9 +75,20 @@ function NavigationBar() {
           <Navbar.Brand href="#">
             <Link className="d-inline-block align-top mx-5" to="/">
               {" "}
-              <img src={imageL} width="100" height="80" alt=" logo" />
+              <img src={imageL} width="100" height="70" alt=" logo" />
             </Link>
           </Navbar.Brand>
+          <div className="d-flex flex-grow-1 mx-5">
+            <input
+              type="text"
+              placeholder="Search for Products, Brands and More..."
+              className="form-control me-2"
+              style={{ maxWidth: "400px" }}
+            />
+            <button className="btn btn-outline-light" type="submit">
+              Search
+            </button>
+          </div>
 
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
