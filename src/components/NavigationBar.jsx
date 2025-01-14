@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import imageL from "../images/12.png";
+import imageL from "../assets/images/12.png";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import { loadUserCartItems } from "../reducres/cartReducer";
 import { loadUserSaveItems } from "../reducres/saveForLaterReducer";
 import { loadUserWishlistItem } from "../reducres/wishListReducer";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
 
 function NavigationBar() {
   const [hoverEffect, setHoverEffect] = React.useState(false);
@@ -45,15 +47,15 @@ function NavigationBar() {
 
   const handleShowCart = () => {
     if (currentUser) {
-      navigate("/cart");
+      navigate(ROUTES.CART);
     } else {
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     }
   };
 
   const handleLogout = () => {
     if (!currentUser) {
-      toast.info("You are already Logout!", {
+      toast.info(CONSTANTS.ALREADY_LOGOUT, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -65,7 +67,7 @@ function NavigationBar() {
     } else {
       dispatch(logout());
     }
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
   };
 
   return (
@@ -73,7 +75,10 @@ function NavigationBar() {
       <Navbar expand="lg " style={{ backgroundColor: "#e1997e" }}>
         <Container fluid>
           <Navbar.Brand href="#">
-            <Link className="d-inline-block align-top mx-5" to="/">
+            <Link
+              className="d-inline-block align-top mx-5"
+              to={ROUTES.DEFAULT_PATH}
+            >
               {" "}
               <img src={imageL} width="100" height="70" alt=" logo" />
             </Link>
@@ -86,7 +91,7 @@ function NavigationBar() {
               style={{ maxWidth: "400px" }}
             />
             <button className="btn btn-outline-light" type="submit">
-              Search
+              {CONSTANTS.SEARCH}
             </button>
           </div>
 
@@ -98,11 +103,11 @@ function NavigationBar() {
               navbarScroll
             />
             <Nav className="ms-auto" navbarScroll>
-              <Link className="ms-4 btn " to="/">
-                Home
+              <Link className="ms-4 btn " to={ROUTES.DEFAULT_PATH}>
+                {CONSTANTS.HOME}
               </Link>
-              <Link className="ms-4 btn " to="/shop">
-                Shop
+              <Link className="ms-4 btn " to={ROUTES.SHOP}>
+                {CONSTANTS.SHOP}
               </Link>
               <Dropdown
                 className="ms-4 d-flex justify-content-center align-items-center"
@@ -111,49 +116,49 @@ function NavigationBar() {
                 show={hoverEffect}
               >
                 <Dropdown.Toggle variant="btn" id="dropdown-basic">
-                  Account
+                  {CONSTANTS.ACCOUNT}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ top: "35px" }}>
-                  <Dropdown.Item as={Link} to="/profile">
+                  <Dropdown.Item as={Link} to={ROUTES.PROFILE}>
                     <FontAwesomeIcon
                       icon={faUserCircle}
                       style={{ marginRight: "6px" }}
                     />
-                    My Profile
+                    {CONSTANTS.MY_PROFILE}
                   </Dropdown.Item>
                   <hr />
-                  <Dropdown.Item as={Link} to="/signup">
+                  <Dropdown.Item as={Link} to={ROUTES.SIGN_UP}>
                     <PersonAddIcon style={{ marginRight: "15px" }} />
-                    Sign Up
+                    {CONSTANTS.SIGN_UP}
                   </Dropdown.Item>
                   <hr />
-                  <Dropdown.Item as={Link} to="/login">
+                  <Dropdown.Item as={Link} to={ROUTES.LOGIN}>
                     <LoginIcon style={{ marginRight: "15px" }} />
-                    Login
+                    {CONSTANTS.LOGIN}
                   </Dropdown.Item>
                   <hr />
-                  <Dropdown.Item as={Link} to="/wishlist">
+                  <Dropdown.Item as={Link} to={ROUTES.WISHLIST}>
                     <FontAwesomeIcon
                       icon={faHeart}
                       style={{ marginRight: "8px" }}
                     />
-                    My Wishlist
+                    {CONSTANTS.MY_WISHLIST}
                     <span className="ms-2">{wishlistItem.length}</span>
                   </Dropdown.Item>
                   <hr />
-                  <Dropdown.Item as={Link} to="/saveforlater">
+                  <Dropdown.Item as={Link} to={ROUTES.SAVEFOR_LATER}>
                     <FontAwesomeIcon
                       icon={faSave}
                       style={{ marginRight: "8px" }}
                     />
-                    Save List
+                    {CONSTANTS.SAVE_LIST}
                     <span className="ms-2">{saveForLaterItems.length}</span>
                   </Dropdown.Item>
                   <hr />
                   <Dropdown.Item onClick={handleLogout}>
                     <LogoutIcon style={{ marginRight: "8px" }} />
-                    Log Out
+                    {CONSTANTS.LOGOUT}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

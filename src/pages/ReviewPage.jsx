@@ -1,11 +1,11 @@
 import React from "react";
 import Swal from "sweetalert2";
+import ReactStars from "react-stars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useLocation } from "react-router-dom";
-import { storedReviews } from "../utils/authKeys";
+import { storedReviews } from "../utils/helperFunction/authKeys";
 import { useSelector } from "react-redux";
 
 const ReviewPage = () => {

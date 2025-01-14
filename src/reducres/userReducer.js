@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { removeLogoutLocalStorage } from "../validation/localStorage";
+import { removeLogoutLocalStorage } from "../utils/helperFunction/localStorage";
 import { toast } from "react-toastify";
 
 const initialUserState =

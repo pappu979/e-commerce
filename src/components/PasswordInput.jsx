@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import "../styles/passwordInput.css";
+import "../assets/styles/passwordInput.css";
 
 const PasswordInput = ({ name, value, onChange, placeholder }) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
   return (
     <>

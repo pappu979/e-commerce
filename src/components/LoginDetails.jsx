@@ -1,10 +1,10 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import LoginImg from "../images/login[1].svg";
+import LoginImg from "../assets/images/login[1].svg";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import PasswordInput from "./PasswordInput";
-import { validateLoginForm } from "../validation/validation";
+import { validateLoginForm } from "../utils/validationUtilis";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateLoginField,
@@ -12,8 +12,10 @@ import {
   resetLoginForm,
 } from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
-import { API_URL } from "../utils/authKeys";
-import "../styles/Login.css";
+import { API_URL } from "../config";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
+import "../assets/styles/Login.css";
 
 export default function LoginDetails() {
   const loginState = useSelector((state) => state.auth.login);
@@ -56,7 +58,7 @@ export default function LoginDetails() {
         }
         dispatch(setCurrentUser(user));
         dispatch(resetLoginForm());
-        const redirectTo = location.state?.from || "/";
+        const redirectTo = location.state?.from || ROUTES.DEFAULT_PATH;
         navigate(redirectTo);
       } else {
         Swal.fire({
@@ -73,7 +75,7 @@ export default function LoginDetails() {
         text: "No account found with the provided credentials. Please sign up first.",
         confirmButtonText: "Ok",
       }).then(() => {
-        navigate("/signup", { state: { from: location.pathname } });
+        navigate(ROUTES.SIGN_UP, { state: { from: location.pathname } });
       });
     }
   };
@@ -88,7 +90,7 @@ export default function LoginDetails() {
           <div className="Auth-form-content">
             <h3 className="Auth-form-title">Log In</h3>
             <div className="form-group mt-3">
-              <label>Email address</label>
+              <label>{CONSTANTS.EMAIL_ADDRESS}</label>
               <input
                 type="email"
                 className="form-control mt-1"
@@ -101,7 +103,7 @@ export default function LoginDetails() {
               )}
             </div>
             <div className="form-group mt-3">
-              <label>Password</label>
+              <label>{CONSTANTS.PASSWORD}</label>
               <PasswordInput
                 type="password"
                 name="password"
@@ -114,8 +116,11 @@ export default function LoginDetails() {
                 </span>
               )}
               <p className="forgot-password text-right mt-2">
-                <Link to="/forgot-password" style={{ textDecoration: "none" }}>
-                  Forgot Password?
+                <Link
+                  to={ROUTES.FORGOT_PAAWORD}
+                  style={{ textDecoration: "none" }}
+                >
+                  {CONSTANTS.FORGOT_PASSWORD}
                 </Link>
               </p>
             </div>
@@ -129,22 +134,22 @@ export default function LoginDetails() {
                   fontWeight: "800",
                 }}
               >
-                Log In
+                {CONSTANTS.LOGIN}
               </button>
             </div>
             <p
               className="forgot-password text-right mt-2"
               style={{ color: "#e1997e" }}
             >
-              Don't have an account?
+              {CONSTANTS.DONT_ACCOUNT}
               <Link
-                to="/SignUp"
+                to={ROUTES.SIGN_UP}
                 style={{
                   textDecoration: "none",
                   marginLeft: "8px",
                 }}
               >
-                SignUp
+                {CONSTANTS.SIGN_UP}
               </Link>
             </p>
           </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
 
 export default function ConfirmationPage() {
   const location = useLocation();
@@ -12,7 +13,7 @@ export default function ConfirmationPage() {
       </p>
       <p>Total: ₹{product.price * productQuantity}</p>
       <Link
-        to="/"
+        to={ROUTES.DEFAULT_PATH}
         style={{
           textDecoration: "none",
           padding: "8px 15px",

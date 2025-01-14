@@ -1,10 +1,10 @@
 import React from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import flipLogo from "../assets/images/flipLogo.png";
 import { removeFromCart, updateQuantity } from "../reducres/cartReducer";
 import CheckWishlistItemButton from "./CheckWishListButton";
-import flipLogo from "../images/flipLogo.png";
 import { useDispatch, useSelector } from "react-redux";
-import useDateInfo from "../utils/dateUtilis";
+import useDateInfo from "../utils/helperFunction/dateUtilis";
 
 const ShowCartItem = ({ cartItems, handleSaveForLater }) => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
-import states from "../data/states.json";
+import states from "../constants/data/states.json";
 
 function EditDeliveryAdress({
   handleDeliveryAddressCancel,

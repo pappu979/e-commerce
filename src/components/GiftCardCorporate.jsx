@@ -1,5 +1,5 @@
 import React from "react";
-import { initialgiftCardCorporateData } from "../utils/formData";
+import { initialgiftCardCorporateData } from "../constants/formdata";
 
 const GiftCardCorporate = () => {
   const [giftCardCorporateState, setGiftCardCorporateState] = React.useState(
@@ -13,7 +13,6 @@ const GiftCardCorporate = () => {
 
   const handleGiftCardCorporatesubmit = (e) => {
     e.preventDefault();
-    console.log("giftCardCorporateState", giftCardCorporateState);
     setGiftCardCorporateState(initialgiftCardCorporateData);
   };
 

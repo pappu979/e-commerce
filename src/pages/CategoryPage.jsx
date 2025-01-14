@@ -1,14 +1,12 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Card from "react-bootstrap/Card";
 import Slider from "react-slick";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import CheckWishlistItemButton from "../components/CheckWishListButton";
 import Rating from "../components/Rating";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../styles/ProductSlider.css";
-import Loader from "../components/Loader";
+import Loader from "../utils/loader/Loader";
+import "../assets/styles/ProductSlider.css";
 
 // CustomPrevArrow component
 const CustomPrevArrow = (props) => {

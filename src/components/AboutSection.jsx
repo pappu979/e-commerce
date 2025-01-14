@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import imageslide from "../images/about.png";
+import imageslide from "../assets/images/about.png";
 
 const AboutSection = () => {
   return (

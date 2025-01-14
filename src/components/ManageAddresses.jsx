@@ -1,8 +1,9 @@
 import React from "react";
-import "../styles/manageAddress.css";
 import EditDeliveryAdress from "./EditDeliveryadress";
-import { intialEditDeliveryAddressState } from "../utils/formData";
+import { intialEditDeliveryAddressState } from "../constants/formdata";
 import ShowManageAddress from "./ShowManageAddress";
+import { CONSTANTS } from "../constants";
+import "../assets/styles/manageAddress.css";
 
 const ManageAddresses = ({ selectedOption }) => {
   const [addAddress, setAddaddress] = React.useState(false);
@@ -46,7 +47,7 @@ const ManageAddresses = ({ selectedOption }) => {
     <div className="container">
       <h3>{selectedOption}</h3>
       <div className="manageadd-address mt-4" onClick={handleAddaddress}>
-        + ADD A NEW ADDRESS
+        {CONSTANTS.ADD_NEW_ADDRESS}
       </div>
       {addAddress && (
         <EditDeliveryAdress

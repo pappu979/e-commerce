@@ -1,15 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import { Card, CardContent } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { toast } from "react-toastify";
-import { API_URL } from "../utils/authKeys";
+import { API_URL } from "../config";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
 
 export default function ForgotPassword() {
   const [email, setEmail] = React.useState("");
@@ -26,7 +28,7 @@ export default function ForgotPassword() {
 
       // Simulate sending a reset link
       if (user) {
-        toast.success("Check your email for the password reset link.", {
+        toast.success(CONSTANTS.RESET_LINK_MSG, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -38,7 +40,7 @@ export default function ForgotPassword() {
 
         // Navigate after toast is shown
         setTimeout(() => {
-          navigate("/reset-password", { state: { email } });
+          navigate(ROUTES.RESET_PASSWWORD, { state: { email } });
         }, 3000);
 
         setEmail("");
@@ -80,7 +82,7 @@ export default function ForgotPassword() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5" sx={{ mt: 1 }}>
-              Forgot Password
+              {CONSTANTS.FORGOT_PASSWORD}
             </Typography>
 
             <Box component="form" onSubmit={handleReset} sx={{ mt: 1 }}>
@@ -101,7 +103,7 @@ export default function ForgotPassword() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Reset Password
+                {CONSTANTS.RESET_PASSWORD}
               </Button>
             </Box>
             <Box>

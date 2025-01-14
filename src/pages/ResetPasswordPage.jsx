@@ -10,8 +10,10 @@ import Swal from "sweetalert2";
 import { Card, CardContent } from "@mui/material";
 import PasswordInput from "../components/PasswordInput";
 import { setCurrentUser } from "../reducres/userReducer";
-import { API_URL } from "../utils/authKeys";
+import { API_URL } from "../config";
 import { useDispatch } from "react-redux";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = React.useState("");
@@ -76,7 +78,7 @@ const ResetPassword = () => {
           text: "Your password has been updated successfully!",
           confirmButtonText: "Ok",
         }).then(() => {
-          navigate("/login");
+          navigate(ROUTES.LOGIN);
         });
       } else {
         throw new Error("Failed to update password");
@@ -108,7 +110,7 @@ const ResetPassword = () => {
               <LockResetIcon />
             </Avatar>
             <Typography component="h1" variant="h5" sx={{ mt: 1 }}>
-              Reset Password
+              {CONSTANTS.RESET_PASSWORD}
             </Typography>
 
             <Box

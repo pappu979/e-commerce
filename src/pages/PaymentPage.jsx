@@ -2,7 +2,17 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../reducres/userReducer";
 import { useDispatch, useSelector } from "react-redux";
-import { checkPlatformFee } from "../utils/cartCalculations";
+import { checkPlatformFee } from "../utils/helperFunction/cartCalculations";
+import { ROUTES } from "../constants/routes";
+import PriceDetails from "../components/PriceDetails";
+import EditDeliveryAdress from "../components/EditDeliveryadress";
+import PaymentAdressDetails from "../components/PaymentAdressDetails";
+import PaymentOrderSummary from "../components/PaymentOrderSummary";
+import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
+import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
+import useDateInfo from "../utils/helperFunction/dateUtilis";
+import bank from "../constants/data/indianBanks.json";
+import "../assets/styles/payment.css";
 import {
   addAddress,
   editAddress,
@@ -11,16 +21,7 @@ import {
 import {
   intialEditDeliveryAddressState,
   intialPaymentPageState,
-} from "../utils/formData";
-import PriceDetails from "../components/PriceDetails";
-import EditDeliveryAdress from "../components/EditDeliveryadress";
-import PaymentAdressDetails from "../components/PaymentAdressDetails";
-import PaymentOrderSummary from "../components/PaymentOrderSummary";
-import PaymentDefaultAddress from "../components/PaymentDefaultAddress";
-import PaymentLoginAccordian from "../components/PaymentLoginAccordian";
-import useDateInfo from "../utils/dateUtilis";
-import bank from "../data/indianBanks.json";
-import "../styles/payment.css";
+} from "../constants/formdata";
 
 export default function PaymentPage() {
   const dispatch = useDispatch();
@@ -47,14 +48,14 @@ export default function PaymentPage() {
     if (stateData?.timeLeft <= 0) {
       clearInterval(interval);
       alert("Time up! Redirecting you to the products page.");
-      navigate("/products");
+      navigate(ROUTES.SHOP);
     }
 
     return () => clearInterval(interval);
   }, [stateData?.timeLeft, navigate]);
 
   if (!product || !productQuantity) {
-    navigate("/products");
+    navigate(ROUTES.SHOP);
   }
 
   const updateState = (key, value) => {

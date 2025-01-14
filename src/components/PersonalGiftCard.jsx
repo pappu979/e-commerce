@@ -1,6 +1,6 @@
 import React from "react";
-import { initialBuygiftCardData } from "../utils/formData";
-import { giftCardcalculateTotal } from "../utils/cartCalculations";
+import { initialBuygiftCardData } from "../constants/formdata";
+import { giftCardcalculateTotal } from "../utils/helperFunction/cartCalculations";
 
 const PersonalGiftCard = () => {
   const [buygiftCard, setBuygiftCard] = React.useState([

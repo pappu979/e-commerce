@@ -1,5 +1,5 @@
 import React from "react";
-import not from "../images/nfound.gif";
+import not from "../assets/images/nfound.gif";
 
 function Page404() {
   return (

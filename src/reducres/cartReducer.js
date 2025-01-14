@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { calculateTotalAmount } from "../utils/cartCalculations";
+import { calculateTotalAmount } from "../utils/helperFunction/cartCalculations";
 import {
   getLocalStorageForUser,
   saveLocalStorageForUser,
-} from "../validation/localStorage";
+} from "../utils/helperFunction/localStorage";
 
 const initialState = {
   items: [],

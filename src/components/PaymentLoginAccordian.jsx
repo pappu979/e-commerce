@@ -1,18 +1,17 @@
 import React from "react";
+import { CONSTANTS } from "../constants";
 
 export default function ({ currentUser, handleLoginChange }) {
   return (
     <div className="d-flex align-items-center justify-content-between flex-wrap">
       <div className="login-title">
-        1 LOGIN ✔️
+        1 {CONSTANTS.LOGIN} ✔️
         {currentUser ? (
           <p style={{ fontSize: "14px" }}>
-            +91{currentUser?.mobileNumber || 916352075082}
+            +91{currentUser?.mobileNumber || 6352075082}
           </p>
         ) : (
-          <p style={{ fontSize: "14px" }}>
-            No current user found! Please login.
-          </p>
+          <p style={{ fontSize: "14px" }}>{CONSTANTS.CURRENT_USER_NOT_FOUND}</p>
         )}
       </div>
       <div className="login-details">

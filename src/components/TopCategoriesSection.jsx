@@ -2,14 +2,17 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCategories, fetchProductsByCategory } from "../utils/api";
+import {
+  fetchCategories,
+  fetchProductsByCategory,
+} from "../utils/helperFunction/api";
 import CheckWishlistItemButton from "./CheckWishListButton";
 import Rating from "./Rating";
-import Loader from "./Loader";
-import image1 from "../images/m1.jpg";
-import { capitalizeSegments } from "../utils/cartCalculations";
-import "../styles/cardStyle.css";
-import "../styles/best-seller.css";
+import Loader from "../utils/loader/Loader";
+import image1 from "../assets/images/m1.jpg";
+import { capitalizeSegments } from "../utils/helperFunction/cartCalculations";
+import "../assets/styles/cardStyle.css";
+import "../assets/styles/best-seller.css";
 
 const TopCategoriesSection = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("beauty");

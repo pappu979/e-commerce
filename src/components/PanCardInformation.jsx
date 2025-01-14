@@ -1,11 +1,11 @@
 import React from "react";
-import { intialPanCardData } from "../utils/formData";
+import { intialPanCardData } from "../constants/formdata";
+import { panCardRegex } from "../utils/helperFunction/regex";
 
 const PanCardInformation = ({ selectedOption }) => {
   const [panCardState, setPanCardState] = React.useState(intialPanCardData);
   const [file, setFile] = React.useState(null);
   const [error, setError] = React.useState("");
-  const panCardRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
   const handlePanCardChange = (e) => {
     const { name, value } = e.target;

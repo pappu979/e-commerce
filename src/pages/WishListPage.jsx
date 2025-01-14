@@ -1,13 +1,13 @@
 import React from "react";
-import emptyCartImg from "../images/emptyCart.webp";
+import emptyCartImg from "../assets/images/emptyCart.webp";
+import flipLogo from "../assets/images/flipLogo.png";
+import ReactStars from "react-stars";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import ReactStars from "react-stars";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import flipLogo from "../images/flipLogo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist, clearWishlist } from "../reducres/wishListReducer";
-import "../styles/wishlist.css";
+import "../assets/styles/wishlist.css";
 
 const WishListPage = () => {
   const dispatch = useDispatch();

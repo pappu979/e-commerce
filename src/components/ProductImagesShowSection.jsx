@@ -1,6 +1,6 @@
 import React from "react";
 import CheckWishlistItemButton from "./CheckWishListButton";
-import "../styles/imageSection.css";
+import "../assets/styles/imageSection.css";
 
 function ProductImagesShowSection({ images, product }) {
   const [img, setImg] = React.useState(images[0] ? images[0] : null);

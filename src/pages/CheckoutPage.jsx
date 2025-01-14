@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { clearCart } from "../reducres/cartReducer";
-import { intialCheckoutFormData } from "../utils/formData";
-import { checkOutValidate } from "../validation/validation";
+import { intialCheckoutFormData } from "../constants/formdata";
+import { checkOutValidate } from "../utils/validationUtilis";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const CheckoutPage = () => {
         autoClose: 3000,
       });
       setTimeout(() => {
-        navigate("/");
+        navigate(ROUTES.DEFAULT_PATH);
       }, 3000);
       dispatch(clearCart());
 
@@ -60,7 +62,7 @@ const CheckoutPage = () => {
                 htmlFor="name"
                 style={{ fontSize: "17px", marginTop: "15px" }}
               >
-                Name
+                {CONSTANTS.NAME}
               </label>
               <input
                 type="text"
@@ -78,7 +80,7 @@ const CheckoutPage = () => {
                 htmlFor="email"
                 style={{ fontSize: "17px", marginTop: "15px" }}
               >
-                Email
+                {CONSTANTS.EMAIL}
               </label>
               <input
                 type="email"
@@ -96,7 +98,7 @@ const CheckoutPage = () => {
                 htmlFor="address"
                 style={{ fontSize: "17px", marginTop: "15px" }}
               >
-                Address
+                {CONSTANTS.ADDRESS}
               </label>
               <input
                 type="text"
@@ -117,7 +119,7 @@ const CheckoutPage = () => {
                   htmlFor="city"
                   style={{ fontSize: "17px", marginTop: "15px" }}
                 >
-                  City
+                  {CONSTANTS.CITY}
                 </label>
                 <input
                   type="text"
@@ -135,7 +137,7 @@ const CheckoutPage = () => {
                   htmlFor="state"
                   style={{ fontSize: "17px", marginTop: "15px" }}
                 >
-                  State
+                  {CONSTANTS.STATE}
                 </label>
                 <input
                   type="text"

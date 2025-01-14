@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import imageslide from "../images/Imac.gif";
-import "../App.css";
+import imageslide from "../assets/images/Imac.gif";
 
 const WhyUs = () => {
   return (

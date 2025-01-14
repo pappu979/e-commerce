@@ -2,7 +2,7 @@ import React from "react";
 import {
   totalSavingAmountCashOnDelivery,
   totalPayableAmountCashOnDelivery,
-} from "../utils/cartCalculations";
+} from "../utils/helperFunction/cartCalculations";
 
 export default function PriceDetails({
   selectedOption,

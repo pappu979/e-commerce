@@ -4,7 +4,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import useWishlistHandler from "../provider/useWishlistHandler";
 import { useSelector } from "react-redux";
-import "../styles/wishlistButton.css";
+import "../assets/styles/wishlistButton.css";
 
 const CheckWishlistItemButton = ({ product }) => {
   const wishlistItem = useSelector((state) => state.wishlist.wishlistItems);

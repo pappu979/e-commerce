@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   FaApple,
   FaMobileAlt,
@@ -9,9 +9,9 @@ import {
   FaSmile,
   FaMotorcycle,
 } from "react-icons/fa";
-import "../styles/toggleHeader.css";
+import "../assets/styles/toggleHeader.css";
 
-export const categories = [
+const categories = [
   { name: "Grocery", icon: <FaApple /> },
   { name: "Mobiles", icon: <FaMobileAlt /> },
   {
@@ -556,8 +556,8 @@ export const categories = [
 ];
 
 const ToggleHeader = () => {
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [activeSubcategory, setActiveSubcategory] = useState(null);
+  const [activeCategory, setActiveCategory] = React.useState(null);
+  const [activeSubcategory, setActiveSubcategory] = React.useState(null);
 
   const handleMouseEnterCategory = (category) => {
     setActiveCategory(category);

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { currentUser_id } from "../utils/authKeys";
+import { currentUser_id } from "../utils/helperFunction/authKeys";
 
 const intialSignupState = {
   username: "",

@@ -1,8 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import CashOnDelivery from "../components/CashOnDelivery";
-import { formatTime } from "../utils/cartCalculations";
+import CashOnDelivery from "./CashOnDelivery";
+import { formatTime } from "../utils/helperFunction/cartCalculations";
 
 export default function PaymentAdressDetails({
   selectPaymetOption,

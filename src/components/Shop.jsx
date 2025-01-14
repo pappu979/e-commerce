@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useQuery } from "@tanstack/react-query";
 import Rating from "./Rating";
-import { fetchProducts, categorizeProducts } from "../utils/api";
+import { fetchProducts, categorizeProducts } from "../utils/helperFunction/api";
 import CheckWishlistItemButton from "./CheckWishListButton";
 import SliderForShop from "./SliderForShop";
-import Loader from "./Loader";
-import "../styles/AllProducts.css";
+import Loader from "../utils/loader/Loader";
+import "../assets/styles/AllProducts.css";
 
 export default function ShopNow() {
   const {

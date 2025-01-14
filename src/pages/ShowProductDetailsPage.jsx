@@ -1,19 +1,18 @@
 import React from "react";
-import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { toast } from "react-toastify";
+import { addToCart, updateQuantity } from "../reducres/cartReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { ROUTES } from "../constants/routes";
 import Swal from "sweetalert2";
 import ReactStars from "react-stars";
 import ProductImagesShowSection from "../components/ProductImagesShowSection";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Rating from "../components/Rating";
-import { toast } from "react-toastify";
-import { addToCart, updateQuantity } from "../reducres/cartReducer";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../components/Loader";
-import "../styles/product-page.css";
-import "../App.css";
+import Loader from "../utils/loader/Loader";
+import "../assets/styles/product-page.css";
 
 function ShowProductDetailsPage() {
   const { productID } = useParams();
@@ -21,8 +20,7 @@ function ShowProductDetailsPage() {
   const [productQuantity, setProductQuantity] = React.useState(1);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
-  // const [isHovered, setIsHovered] = React.useState(false);
-  // const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -45,16 +43,6 @@ function ShowProductDetailsPage() {
 
     fetchData();
   }, []);
-
-  // const handleMouseEnter = () => setIsHovered(true);
-  // const handleMouseLeave = () => setIsHovered(false);
-
-  // const handleMouseMove = (e) => {
-  //   const rect = e.target.getBoundingClientRect();
-  //   const x = ((e.clientX - rect.left) / rect.width) * 100;
-  //   const y = ((e.clientY - rect.top) / rect.height) * 100;
-  //   setMousePosition({ x, y });
-  // };
 
   const handleToAddCart = () => {
     if (!currentUser) {
@@ -90,18 +78,18 @@ function ShowProductDetailsPage() {
             quantity: productQuantity,
           })
         );
-        navigate("/cart");
+        navigate(ROUTES.CART);
       } else {
-        navigate("/login", { state: { from: location.pathname } });
+        navigate(ROUTES.LOGIN, { state: { from: location.pathname } });
       }
     });
   };
 
   const handleBuyNow = () => {
     if (currentUser) {
-      navigate("/payment", { state: { product, productQuantity } });
+      navigate(ROUTES.PAYMENT, { state: { product, productQuantity } });
     } else {
-      navigate("/login", { state: { from: location.pathname } });
+      navigate(ROUTES.LOGIN, { state: { from: location.pathname } });
     }
   };
 
@@ -206,7 +194,7 @@ function ShowProductDetailsPage() {
                 </div>
                 <div>
                   <Link
-                    to="/review"
+                    to={ROUTES.REVIEW}
                     state={{ product, productID }}
                     style={{ textDecoration: "none" }}
                   >

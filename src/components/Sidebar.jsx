@@ -11,7 +11,8 @@ import {
 } from "react-bootstrap-icons";
 import { logout } from "../reducres/userReducer";
 import { useDispatch } from "react-redux";
-import "../styles/sidebar.css";
+import { CONSTANTS } from "../constants";
+import "../assets/styles/sidebar.css";
 
 const Sidebar = () => {
   const [selectedOption, setSelectedOption] = React.useState(
@@ -125,7 +126,7 @@ const Sidebar = () => {
                 onClick={() => dispatch(logout())}
               >
                 <BoxArrowRight className="me-2" />
-                Logout
+                {CONSTANTS.LOGOUT}
               </Nav.Link>
             </Nav.Item>
           </Nav>

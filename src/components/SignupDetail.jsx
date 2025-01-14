@@ -2,10 +2,10 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import signupImage from "../images/sign.png";
+import signupImage from "../assets/images/sign.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import PasswordInput from "./PasswordInput";
-import { validateForm } from "../validation/validation";
+import { validateForm } from "../utils/validationUtilis";
 import { useDispatch } from "react-redux";
 import {
   updateSignupField,
@@ -14,8 +14,10 @@ import {
 } from "../reducres/authReducer";
 import { setCurrentUser } from "../reducres/userReducer";
 import { connect } from "react-redux";
-import { API_URL } from "../utils/authKeys";
-import "../styles/SignupDetail.css";
+import { API_URL } from "../config";
+import { ROUTES } from "../constants/routes";
+import { CONSTANTS } from "../constants";
+import "../assets/styles/SignupDetail.css";
 
 function SignupDetail({ signupState }) {
   const [isChecked, setIsChecked] = React.useState(false);
@@ -43,9 +45,7 @@ function SignupDetail({ signupState }) {
         (user) => user.email === signupState.email
       );
       if (isEmailAlreadyTaken) {
-        alert(
-          "This email is already registered. Please use a different email."
-        );
+        alert(CONSTANTS.REGISTRED_EMAIL);
         return;
       }
 
@@ -74,7 +74,7 @@ function SignupDetail({ signupState }) {
           confirmButtonText: "Ok",
         }).then(() => {
           dispatch(resetSignupForm());
-          const redirectTo = location.state?.from || "/";
+          const redirectTo = location.state?.from || ROUTES.DEFAULT_PATH;
           navigate(redirectTo);
         });
       } else {
@@ -95,7 +95,7 @@ function SignupDetail({ signupState }) {
           <div className="signup-form col-md-6">
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formGridName">
-                <Form.Label>Name</Form.Label>
+                <Form.Label>{CONSTANTS.NAME}</Form.Label>
                 <Form.Control
                   type="text"
                   name="username"
@@ -110,7 +110,7 @@ function SignupDetail({ signupState }) {
               </Form.Group>
 
               <Form.Group controlId="formGridEmail">
-                <Form.Label>Email</Form.Label>
+                <Form.Label>{CONSTANTS.EMAIL}</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -125,7 +125,7 @@ function SignupDetail({ signupState }) {
               </Form.Group>
 
               <Form.Group controlId="formGridPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>{CONSTANTS.PASSWORD}</Form.Label>
                 <PasswordInput
                   type="number"
                   name="password"
@@ -140,7 +140,7 @@ function SignupDetail({ signupState }) {
               </Form.Group>
 
               <Form.Group controlId="formGridAddress2">
-                <Form.Label>Mobile No.</Form.Label>
+                <Form.Label>{CONSTANTS.MOBILE_NUMBER}</Form.Label>
                 <Form.Control
                   type="number"
                   name="mobileNumber"
@@ -170,21 +170,21 @@ function SignupDetail({ signupState }) {
                 style={{ fontWeight: "800" }}
                 disabled={!isChecked}
               >
-                Sign Up
+                {CONSTANTS.SIGN_UP}
               </Button>
             </Form>
 
             <p className="sign-up">
-              Already have an account?{" "}
+              {CONSTANTS.ALREADY_ACCOUNT}{" "}
               <Link
-                to="/login"
+                to={ROUTES.LOGIN}
                 style={{
                   textDecoration: "none",
                   marginLeft: "6px",
                   color: "#007BFF",
                 }}
               >
-                Login
+                {CONSTANTS.LOGIN}
               </Link>
             </p>
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/giftCard.css";
 import GiftCardCorporate from "./GiftCardCorporate";
 import PersonalGiftCard from "./PersonalGiftCard";
+import "../assets/styles/giftCard.css";
 
 const GiftCard = () => {
   const addgiftCard = {

@@ -1,4 +1,5 @@
 import React from "react";
+import { CONSTANTS } from "../constants";
 
 export default function PaymentDefaultAddress({
   addresses,
@@ -50,7 +51,7 @@ export default function PaymentDefaultAddress({
                 }}
                 onClick={() => handleDeliveryHere(addr)}
               >
-                DELIVERY HERE
+                {CONSTANTS.DELIVERY_HERE}
               </button>
             )}
           </div>
@@ -68,7 +69,7 @@ export default function PaymentDefaultAddress({
           setFormData(intialEditState);
         }}
       >
-        + Add a new address
+        {CONSTANTS.ADD_NEW_ADDRESS}
       </button>
     </>
   );

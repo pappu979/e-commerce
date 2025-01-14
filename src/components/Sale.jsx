@@ -2,13 +2,13 @@ import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import image1 from "../images/m11.webp";
-import image2 from "../images/m12.webp";
-import image3 from "../images/m13.webp";
-import image4 from "../images/m14.webp";
-import image5 from "../images/m8.jpg";
-import image6 from "../images/m9.jpg";
-import image7 from "../images/m7.jpg";
+import image1 from "../assets/images/m11.webp";
+import image2 from "../assets/images/m12.webp";
+import image3 from "../assets/images/m13.webp";
+import image4 from "../assets/images/m14.webp";
+import image5 from "../assets/images/m8.jpg";
+import image6 from "../assets/images/m9.jpg";
+import image7 from "../assets/images/m7.jpg";
 
 const ProductCarouselSale = () => {
   const images = [image1, image2, image3, image4, image5, image6, image7];

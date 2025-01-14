@@ -1,14 +1,15 @@
 import React from "react";
-import emptyCartImg from "../images/emptyCart.webp";
+import emptyCartImg from "../assets/images/emptyCart.webp";
+import flipLogo from "../assets/images/flipLogo.png";
+import CheckWishlistItemButton from "../components/CheckWishListButton";
+import { addToCart } from "../reducres/cartReducer";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ROUTES } from "../constants/routes";
 import {
   loadUserSaveItems,
   removeForSaveLater,
 } from "../reducres/saveForLaterReducer";
-import { addToCart } from "../reducres/cartReducer";
-import { useNavigate } from "react-router-dom";
-import flipLogo from "../images/flipLogo.png";
-import CheckWishlistItemButton from "../components/CheckWishListButton";
-import { useDispatch, useSelector } from "react-redux";
 
 const SaveForLaterPage = () => {
   const saveForLaterItems = useSelector(
@@ -27,7 +28,7 @@ const SaveForLaterPage = () => {
   const moveToCart = (product) => {
     dispatch(addToCart({ userId: currentUser.id, addProduct: product }));
     dispatch(removeForSaveLater({ userId: currentUser.id, id: product.id }));
-    navigate("/cart");
+    navigate(ROUTES.CART);
   };
 
   return (

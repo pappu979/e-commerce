@@ -1,6 +1,6 @@
-import ReactStars from "react-stars";
 import React from "react";
-import flipLogo from "../images/flipLogo.png";
+import ReactStars from "react-stars";
+import flipLogo from "../assets/images/flipLogo.png";
 
 const Rating = ({ product }) => {
   return (

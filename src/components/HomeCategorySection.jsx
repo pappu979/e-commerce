@@ -1,10 +1,10 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
-import { fetchCategories } from "../utils/api";
-import "../styles/cardStyle.css";
+import { fetchCategories } from "../utils/helperFunction/api";
 import { useQuery } from "@tanstack/react-query";
-import Loader from "./Loader";
+import Loader from "../utils/loader/Loader";
+import "../assets/styles/cardStyle.css";
 
 export default function HomeCategoriesSection() {
   const {

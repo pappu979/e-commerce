@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
+import { CONSTANTS } from "../constants";
 
 const CashOnDelivery = ({ selectedOption }) => {
   const [randomCode, setRandomCode] = React.useState("");
@@ -37,7 +38,7 @@ const CashOnDelivery = ({ selectedOption }) => {
             className="mt-2"
             style={{ padding: "4px", border: "1px solid grey" }}
           >
-            Due to handling costa, a nominal fee of ₹7 will be charged
+            {CONSTANTS.EXTRA_CASHON_DELIVERY_CHARGE}
           </p>
         </div>
 

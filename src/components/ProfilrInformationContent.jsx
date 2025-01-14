@@ -1,6 +1,7 @@
 import React from "react";
-import { intialProfileInformation } from "../utils/formData";
+import { intialProfileInformation } from "../constants/formdata";
 import Faqs from "./Faqs";
+import { CONSTANTS } from "../constants";
 
 const ProfileInformationContent = () => {
   const [isEditing, setIsEditing] = React.useState(false);
@@ -57,7 +58,7 @@ const ProfileInformationContent = () => {
           checked={personlInformation.gender === "male"}
           onChange={handleInformation}
         />
-        <label style={{ marginLeft: "15px" }}>Male</label>
+        <label style={{ marginLeft: "15px" }}>{CONSTANTS.MALE}</label>
 
         <input
           style={{ marginLeft: "40px" }}
@@ -68,10 +69,10 @@ const ProfileInformationContent = () => {
           checked={personlInformation.gender === "female"}
           onChange={handleInformation}
         />
-        <label>Female</label>
+        <label>{CONSTANTS.FEMALE}</label>
       </div>
       <div className="section mt-4">
-        <h3>Email Address</h3>
+        <h3>{CONSTANTS.EMAIL_ADDRESS}</h3>
 
         <input
           style={{ padding: "9px" }}
@@ -83,7 +84,7 @@ const ProfileInformationContent = () => {
         />
       </div>
       <div className="section mt-4">
-        <h3>Mobile Number</h3>
+        <h3>{CONSTANTS.MOBILE_NUMBER}</h3>
 
         <input
           style={{ padding: "9px" }}

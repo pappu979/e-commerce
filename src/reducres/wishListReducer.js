@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getLocalStorageForUser,
   saveLocalStorageForUser,
-} from "../validation/localStorage";
+} from "../utils/helperFunction/localStorage";
 
 const initialState = {
   wishlistItems: [],

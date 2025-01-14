@@ -2,18 +2,21 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { checkPlatformFee } from "../utils/cartCalculations";
-import { totalDiscountAmount } from "../utils/cartCalculations";
+import { addSaveforLater } from "../reducres/saveForLaterReducer";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import ShowCartItem from "../components/ShowCartItem";
+import emptyCartImg from "../assets/images/emptyCart.webp";
+import { ROUTES } from "../constants/routes";
+import {
+  checkPlatformFee,
+  totalDiscountAmount,
+} from "../utils/helperFunction/cartCalculations";
 import {
   clearCart,
   loadUserCartItems,
   removeFromCart,
 } from "../reducres/cartReducer";
-import { addSaveforLater } from "../reducres/saveForLaterReducer";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import ShowCartItem from "../components/ShowCartItem";
-import emptyCartImg from "../images/emptyCart.webp";
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -38,9 +41,9 @@ export default function CartPage() {
         position: "top-right",
         autoClose: 2000,
       });
-      navigate("/checkout", { state: { platformFee } });
+      navigate(ROUTES.CHECKOUT, { state: { platformFee } });
     } else {
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     }
   };
 
@@ -48,7 +51,7 @@ export default function CartPage() {
   const handleSaveForLater = (product) => {
     dispatch(addSaveforLater({ userId: currentUser.id, saveProduct: product }));
     dispatch(removeFromCart({ userId: currentUser.id, id: product.id }));
-    navigate("/saveforlater");
+    navigate(ROUTES.SAVEFOR_LATER);
   };
 
   // If user Login then send to HomePage otherwise Login Page....
@@ -58,13 +61,13 @@ export default function CartPage() {
         position: "top-right",
         autoClose: 3000,
       });
-      navigate("/");
+      navigate(ROUTES.DEFAULT_PATH);
     } else {
       toast.error("Please log in to continue with your order", {
         position: "top-right",
         autoClose: 3000,
       });
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     }
   };
 
@@ -194,7 +197,7 @@ export default function CartPage() {
           </button>
           <ReactTooltip id="clear-tooltip" place="top" content="Clear Cart" />
           <Link
-            to="/"
+            to={ROUTES.DEFAULT_PATH}
             className="btn btn-secondary"
             style={{
               backgroundColor: "#fb641b",
